@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agrovip S.A. — Centro de Herramientas</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--g:#1A6B3C;--g2:#0f4526;--ol:#7A9A2E;--gold:#C8962A;--cr:#F7F3EC;--ink:#1C1A16;--mid:#5A5750;--brd:#E3DDD3;--bg:#FDFBF7;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;}
+.hero{background:var(--g2);padding:56px 40px 52px;text-align:center;position:relative;overflow:hidden;border-bottom:4px solid var(--gold);}
+.hero::after{content:'';position:absolute;bottom:-80px;right:-80px;width:300px;height:300px;border-radius:50%;background:rgba(200,150,42,0.07);pointer-events:none;}
+.logo-row{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:18px;}
+.badge{width:58px;height:58px;background:var(--gold);border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:26px;color:#fff;flex-shrink:0;}
+.brand-txt .name{font-family:'Syne',sans-serif;font-weight:800;font-size:26px;color:#fff;text-align:left;}
+.brand-txt .sub{font-size:13px;color:rgba(255,255,255,0.5);text-align:left;margin-top:2px;}
+.hero-tagline{font-size:15px;color:rgba(255,255,255,0.6);max-width:480px;margin:0 auto;line-height:1.7;}
+.tools-section{max-width:960px;margin:0 auto;padding:48px 24px 64px;}
+.section-label{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--ol);margin-bottom:8px;}
+.section-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:24px;}
+.section-desc{font-size:14px;color:var(--mid);}
+.pill-public{display:inline-flex;align-items:center;gap:6px;background:#EAF3EC;color:var(--g);border:1px solid var(--ol);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:600;}
+.pill-private{display:inline-flex;align-items:center;gap:6px;background:#FEF5E7;color:var(--gold);border:1px solid var(--gold);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:600;}
+.divider{border:none;border-top:2px solid var(--brd);margin:36px 0;}
+.tools-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.tools-grid-2{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+@media(max-width:700px){.tools-grid,.tools-grid-2{grid-template-columns:1fr;}}
+@media(max-width:960px) and (min-width:701px){.tools-grid,.tools-grid-2{grid-template-columns:1fr 1fr;}}
+.tool-card{background:#fff;border:1px solid var(--brd);border-radius:14px;overflow:hidden;text-decoration:none;display:flex;flex-direction:column;transition:transform 0.18s,box-shadow 0.18s,border-color 0.18s;box-shadow:0 2px 12px rgba(26,107,60,0.05);}
+.tool-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(26,107,60,0.13);border-color:var(--ol);}
+.tool-card.public-card{border-top:3px solid var(--g);}
+.tool-card.private-card{border-top:3px solid var(--gold);}
+.card-top{padding:22px 22px 14px;display:flex;align-items:flex-start;gap:14px;}
+.card-icon{width:46px;height:46px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.icon-green{background:#EAF3EC;} .icon-gold{background:#FEF5E7;} .icon-blue{background:#EBF5FB;}
+.card-title{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--ink);margin-bottom:4px;}
+.card-desc{font-size:13px;color:var(--mid);line-height:1.55;}
+.card-footer{margin-top:auto;padding:12px 22px;background:var(--cr);border-top:1px solid var(--brd);display:flex;align-items:center;justify-content:space-between;}
+.card-tag{font-size:11px;font-weight:500;border-radius:20px;padding:3px 10px;}
+.tag-green{background:#EAF3EC;color:var(--g);} .tag-gold{background:#FEF5E7;color:var(--gold);} .tag-blue{background:#EBF5FB;color:#1A5276;}
+.card-arrow{color:var(--mid);font-size:18px;transition:transform 0.18s;}
+.tool-card:hover .card-arrow{transform:translateX(4px);color:var(--g);}
+footer{text-align:center;padding:28px 20px;border-top:1px solid var(--brd);font-size:12px;color:var(--mid);}
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="logo-row">
+    <div class="badge">A</div>
+    <div class="brand-txt"><div class="name">Agrovip S.A.</div><div class="sub">Centro de Herramientas Comerciales</div></div>
+  </div>
+  <p class="hero-tagline">Inteligencia de mercado, cotizaciones y comunicación con productores.</p>
+</div>
+<div class="tools-section">
+
+  <!-- PÚBLICA -->
+  <div class="section-row">
+    <div>
+      <div class="section-label">Información pública</div>
+      <div class="section-desc">Visible para productores, clientes y cualquier visitante</div>
+    </div>
+    <span class="pill-public">🌐 Acceso libre</span>
+  </div>
+  <div class="tools-grid">
+    <a class="tool-card public-card" href="mercado-publico.html">
+      <div class="card-top">
+        <div class="card-icon icon-green">📡</div>
+        <div class="card-meta">
+          <div class="card-title">Inteligencia de Mercado</div>
+          <div class="card-desc">Precios reales de pitahaya en Walmart, Whole Foods y USDA. Cadena de valor completa del campo al consumidor. Links directos a fuentes.</div>
+        </div>
+      </div>
+      <div class="card-footer"><span class="card-tag tag-green">Público · Semanal</span><span class="card-arrow">→</span></div>
+    </a>
+  </div>
+
+  <hr class="divider">
+
+  <!-- INTERNA -->
+  <div class="section-row">
+    <div>
+      <div class="section-label">Herramientas internas</div>
+      <div class="section-desc">Para uso del equipo comercial Agrovip</div>
+    </div>
+    <span class="pill-private">🔒 Uso interno</span>
+  </div>
+  <div class="tools-grid-2">
+    <a class="tool-card private-card" href="tracker.html">
+      <div class="card-top">
+        <div class="card-icon icon-gold">📊</div>
+        <div class="card-meta">
+          <div class="card-title">Tracker de Mercado</div>
+          <div class="card-desc">Búsqueda automática con IA, historial semanal acumulado, gráficas de tendencia y exportación a Excel.</div>
+        </div>
+      </div>
+      <div class="card-footer"><span class="card-tag tag-gold">IA + Web · Lunes</span><span class="card-arrow">→</span></div>
+    </a>
+    <a class="tool-card private-card" href="aviso.html">
+      <div class="card-top">
+        <div class="card-icon icon-green">🌿</div>
+        <div class="card-meta">
+          <div class="card-title">Aviso de Precio</div>
+          <div class="card-desc">Genera el comunicado semanal para productores con justificación de precio en lenguaje claro. Listo para imprimir o WhatsApp.</div>
+        </div>
+      </div>
+      <div class="card-footer"><span class="card-tag tag-green">Productor · PDF</span><span class="card-arrow">→</span></div>
+    </a>
+    <a class="tool-card private-card" href="cotizador.html">
+      <div class="card-top">
+        <div class="card-icon icon-blue">📋</div>
+        <div class="card-meta">
+          <div class="card-title">Cotizador</div>
+          <div class="card-desc">Cotizaciones profesionales para clientes internacionales con márgenes, incoterms y PDF con membrete Agrovip.</div>
+        </div>
+      </div>
+      <div class="card-footer"><span class="card-tag tag-blue">Clientes · PDF</span><span class="card-arrow">→</span></div>
+    </a>
+  </div>
+</div>
+<footer>Agrovip S.A. &nbsp;·&nbsp; Ecuador &nbsp;·&nbsp; agrovipsas.com</footer>
+</body>
+</html>

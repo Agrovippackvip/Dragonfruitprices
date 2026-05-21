@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aviso de Precio Semanal — Agrovip</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --verde: #1A6B3C;
+    --verde-oliva: #7A9A2E;
+    --crema: #F8F4ED;
+    --cafe: #3D2B1A;
+    --dorado: #C8962A;
+    --gris: #6B6B6B;
+    --blanco: #FFFFFF;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--crema);
+    color: var(--cafe);
+    min-height: 100vh;
+  }
+
+  /* ── PANEL ADMIN ── */
+  .admin-panel {
+    background: var(--verde);
+    color: var(--blanco);
+    padding: 28px 32px 32px;
+    border-bottom: 4px solid var(--dorado);
+  }
+  .admin-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .logo-badge {
+    width: 48px; height: 48px;
+    background: var(--dorado);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-weight: 900; font-size: 22px;
+    color: var(--blanco);
+    flex-shrink: 0;
+  }
+  .admin-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; }
+  .admin-subtitle { font-size: 13px; opacity: 0.75; margin-top: 2px; }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  @media(max-width:700px){ .form-grid { grid-template-columns: 1fr 1fr; } }
+  @media(max-width:460px){ .form-grid { grid-template-columns: 1fr; } }
+
+  .field label {
+    display: block;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.75;
+    margin-bottom: 5px;
+  }
+  .field input, .field select, .field textarea {
+    width: 100%;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 6px;
+    color: var(--blanco);
+    padding: 9px 12px;
+    font-size: 14px;
+    font-family: 'Source Sans 3', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .field input::placeholder, .field textarea::placeholder { color: rgba(255,255,255,0.4); }
+  .field input:focus, .field textarea:focus { border-color: var(--dorado); }
+  .field select option { background: var(--verde); color: #fff; }
+  .field textarea { resize: vertical; min-height: 60px; }
+
+  .row-full { grid-column: 1 / -1; }
+
+  .btn-generar {
+    background: var(--dorado);
+    color: var(--blanco);
+    border: none; border-radius: 8px;
+    padding: 13px 28px;
+    font-size: 15px; font-weight: 600;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 10px;
+    transition: opacity 0.2s, transform 0.15s;
+    font-family: 'Source Sans 3', sans-serif;
+  }
+  .btn-generar:hover { opacity: 0.9; transform: translateY(-1px); }
+  .btn-generar:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .spinner {
+    width: 18px; height: 18px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    display: none;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── AVISO GENERADO ── */
+  #aviso-container {
+    max-width: 680px;
+    margin: 36px auto 48px;
+    padding: 0 20px;
+    display: none;
+    animation: fadeUp 0.5s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .aviso-card {
+    background: var(--blanco);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(26,107,60,0.12), 0 2px 8px rgba(0,0,0,0.06);
+  }
+
+  /* cabecera del aviso */
+  .aviso-header {
+    background: var(--verde);
+    padding: 28px 32px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .aviso-header::before {
+    content: '';
+    position: absolute; top: -40px; right: -40px;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+  }
+  .aviso-header::after {
+    content: '';
+    position: absolute; bottom: -20px; right: 60px;
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: rgba(200,150,42,0.2);
+  }
+  .aviso-semana {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--dorado);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .aviso-titulo {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 900;
+    color: var(--blanco);
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .aviso-precio-badge {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+    background: var(--dorado);
+    border-radius: 8px;
+    padding: 6px 16px;
+    margin-top: 4px;
+  }
+  .aviso-precio-badge .moneda { color: #fff; font-size: 14px; opacity: 0.85; }
+  .aviso-precio-badge .precio-num {
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    font-size: 28px; font-weight: 900;
+  }
+  .aviso-precio-badge .por-kg { color: #fff; font-size: 13px; opacity: 0.85; }
+
+  /* cuerpo del aviso */
+  .aviso-body { padding: 28px 32px 32px; }
+
+  .section-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--verde);
+    font-weight: 700;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--verde-oliva);
+    display: inline-block;
+  }
+
+  .aviso-contenido {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--cafe);
+    white-space: pre-wrap;
+    margin-bottom: 24px;
+  }
+  .aviso-contenido strong { color: var(--verde); }
+
+  /* indicadores KPI */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  @media(max-width:480px){ .kpi-row { grid-template-columns: 1fr 1fr; } }
+  .kpi-box {
+    background: var(--crema);
+    border-radius: 10px;
+    padding: 14px 16px;
+    border-left: 3px solid var(--verde-oliva);
+  }
+  .kpi-box .kpi-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 700;
+    color: var(--verde);
+    line-height: 1;
+  }
+  .kpi-box .kpi-label { font-size: 11px; color: var(--gris); margin-top: 4px; line-height: 1.3; }
+
+  /* tendencia visual */
+  .tendencia-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--crema);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 24px;
+  }
+  .tendencia-icon { font-size: 24px; }
+  .tendencia-texto { font-size: 14px; line-height: 1.4; }
+  .tendencia-titulo { font-weight: 700; color: var(--cafe); font-size: 13px; }
+
+  /* footer del aviso */
+  .aviso-footer {
+    background: var(--crema);
+    border-top: 1px solid #E8E2D8;
+    padding: 16px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .firma { font-size: 13px; color: var(--gris); }
+  .firma strong { color: var(--cafe); }
+
+  .btn-imprimir {
+    background: transparent;
+    border: 1.5px solid var(--verde);
+    color: var(--verde);
+    border-radius: 6px;
+    padding: 8px 18px;
+    font-size: 13px; font-weight: 600;
+    cursor: pointer;
+    font-family: 'Source Sans 3', sans-serif;
+    transition: all 0.2s;
+  }
+  .btn-imprimir:hover { background: var(--verde); color: #fff; }
+
+  .error-box {
+    background: #FFF0F0;
+    border: 1px solid #FFCCCC;
+    border-radius: 8px;
+    padding: 14px 18px;
+    color: #C0392B;
+    font-size: 14px;
+    margin-top: 16px;
+    display: none;
+  }
+
+  @media print {
+    .admin-panel { display: none !important; }
+    #aviso-container { display: block !important; margin: 0; padding: 0; max-width: 100%; }
+    .btn-imprimir { display: none; }
+    .aviso-card { box-shadow: none; border: 1px solid #ccc; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ PANEL ADMIN ═══════════════ -->
+<div class="admin-panel">
+  <div class="admin-header">
+    <div class="logo-badge">A</div>
+    <div>
+      <div class="admin-title">Generador de Aviso Semanal de Precio</div>
+      <div class="admin-subtitle">Agrovip S.A. — Para comunicación con productores</div>
+    </div>
+  </div>
+
+  <div class="form-grid">
+    <div class="field">
+      <label>Semana / Período</label>
+      <input type="text" id="semana" placeholder="Ej: 19–25 Mayo 2026">
+    </div>
+    <div class="field">
+      <label>Precio ofrecido ($/kg)</label>
+      <input type="number" id="precio" placeholder="Ej: 1.85" step="0.01" min="0">
+    </div>
+    <div class="field">
+      <label>Precio semana anterior ($/kg)</label>
+      <input type="number" id="precio-ant" placeholder="Ej: 2.10" step="0.01" min="0">
+    </div>
+    <div class="field">
+      <label>Precio mercado destino ($/kg)</label>
+      <input type="number" id="precio-mercado" placeholder="Ej: 7.50" step="0.01" min="0">
+    </div>
+    <div class="field">
+      <label>Tendencia de mercado</label>
+      <select id="tendencia">
+        <option value="baja">📉 Baja — sobreoferta</option>
+        <option value="estable">➡️ Estable</option>
+        <option value="alza">📈 Alza — escasez</option>
+        <option value="incierta">⚠️ Incierta / mixta</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Nivel de oferta Ecuador</label>
+      <select id="oferta">
+        <option value="alta">Alta — temporada pico</option>
+        <option value="media">Media — normal</option>
+        <option value="baja">Baja — fuera de temporada</option>
+      </select>
+    </div>
+    <div class="field row-full">
+      <label>Contexto adicional (opcional)</label>
+      <textarea id="contexto" placeholder="Ej: Clientes en Europa reportan exceso de stock, Veritas pidió calidad extra esta semana, hay competencia de Vietnam..."></textarea>
+    </div>
+  </div>
+
+  <button class="btn-generar" id="btn-gen" onclick="generarAviso()">
+    <span class="spinner" id="spinner"></span>
+    <span id="btn-texto">⚡ Generar aviso con IA</span>
+  </button>
+  <div class="error-box" id="error-box"></div>
+</div>
+
+<!-- ═══════════════ AVISO GENERADO ═══════════════ -->
+<div id="aviso-container">
+  <div class="aviso-card">
+    <div class="aviso-header">
+      <div class="aviso-semana" id="out-semana">Semana —</div>
+      <div class="aviso-titulo">Aviso de Precio<br>de Compra Pitahaya</div>
+      <div class="aviso-precio-badge">
+        <span class="moneda">$</span>
+        <span class="precio-num" id="out-precio">—</span>
+        <span class="por-kg">/ kg</span>
+      </div>
+    </div>
+
+    <div class="aviso-body">
+      <!-- KPIs -->
+      <div class="kpi-row" id="kpi-row">
+        <!-- se llena con JS -->
+      </div>
+
+      <!-- Tendencia -->
+      <div class="tendencia-bar" id="tendencia-bar">
+        <div class="tendencia-icon" id="tend-icon">📊</div>
+        <div class="tendencia-texto">
+          <div class="tendencia-titulo" id="tend-titulo">Tendencia del mercado</div>
+          <div id="tend-desc" style="font-size:13px;color:#6B6B6B;">—</div>
+        </div>
+      </div>
+
+      <!-- Cuerpo IA -->
+      <div class="section-label">Explicación para el productor</div>
+      <div class="aviso-contenido" id="out-contenido">—</div>
+    </div>
+
+    <div class="aviso-footer">
+      <div class="firma">
+        Emitido por <strong>Agrovip S.A.</strong><br>
+        <span id="out-fecha">—</span>
+      </div>
+      <button class="btn-imprimir" onclick="window.print()">🖨 Imprimir / PDF</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const tendenciaData = {
+  baja:    { icon: '📉', titulo: 'Mercado a la baja — sobreoferta', color: '#C0392B' },
+  estable: { icon: '➡️', titulo: 'Mercado estable', color: '#2980B9' },
+  alza:    { icon: '📈', titulo: 'Mercado en alza — escasez', color: '#27AE60' },
+  incierta:{ icon: '⚠️', titulo: 'Tendencia mixta / incierta', color: '#E67E22' },
+};
+
+async function generarAviso() {
+  const semana      = document.getElementById('semana').value.trim();
+  const precio      = parseFloat(document.getElementById('precio').value);
+  const precioAnt   = parseFloat(document.getElementById('precio-ant').value);
+  const precioMerc  = parseFloat(document.getElementById('precio-mercado').value);
+  const tendencia   = document.getElementById('tendencia').value;
+  const oferta      = document.getElementById('oferta').value;
+  const contexto    = document.getElementById('contexto').value.trim();
+
+  const errBox = document.getElementById('error-box');
+  errBox.style.display = 'none';
+
+  if (!semana || isNaN(precio) || isNaN(precioAnt) || isNaN(precioMerc)) {
+    errBox.textContent = 'Por favor completa al menos: semana, precio actual, precio anterior y precio de mercado destino.';
+    errBox.style.display = 'block';
+    return;
+  }
+
+  // UI loading
+  const btn = document.getElementById('btn-gen');
+  btn.disabled = true;
+  document.getElementById('spinner').style.display = 'block';
+  document.getElementById('btn-texto').textContent = 'Generando…';
+
+  const variacion = ((precio - precioAnt) / precioAnt * 100).toFixed(1);
+  const margen = ((precioMerc - precio) / precioMerc * 100).toFixed(1);
+
+  const tendMap = { baja: 'baja (sobreoferta)', estable: 'estable', alza: 'en alza (escasez)', incierta: 'mixta o incierta' };
+  const ofertaMap = { alta: 'alta (temporada pico)', media: 'media (normal)', baja: 'baja (fuera de temporada)' };
+
+  const prompt = `Eres el equipo comercial de Agrovip S.A., empresa exportadora ecuatoriana de pitahaya roja pulpa blanca. Debes redactar el cuerpo de un AVISO SEMANAL DE PRECIO dirigido a productores agricultores (no son técnicos ni financieros).
+
+DATOS DE ESTA SEMANA:
+- Período: ${semana}
+- Precio ofrecido al productor: $${precio}/kg
+- Precio semana anterior: $${precioAnt}/kg (variación: ${variacion}%)
+- Precio wholesale en mercado destino (EE.UU./Europa): $${precioMerc}/kg
+- Tendencia de mercado: ${tendMap[tendencia]}
+- Nivel de oferta Ecuador: ${ofertaMap[oferta]}
+${contexto ? '- Contexto adicional: ' + contexto : ''}
+
+INSTRUCCIONES:
+- Explica en 3 párrafos breves y claros POR QUÉ el precio está en $${precio}/kg esta semana.
+- Párrafo 1: lo que está pasando en el mercado destino (precios, demanda, competencia).
+- Párrafo 2: la situación de oferta en Ecuador y cómo afecta el precio.
+- Párrafo 3: perspectiva para las próximas semanas y qué puede hacer el productor para maximizar su precio (calidad, calibre, puntualidad).
+- Usa lenguaje cercano, honesto y respetuoso. Nada de tecnicismos. El productor debe sentir que Agrovip le habla con transparencia.
+- NO uses bullet points. Solo prosa natural, párrafos cortos.
+- Al final, una frase de cierre de compromiso mutuo entre Agrovip y el productor.
+- Máximo 220 palabras en total.
+- Responde SOLO el texto del aviso, sin títulos ni encabezados.`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await res.json();
+    const texto = data.content?.find(b => b.type === 'text')?.text || 'No se pudo generar el aviso.';
+
+    // Rellenar aviso
+    document.getElementById('out-semana').textContent = 'Semana ' + semana;
+    document.getElementById('out-precio').textContent = precio.toFixed(2);
+    document.getElementById('out-contenido').textContent = texto;
+    document.getElementById('out-fecha').textContent = new Date().toLocaleDateString('es-EC', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+
+    // KPIs
+    const varClass = parseFloat(variacion) >= 0 ? '#27AE60' : '#C0392B';
+    const varSym   = parseFloat(variacion) >= 0 ? '▲' : '▼';
+    document.getElementById('kpi-row').innerHTML = `
+      <div class="kpi-box">
+        <div class="kpi-val">$${precio.toFixed(2)}</div>
+        <div class="kpi-label">Precio ofrecido<br>esta semana</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-val" style="color:${varClass}">${varSym} ${Math.abs(variacion)}%</div>
+        <div class="kpi-label">Variación vs.<br>semana anterior</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-val">$${precioMerc.toFixed(2)}</div>
+        <div class="kpi-label">Precio mercado<br>destino ($/kg)</div>
+      </div>`;
+
+    // Tendencia
+    const td = tendenciaData[tendencia];
+    document.getElementById('tend-icon').textContent = td.icon;
+    document.getElementById('tend-titulo').textContent = td.titulo;
+    document.getElementById('tend-titulo').style.color = td.color;
+    const tendDesc = {
+      baja: 'Hay más fruta que demanda en el mercado. Los compradores tienen poder de negociación.',
+      estable: 'Oferta y demanda equilibradas. Precios previsibles en el corto plazo.',
+      alza: 'Demanda supera la oferta disponible. Buena oportunidad si se mantiene calidad.',
+      incierta: 'El mercado envía señales mixtas. Se monitorea semana a semana.'
+    };
+    document.getElementById('tend-desc').textContent = tendDesc[tendencia];
+
+    document.getElementById('aviso-container').style.display = 'block';
+    document.getElementById('aviso-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  } catch(e) {
+    errBox.textContent = 'Error al conectar con la IA: ' + e.message;
+    errBox.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    document.getElementById('spinner').style.display = 'none';
+    document.getElementById('btn-texto').textContent = '⚡ Generar aviso con IA';
+  }
+}
+</script>
+</body>
+</html>
