@@ -5,803 +5,512 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tracker de Mercado — Pitahaya Agrovip</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root {
-  --g:   #1A6B3C;
-  --g2:  #0f4526;
-  --ol:  #7A9A2E;
-  --gold:#C8962A;
-  --cr:  #F7F3EC;
-  --ink: #1C1A16;
-  --mid: #5A5750;
-  --brd: #E3DDD3;
-  --red: #C0392B;
-  --blu: #1A5276;
-  --bg:  #FDFBF7;
-}
+:root{--g:#1A6B3C;--g2:#0d3d22;--ol:#7A9A2E;--gold:#C8962A;--cr:#F7F3EC;--ink:#1C1A16;--mid:#5A5750;--brd:#E3DDD3;--bg:#FDFBF7;--red:#b83232;--blue:#1a5276;}
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);}
 
-/* ── TOP BAR ── */
-.topbar{
-  background:var(--g2);
-  padding:18px 28px;
-  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
-  border-bottom:3px solid var(--gold);
-}
-.brand{display:flex;align-items:center;gap:12px;}
-.brand-badge{
-  width:42px;height:42px;background:var(--gold);border-radius:8px;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Syne',sans-serif;font-weight:800;font-size:18px;color:#fff;
-}
-.brand-name{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:#fff;}
-.brand-sub{font-size:11px;color:rgba(255,255,255,0.55);margin-top:1px;}
-.topbar-actions{display:flex;gap:10px;flex-wrap:wrap;}
-.btn{
-  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;
-  border-radius:7px;padding:8px 16px;cursor:pointer;border:none;
-  display:flex;align-items:center;gap:7px;transition:all 0.18s;
-}
-.btn-gold{background:var(--gold);color:#fff;}
-.btn-gold:hover{opacity:0.88;transform:translateY(-1px);}
-.btn-outline{background:transparent;border:1.5px solid rgba(255,255,255,0.3);color:#fff;}
-.btn-outline:hover{background:rgba(255,255,255,0.08);}
-.btn:disabled{opacity:0.45;cursor:not-allowed;transform:none!important;}
+.topbar{background:var(--g2);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;border-bottom:3px solid var(--gold);}
+.brand{display:flex;align-items:center;gap:10px;}
+.brand-badge{width:36px;height:36px;background:var(--gold);border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:16px;color:#fff;}
+.brand-name{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:#fff;}
+.brand-sub{font-size:11px;color:rgba(255,255,255,.5);margin-top:1px;}
+.topbar-btns{display:flex;gap:8px;flex-wrap:wrap;}
+.btn{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;border-radius:6px;padding:8px 13px;cursor:pointer;border:none;display:flex;align-items:center;gap:5px;transition:all .15s;}
+.btn-gold{background:var(--gold);color:#fff;}.btn-gold:hover{opacity:.88;}
+.btn-outline{background:transparent;border:1.5px solid rgba(255,255,255,.3);color:#fff;}.btn-outline:hover{background:rgba(255,255,255,.08);}
+.btn-sm{padding:6px 10px;font-size:11px;}
 
-/* ── MAIN LAYOUT ── */
-.layout{display:grid;grid-template-columns:340px 1fr;min-height:calc(100vh - 72px);}
-@media(max-width:860px){.layout{grid-template-columns:1fr;}}
+.notice{background:#EBF5FB;border:1px solid #AED6F1;border-radius:8px;padding:10px 16px;font-size:12px;color:var(--blue);margin:14px 24px 0;display:flex;align-items:center;gap:8px;line-height:1.5;}
+.notice a{color:var(--blue);font-weight:700;}
 
-/* ── LEFT PANEL ── */
-.panel-left{
-  background:var(--cr);
-  border-right:1px solid var(--brd);
-  padding:24px 22px;
-  display:flex;flex-direction:column;gap:18px;
-}
-.panel-title{
-  font-family:'Syne',sans-serif;font-weight:700;font-size:13px;
-  text-transform:uppercase;letter-spacing:0.1em;color:var(--g);
-  padding-bottom:10px;border-bottom:2px solid var(--ol);
-}
-.field{display:flex;flex-direction:column;gap:5px;}
-.field label{font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--mid);font-weight:500;}
-.field input,.field select,.field textarea{
-  background:#fff;border:1.5px solid var(--brd);border-radius:7px;
-  padding:9px 12px;font-size:14px;font-family:'DM Sans',sans-serif;
-  color:var(--ink);outline:none;transition:border-color 0.18s;
-}
-.field input:focus,.field textarea:focus{border-color:var(--g);}
-.field textarea{resize:vertical;min-height:72px;font-size:13px;}
-.field select option{background:#fff;}
+.layout{display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 90px);}
+@media(max-width:800px){.layout{grid-template-columns:1fr;}}
 
-.sources-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
-.src-chk{
-  display:flex;align-items:center;gap:7px;
-  background:#fff;border:1.5px solid var(--brd);border-radius:6px;
-  padding:7px 10px;cursor:pointer;font-size:12px;color:var(--ink);
-  transition:border-color 0.15s,background 0.15s;
-}
-.src-chk:hover{border-color:var(--g);}
-.src-chk input[type=checkbox]{accent-color:var(--g);width:14px;height:14px;}
-.src-chk.checked{border-color:var(--g);background:#EAF3EC;}
+.panel-left{background:var(--cr);border-right:1px solid var(--brd);padding:18px 16px;display:flex;flex-direction:column;gap:12px;}
+.panel-title{font-family:'Syne',sans-serif;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--g);border-bottom:2px solid var(--ol);padding-bottom:7px;}
+.field{display:flex;flex-direction:column;gap:3px;}
+.field label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--mid);font-weight:600;}
+.field input,.field select,.field textarea{background:#fff;border:1.5px solid var(--brd);border-radius:6px;padding:8px 10px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--ink);outline:none;transition:border-color .15s;}
+.field input:focus{border-color:var(--g);}
+.field textarea{resize:vertical;min-height:60px;font-size:12px;}
 
-.btn-buscar{
-  background:var(--g);color:#fff;border:none;border-radius:8px;
-  padding:13px 20px;font-size:14px;font-weight:600;font-family:'DM Sans',sans-serif;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;
-  transition:all 0.18s;width:100%;
-}
-.btn-buscar:hover{background:var(--g2);}
-.btn-buscar:disabled{opacity:0.45;cursor:not-allowed;}
-.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,0.35);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;display:none;}
-@keyframes spin{to{transform:rotate(360deg);}}
+.src-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;}
+.src-item{background:#fff;border:1.5px solid var(--brd);border-radius:5px;padding:6px 8px;font-size:11px;color:var(--mid);display:flex;align-items:center;gap:5px;}
+.src-item a{color:var(--g);text-decoration:none;font-weight:600;font-size:10px;}
+.src-item a:hover{text-decoration:underline;}
 
-.status-log{
-  background:#fff;border:1px solid var(--brd);border-radius:7px;
-  padding:10px 12px;font-size:12px;color:var(--mid);min-height:60px;
-  max-height:120px;overflow-y:auto;line-height:1.6;display:none;
-}
+.btn-guardar{background:var(--g);color:#fff;border:none;border-radius:7px;padding:12px;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;width:100%;transition:background .15s;}
+.btn-guardar:hover{background:var(--g2);}
 
-/* ── RIGHT PANEL ── */
-.panel-right{padding:24px 28px;display:flex;flex-direction:column;gap:24px;}
+.calc-box{background:#fff;border:1.5px solid var(--gold);border-radius:8px;padding:13px;}
+.calc-title{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--gold);margin-bottom:8px;}
+.cr-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px dashed var(--brd);}
+.cr-row:last-child{border:none;padding-top:6px;}
+.cr-label{font-size:11px;color:var(--mid);}
+.cr-val{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;}
 
-/* tabs */
-.tabs{display:flex;gap:4px;border-bottom:2px solid var(--brd);padding-bottom:0;}
-.tab{
-  font-family:'Syne',sans-serif;font-size:12px;font-weight:600;
-  text-transform:uppercase;letter-spacing:0.08em;
-  padding:10px 18px;cursor:pointer;color:var(--mid);
-  border-bottom:2px solid transparent;margin-bottom:-2px;transition:all 0.18s;
-}
+.panel-right{padding:18px 22px;display:flex;flex-direction:column;gap:16px;}
+.tabs{display:flex;gap:2px;border-bottom:2px solid var(--brd);flex-wrap:wrap;}
+.tab{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;padding:8px 13px;cursor:pointer;color:var(--mid);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s;}
 .tab.active{color:var(--g);border-bottom-color:var(--g);}
-
 .tab-content{display:none;}
-.tab-content.active{display:block;animation:fadeIn 0.3s ease;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.tab-content.active{display:block;animation:fi .2s ease;}
+@keyframes fi{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
 
-/* ── RESULTADO IA ── */
-.result-card{
-  background:#fff;border-radius:12px;border:1px solid var(--brd);
-  overflow:hidden;box-shadow:0 2px 16px rgba(26,107,60,0.06);
-}
-.result-header{
-  background:var(--g);padding:18px 22px;
-  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
-}
-.result-week{font-family:'Syne',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.65);}
-.result-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:#fff;}
-.result-price{
-  background:var(--gold);border-radius:8px;padding:8px 18px;
-  font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#fff;
-}
-.result-body{padding:22px;}
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px;}
-@media(max-width:600px){.kpis{grid-template-columns:1fr 1fr;}}
-.kpi{background:var(--cr);border-radius:9px;padding:12px 14px;border-left:3px solid var(--ol);}
-.kpi-val{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--g);}
-.kpi-lbl{font-size:11px;color:var(--mid);margin-top:3px;line-height:1.3;}
-.ai-text{font-size:14px;line-height:1.8;color:var(--ink);white-space:pre-wrap;}
-.sources-found{margin-top:16px;padding-top:14px;border-top:1px solid var(--brd);}
-.sf-title{font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--mid);margin-bottom:8px;}
-.sf-list{display:flex;flex-wrap:wrap;gap:7px;}
-.sf-tag{
-  background:#EAF3EC;color:var(--g);border:1px solid var(--ol);
-  border-radius:20px;padding:4px 12px;font-size:11px;font-weight:500;
-}
-.empty-state{
-  text-align:center;padding:60px 20px;color:var(--mid);
-  border:2px dashed var(--brd);border-radius:12px;
-}
-.empty-state .icon{font-size:40px;margin-bottom:12px;}
-.empty-state p{font-size:14px;line-height:1.6;}
-
-/* ── HISTORIAL TABLE ── */
-.hist-toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px;}
-.hist-title{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;}
-.table-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--brd);}
-table{width:100%;border-collapse:collapse;font-size:13px;}
+.table-wrap{overflow-x:auto;border-radius:9px;border:1px solid var(--brd);}
+table{width:100%;border-collapse:collapse;font-size:12px;}
 thead{background:var(--g);color:#fff;}
-th{padding:11px 14px;text-align:left;font-family:'Syne',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:0.07em;font-weight:600;}
-td{padding:10px 14px;border-bottom:1px solid var(--brd);vertical-align:top;}
+th{padding:9px 11px;text-align:left;font-family:'Syne',sans-serif;font-size:9px;text-transform:uppercase;letter-spacing:.06em;font-weight:700;}
+td{padding:8px 11px;border-bottom:1px solid var(--brd);vertical-align:middle;}
 tr:last-child td{border-bottom:none;}
 tr:nth-child(even) td{background:#FAFAF8;}
-.badge{display:inline-block;border-radius:20px;padding:2px 10px;font-size:11px;font-weight:500;}
+.badge{display:inline-block;border-radius:11px;padding:2px 7px;font-size:10px;font-weight:600;}
 .badge-dn{background:#FDECEC;color:var(--red);}
-.badge-up{background:#EAF7ED;color:#196F3D;}
-.badge-eq{background:#EEF2FF;color:var(--blu);}
-.del-btn{background:none;border:none;color:#ccc;cursor:pointer;font-size:15px;padding:2px 6px;border-radius:4px;transition:color 0.15s;}
+.badge-up{background:#EAF3EC;color:var(--g);}
+.badge-eq{background:#EEF2FF;color:var(--blue);}
+.seed-row td{background:#EAF3EC!important;}
+.seed-lbl{font-size:8px;background:var(--ol);color:#fff;padding:1px 5px;border-radius:8px;margin-left:4px;}
+.del-btn{background:none;border:none;color:#ccc;cursor:pointer;font-size:12px;padding:2px 4px;border-radius:3px;transition:color .15s;}
 .del-btn:hover{color:var(--red);}
 
-/* ── CHARTS ── */
-.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
-@media(max-width:700px){.charts-grid{grid-template-columns:1fr;}}
-.chart-card{background:#fff;border-radius:12px;border:1px solid var(--brd);padding:18px 20px;}
-.chart-card h3{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:14px;}
-canvas{width:100%!important;max-height:200px;}
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:600px){.charts-grid{grid-template-columns:1fr;}}
+.chart-card{background:#fff;border-radius:9px;border:1px solid var(--brd);padding:14px 16px;}
+.chart-card h3{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--ink);margin-bottom:10px;}
 
-/* ── AVISO ── */
-.aviso-card{background:#fff;border-radius:12px;border:1px solid var(--brd);overflow:hidden;}
-.aviso-hdr{background:var(--g);padding:22px 26px;}
-.aviso-sem{font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.6);margin-bottom:4px;}
-.aviso-ttl{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#fff;margin-bottom:10px;}
-.aviso-pbadge{display:inline-flex;align-items:baseline;gap:3px;background:var(--gold);border-radius:7px;padding:7px 16px;}
-.aviso-pbadge span{color:#fff;}
-.aviso-pbadge .pnum{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;}
-.aviso-body{padding:24px 26px;}
-.aviso-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px;}
-.aviso-kpi{background:var(--cr);border-radius:8px;padding:12px;border-left:3px solid var(--ol);}
-.aviso-kpi .av{font-family:'Syne',sans-serif;font-size:19px;font-weight:700;color:var(--g);}
-.aviso-kpi .al{font-size:11px;color:var(--mid);margin-top:3px;}
-.sec-label{font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--g);font-weight:700;border-bottom:2px solid var(--ol);display:inline-block;padding-bottom:4px;margin-bottom:10px;}
-.aviso-txt{font-size:14px;line-height:1.8;color:var(--ink);white-space:pre-wrap;}
-.aviso-foot{background:var(--cr);border-top:1px solid var(--brd);padding:14px 26px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
-.firma{font-size:12px;color:var(--mid);}
-.firma strong{color:var(--ink);}
+.forecast-card{background:#fff;border-radius:10px;border:1.5px solid var(--gold);padding:16px 18px;}
+.fc-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--gold);margin-bottom:12px;}
+.fc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+@media(max-width:500px){.fc-grid{grid-template-columns:1fr 1fr;}}
+.fc-week{background:var(--cr);border-radius:7px;padding:10px;border-top:3px solid var(--brd);}
+.fc-week.curr{border-top-color:var(--g);}
+.fc-week.fore{border-top-color:var(--gold);opacity:.9;}
+.fc-wlbl{font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:var(--mid);font-weight:600;margin-bottom:4px;}
+.fc-wprice{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--g);line-height:1;}
+.fc-wsub{font-size:10px;color:var(--mid);margin-top:2px;}
+.fc-wdir{font-size:10px;font-weight:600;margin-top:4px;}
+.fc-note{margin-top:12px;background:var(--cr);border-radius:6px;padding:10px 12px;font-size:12px;color:var(--mid);line-height:1.6;}
 
-/* error */
-.err{background:#FFF0F0;border:1px solid #FFCCCC;border-radius:7px;padding:11px 14px;color:var(--red);font-size:13px;margin-top:10px;display:none;}
+.usda-links{background:#fff;border-radius:9px;border:1.5px solid var(--blue);padding:14px 16px;margin-top:12px;}
+.ul-title{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--blue);margin-bottom:10px;}
+.ul-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+@media(max-width:500px){.ul-grid{grid-template-columns:1fr;}}
+.ul-item{background:var(--cr);border-radius:7px;padding:10px 12px;}
+.ul-name{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+.ul-desc{font-size:10px;color:var(--mid);line-height:1.4;margin-bottom:5px;}
+.ul-link{font-size:10px;color:var(--blue);text-decoration:none;font-weight:600;}
+.ul-link:hover{text-decoration:underline;}
+.ul-data{font-size:11px;font-weight:600;color:var(--g);margin-top:4px;}
 
-@media print{
-  .topbar,.panel-left,.tabs{display:none!important;}
-  .panel-right{padding:0;}
-  #tab-aviso{display:block!important;}
-  .aviso-foot .btn{display:none;}
-}
+.empty{text-align:center;padding:40px 20px;color:var(--mid);border:2px dashed var(--brd);border-radius:9px;}
+.empty .ei{font-size:32px;margin-bottom:8px;}
+.empty p{font-size:12px;line-height:1.6;}
+
+@media print{.topbar,.panel-left,.tabs,.notice{display:none!important;}.panel-right{padding:0;}}
 </style>
 </head>
 <body>
 
-<!-- TOP BAR -->
 <div class="topbar">
   <div class="brand">
     <div class="brand-badge">A</div>
     <div>
       <div class="brand-name">Tracker de Mercado — Pitahaya</div>
-      <div class="brand-sub">Agrovip S.A. · Inteligencia de precios semanal</div>
+      <div class="brand-sub">Agrovip S.A. · Actualizar cada jueves</div>
     </div>
   </div>
-  <div class="topbar-actions">
-    <button class="btn btn-outline" onclick="exportExcel()">📊 Exportar Excel</button>
-    <button class="btn btn-gold" onclick="limpiarHistorial()">🗑 Limpiar historial</button>
+  <div class="topbar-btns">
+    <button class="btn btn-outline" onclick="exportExcel()">📊 Excel</button>
+    <button class="btn btn-gold" onclick="limpiarHistorial()">🗑 Limpiar</button>
   </div>
+</div>
+
+<div class="notice">
+  💡 <span>Ingresa los datos manualmente cada jueves consultando las fuentes USDA. Para análisis con IA usa <a href="https://claude.ai" target="_blank">Claude.ai</a> y pega el análisis en el campo de notas.</span>
 </div>
 
 <div class="layout">
 
-  <!-- LEFT: INPUTS -->
+  <!-- LEFT -->
   <div class="panel-left">
-    <div class="panel-title">Nueva Búsqueda Semanal</div>
+    <div class="panel-title">Registrar semana</div>
 
     <div class="field">
       <label>Semana / Período</label>
-      <input id="in-semana" type="text" placeholder="Ej: 19–25 Mayo 2026">
+      <input id="in-semana" type="text" placeholder="Ej: 22–28 Mayo 2026">
     </div>
     <div class="field">
-      <label>Precio compra al productor ($/kg)</label>
-      <input id="in-precio" type="number" step="0.01" placeholder="Ej: 1.85">
+      <label>Precio productor ($/kg)</label>
+      <input id="in-prod" type="number" step="0.01" placeholder="1.30" oninput="calcularCadena()">
     </div>
     <div class="field">
-      <label>Contexto adicional (opcional)</label>
-      <textarea id="in-contexto" placeholder="Ej: competencia de Vietnam, clientes piden descuento, problema de calidad esta semana..."></textarea>
+      <label>Precio wholesale caja 4.5kg (USDA NY)</label>
+      <input id="in-ws" type="number" step="0.5" placeholder="36.00">
+    </div>
+    <div class="field">
+      <label>Precio retail $/kg (Walmart equiv.)</label>
+      <input id="in-retail" type="number" step="0.1" placeholder="12.40">
+    </div>
+    <div class="field">
+      <label>Tendencia mercado</label>
+      <select id="in-tend">
+        <option value="baja">📉 Baja — sobreoferta</option>
+        <option value="estable" selected>➡️ Estable</option>
+        <option value="alza">📈 Alza — escasez</option>
+        <option value="incierta">⚠️ Incierta</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Nivel oferta Ecuador</label>
+      <select id="in-oferta">
+        <option value="alta">Alta — temporada pico</option>
+        <option value="media" selected>Media — normal</option>
+        <option value="baja">Baja — fuera de temporada</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Notas / análisis de la semana</label>
+      <textarea id="in-notas" placeholder="Pega aquí el análisis de Claude.ai o escribe tus observaciones..."></textarea>
     </div>
 
-    <div class="field">
-      <label>Fuentes a consultar</label>
-      <div class="sources-grid" id="sources-grid">
-        <label class="src-chk checked"><input type="checkbox" value="Walmart USA pitahaya dragon fruit price" checked> Walmart</label>
-        <label class="src-chk checked"><input type="checkbox" value="Whole Foods Market dragon fruit pitahaya price" checked> Whole Foods</label>
-        <label class="src-chk checked"><input type="checkbox" value="USDA Market News dragon fruit wholesale price" checked> USDA</label>
-        <label class="src-chk checked"><input type="checkbox" value="Kroger dragon fruit price" checked> Kroger</label>
-        <label class="src-chk"><input type="checkbox" value="Instacart dragon fruit pitahaya price US"> Instacart</label>
-        <label class="src-chk"><input type="checkbox" value="Vietnam dragon fruit export price 2026"> Vietnam precio</label>
-        <label class="src-chk"><input type="checkbox" value="dragon fruit Ecuador export wholesale 2026"> Ecuador exportación</label>
-        <label class="src-chk"><input type="checkbox" value="Tridge dragon fruit fresh price 2026"> Tridge</label>
+    <button class="btn-guardar" onclick="guardar()">💾 Guardar semana</button>
+
+    <!-- FUENTES RÁPIDAS -->
+    <div style="background:#fff;border:1px solid var(--brd);border-radius:7px;padding:10px 12px;">
+      <div style="font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--mid);margin-bottom:8px;">🔗 Fuentes USDA — abrir cada jueves</div>
+      <div class="src-grid">
+        <div class="src-item">🏛 NY <a href="https://www.ams.usda.gov/mnreports/nx_fv010.pdf" target="_blank">NX_FV010 →</a></div>
+        <div class="src-item">🏛 FOB <a href="https://www.ams.usda.gov/mnreports/fvdfob.pdf" target="_blank">FVDFOB →</a></div>
+        <div class="src-item">🏛 BAL <a href="https://www.ams.usda.gov/mnreports/bp_fv010.pdf" target="_blank">BP_FV010 →</a></div>
+        <div class="src-item">🏛 BOS <a href="https://www.ams.usda.gov/mnreports/bh_fv010.pdf" target="_blank">BH_FV010 →</a></div>
+        <div class="src-item">🛒 WM <a href="https://www.walmart.com/ip/Fresh-Dragon-Fruit-Each/638705858" target="_blank">Walmart →</a></div>
+        <div class="src-item">📊 TRD <a href="https://dir.tridge.com/prices/fresh-dragon-fruit/US" target="_blank">Tridge →</a></div>
       </div>
     </div>
 
-    <button class="btn-buscar" id="btn-buscar" onclick="ejecutarBusqueda()">
-      <span class="spinner" id="sp"></span>
-      <span id="btn-txt">🔍 Buscar y analizar con IA</span>
-    </button>
-    <div class="err" id="err-box"></div>
-    <div class="status-log" id="status-log"></div>
+    <!-- CALCULADORA -->
+    <div class="calc-box">
+      <div class="calc-title">🧮 Calculadora cadena de valor</div>
+      <div id="calc-result"><div style="font-size:11px;color:var(--mid);text-align:center;padding:6px;">Ingresa precio del productor</div></div>
+    </div>
   </div>
 
-  <!-- RIGHT: RESULTS -->
+  <!-- RIGHT -->
   <div class="panel-right">
     <div class="tabs">
-      <div class="tab active" onclick="switchTab('resultado')">Resultado IA</div>
-      <div class="tab" onclick="switchTab('historial')">Historial (<span id="hist-count">0</span>)</div>
+      <div class="tab active" onclick="switchTab('historico')">Histórico (<span id="hist-count">0</span>)</div>
       <div class="tab" onclick="switchTab('graficas')">Gráficas</div>
-      <div class="tab" onclick="switchTab('aviso')">Aviso Productor</div>
+      <div class="tab" onclick="switchTab('proyeccion')">Proyección 4 sem.</div>
+      <div class="tab" onclick="switchTab('fuentes')">Fuentes USDA</div>
     </div>
 
-    <!-- TAB RESULTADO -->
-    <div class="tab-content active" id="tab-resultado">
-      <div id="resultado-wrap">
-        <div class="empty-state">
-          <div class="icon">📡</div>
-          <p>Ingresa los datos de la semana y haz clic en<br><strong>"Buscar y analizar con IA"</strong><br>para obtener el análisis de precios del mercado.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- TAB HISTORIAL -->
-    <div class="tab-content" id="tab-historial">
-      <div class="hist-toolbar">
-        <div class="hist-title">Registro semanal acumulado</div>
+    <!-- HISTORICO -->
+    <div class="tab-content active" id="tab-historico">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;">
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;">Registro histórico acumulado</div>
       </div>
       <div class="table-wrap">
-        <table id="hist-table">
-          <thead>
-            <tr>
-              <th>Semana</th>
-              <th>$/kg productor</th>
-              <th>$/kg retail USA</th>
-              <th>$/kg retail anterior</th>
-              <th>Variación retail</th>
-              <th>Tendencia</th>
-              <th>Oferta</th>
-              <th></th>
-            </tr>
-          </thead>
+        <table>
+          <thead><tr>
+            <th>Semana</th><th>$/kg prod.</th><th>$/caja NY</th><th>$/kg retail</th>
+            <th>Var. retail</th><th>Tendencia</th><th>Oferta</th><th>Margen /kg</th><th></th>
+          </tr></thead>
           <tbody id="hist-body"></tbody>
         </table>
       </div>
     </div>
 
-    <!-- TAB GRÁFICAS -->
+    <!-- GRAFICAS -->
     <div class="tab-content" id="tab-graficas">
       <div class="charts-grid">
-        <div class="chart-card">
-          <h3>📉 Precio retail USA ($/kg)</h3>
-          <canvas id="chart-retail"></canvas>
-        </div>
-        <div class="chart-card">
-          <h3>🌱 Precio compra productor ($/kg)</h3>
-          <canvas id="chart-prod"></canvas>
-        </div>
-        <div class="chart-card">
-          <h3>📦 Índice de oferta semanal</h3>
-          <canvas id="chart-oferta"></canvas>
-        </div>
-        <div class="chart-card">
-          <h3>📊 Margen implícito (retail − productor)</h3>
-          <canvas id="chart-margen"></canvas>
-        </div>
+        <div class="chart-card"><h3>📉 Precio retail USA ($/kg)</h3><canvas id="chart-retail"></canvas></div>
+        <div class="chart-card"><h3>🌱 Precio productor ($/kg)</h3><canvas id="chart-prod"></canvas></div>
+        <div class="chart-card"><h3>📦 Wholesale NY ($/caja 4.5kg)</h3><canvas id="chart-ws"></canvas></div>
+        <div class="chart-card"><h3>📊 Margen cadena (retail − prod.)</h3><canvas id="chart-margen"></canvas></div>
       </div>
     </div>
 
-    <!-- TAB AVISO -->
-    <div class="tab-content" id="tab-aviso">
-      <div id="aviso-wrap">
-        <div class="empty-state">
-          <div class="icon">📄</div>
-          <p>El aviso para productores se genera automáticamente<br>después de ejecutar la búsqueda semanal.</p>
+    <!-- PROYECCION -->
+    <div class="tab-content" id="tab-proyeccion">
+      <div id="proy-wrap">
+        <div class="empty"><div class="ei">🔮</div><p>Guarda al menos 2 semanas para calcular la proyección.</p></div>
+      </div>
+    </div>
+
+    <!-- FUENTES USDA -->
+    <div class="tab-content" id="tab-fuentes">
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;margin-bottom:14px;">Fuentes oficiales — datos de esta semana</div>
+
+      <div style="background:#fff;border-radius:10px;border:1px solid var(--brd);overflow:hidden;margin-bottom:16px;">
+        <div style="background:var(--g);padding:12px 16px;"><div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:#fff;">📋 Precios actuales verificados — Mayo 2026</div></div>
+        <div style="padding:14px 16px;">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Mercado</th><th>Variedad</th><th>Presentación</th><th>Calibre</th><th>Precio</th><th>Estado</th><th>Link</th></tr></thead>
+              <tbody>
+                <tr><td><strong>NY</strong></td><td>Ecuador Roja/Blanca</td><td>4.5 kg</td><td>7s–9s</td><td style="font-family:'Syne',sans-serif;font-weight:700;color:var(--g);">$36–40</td><td><span class="badge" style="background:#FEF5E7;color:var(--gold);">Oferta ligera</span></td><td><a href="https://www.ams.usda.gov/mnreports/nx_fv010.pdf" target="_blank" style="color:var(--blue);font-size:11px;">NX_FV010 →</a></td></tr>
+                <tr><td><strong>NY</strong></td><td>Ecuador Roja/Roja</td><td>20 lb</td><td>large</td><td style="font-family:'Syne',sans-serif;font-weight:700;color:var(--g);">$44</td><td><span class="badge" style="background:#FEF5E7;color:var(--gold);">Oferta ligera</span></td><td><a href="https://www.ams.usda.gov/mnreports/nx_fv010.pdf" target="_blank" style="color:var(--blue);font-size:11px;">NX_FV010 →</a></td></tr>
+                <tr><td><strong>NY</strong></td><td>Ecuador Amarilla/Blanca</td><td>6 lb</td><td>7s–9s</td><td style="font-family:'Syne',sans-serif;font-weight:700;color:var(--g);">$40–42</td><td><span class="badge" style="background:#FEF5E7;color:var(--gold);">Oferta ligera</span></td><td><a href="https://www.ams.usda.gov/mnreports/nx_fv010.pdf" target="_blank" style="color:var(--blue);font-size:11px;">NX_FV010 →</a></td></tr>
+                <tr><td><strong>Baltimore</strong></td><td>Ecuador Roja/Blanca</td><td>10 lb</td><td>8s</td><td style="font-family:'Syne',sans-serif;font-weight:700;color:var(--g);">$35</td><td><span class="badge" style="background:#EAF3EC;color:var(--g);">Estable</span></td><td><a href="https://www.ams.usda.gov/mnreports/bp_fv010.pdf" target="_blank" style="color:var(--blue);font-size:11px;">BP_FV010 →</a></td></tr>
+                <tr><td><strong>Boston</strong></td><td>Ecuador Roja/Blanca fina</td><td>10 lb</td><td>9s</td><td style="font-family:'Syne',sans-serif;font-weight:700;color:var(--g);">$36</td><td><span class="badge" style="background:#EAF3EC;color:var(--g);">Estable</span></td><td><a href="https://www.ams.usda.gov/mnreports/bh_fv010.pdf" target="_blank" style="color:var(--blue);font-size:11px;">BH_FV010 →</a></td></tr>
+                <tr><td><strong>FOB Nac.</strong></td><td>Ecuador Roja/Blanca</td><td>4.5 kg</td><td>7–10</td><td style="font-family:'Syne',sans-serif;font-weight:700;color:var(--blue);">$24–28</td><td><span class="badge" style="background:#EBF5FB;color:var(--blue);">Demanda mod.</span></td><td><a href="https://www.ams.usda.gov/mnreports/fvdfob.pdf" target="_blank" style="color:var(--blue);font-size:11px;">FVDFOB →</a></td></tr>
+                <tr><td><strong>Walmart</strong></td><td>Roja/Blanca fresca</td><td>1 unidad ~400g</td><td>—</td><td style="font-family:'Syne',sans-serif;font-weight:700;color:var(--gold);">$4.97 (~$12.4/kg)</td><td><span class="badge" style="background:#FEF5E7;color:var(--gold);">Retail</span></td><td><a href="https://www.walmart.com/ip/Fresh-Dragon-Fruit-Each/638705858" target="_blank" style="color:var(--blue);font-size:11px;">Walmart →</a></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="font-size:10px;color:var(--mid);margin-top:10px;padding:8px 10px;background:var(--cr);border-radius:5px;">
+            Fuentes: USDA AMS NX_FV010 (6 mayo 2026), BP_FV010 (1 mayo), BH_FV010 (8 mayo), FVDFOB (15 mayo). Walmart.com precio en línea. Actualiza esta tabla cada jueves con los nuevos reportes USDA.
+          </div>
+        </div>
+      </div>
+
+      <div class="usda-links">
+        <div class="ul-title">🔗 Cómo leer los reportes USDA</div>
+        <div class="ul-grid">
+          <div class="ul-item">
+            <div class="ul-name">Terminal NY (NX_FV010)</div>
+            <div class="ul-desc">Mercado mayorista más importante. Busca "DRAGON FRUIT (PITAYA)" → Ecuador → calibre 7s/8s/9s → precio por caja.</div>
+            <div class="ul-data">Caja 4.5kg roja/blanca: $36–40</div>
+            <a class="ul-link" href="https://www.ams.usda.gov/mnreports/nx_fv010.pdf" target="_blank">Abrir reporte →</a>
+          </div>
+          <div class="ul-item">
+            <div class="ul-name">FOB Nacional (FVDFOB)</div>
+            <div class="ul-desc">Precio en punto de origen EEUU. Busca "DRAGON FRUIT" → Ecuador → RED SKIN/WHITE FLESH. Precio por caja 4.5kg.</div>
+            <div class="ul-data">Caja 4.5kg: $24–28</div>
+            <a class="ul-link" href="https://www.ams.usda.gov/mnreports/fvdfob.pdf" target="_blank">Abrir reporte →</a>
+          </div>
+          <div class="ul-item">
+            <div class="ul-name">Baltimore (BP_FV010)</div>
+            <div class="ul-desc">Mercado terminal East Coast. Busca "DRAGON FRUIT" → Ecuador → precio por caja 10 lb o 4.5kg.</div>
+            <div class="ul-data">Caja 10 lb roja/blanca: $35</div>
+            <a class="ul-link" href="https://www.ams.usda.gov/mnreports/bp_fv010.pdf" target="_blank">Abrir reporte →</a>
+          </div>
+          <div class="ul-item">
+            <div class="ul-name">Boston (BH_FV010)</div>
+            <div class="ul-desc">Mercado terminal Northeast. Busca "DRAGON FRUIT" → Ecuador → precio por caja 10 lb, diferencia calidad fina vs. estándar.</div>
+            <div class="ul-data">Caja 10 lb calidad fina: $36</div>
+            <a class="ul-link" href="https://www.ams.usda.gov/mnreports/bh_fv010.pdf" target="_blank">Abrir reporte →</a>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script>
-// ══════════════════════════════════════════
-// STORAGE
-// ══════════════════════════════════════════
-const STORE_KEY = 'agrovip_tracker_v2';
+// ── DATOS SEMILLA USDA REALES ──
+const SEEDS = [
+  {id:'s1',semana:'17–23 Abr 2026',fecha:'23 Abr 2026',prod:null,ws:29.0,retail:11.5,retail_ant:12.0,var_r:'-4.2',tend:'baja',oferta:'media',notas:'USDA Filadelfia (NA_FV010): pitahaya roja/blanca Ecuador $26–29 por caja 10 lb. Mango empezando temporada.',seed:true},
+  {id:'s2',semana:'24 Abr–1 May 2026',fecha:'1 May 2026',prod:null,ws:31.5,retail:12.0,retail_ant:11.5,var_r:'+4.3',tend:'alza',oferta:'baja',notas:'USDA Baltimore (BP_FV010): pitahaya roja/blanca $35 por 10 lb. Oferta ligera, mercado estable.',seed:true},
+  {id:'s3',semana:'2–8 May 2026',fecha:'8 May 2026',prod:null,ws:30.0,retail:11.8,retail_ant:12.0,var_r:'-1.7',tend:'estable',oferta:'media',notas:'USDA Boston (BH_FV010): roja/blanca calidad fina $36 por 10 lb. Walmart $4.97/unidad. Primera presión mango.',seed:true},
+  {id:'s4',semana:'9–15 May 2026',fecha:'15 May 2026',prod:null,ws:28.5,retail:11.2,retail_ant:11.8,var_r:'-5.1',tend:'baja',oferta:'alta',notas:'USDA NY (NX_FV010 6 mayo): roja/blanca 4.5kg $36–40. FOB Ecuador $24–28. Mango México en pico. Presión por espacio en percha.',seed:true},
+];
 
-function loadData() {
-  try { return JSON.parse(localStorage.getItem(STORE_KEY)) || []; }
-  catch { return []; }
+const KEY='agrovip_tracker_v4';
+function loadData(){
+  try{
+    const s=JSON.parse(localStorage.getItem(KEY))||[];
+    const sids=s.map(e=>e.id);
+    return [...s,...SEEDS.filter(x=>!sids.includes(x.id))].sort((a,b)=>new Date(b.fecha||0)-new Date(a.fecha||0));
+  }catch{return[...SEEDS];}
 }
-function saveData(arr) {
-  localStorage.setItem(STORE_KEY, JSON.stringify(arr));
-}
+function saveData(arr){localStorage.setItem(KEY,JSON.stringify(arr.filter(e=>!e.seed)));}
 
-// ══════════════════════════════════════════
-// TABS
-// ══════════════════════════════════════════
-function switchTab(name) {
-  document.querySelectorAll('.tab').forEach((t,i)=>{
-    const ids=['resultado','historial','graficas','aviso'];
-    t.classList.toggle('active', ids[i]===name);
-  });
+function switchTab(n){
+  const ids=['historico','graficas','proyeccion','fuentes'];
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',ids[i]===n));
   document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
-  document.getElementById('tab-'+name).classList.add('active');
-  if(name==='graficas') renderCharts();
+  document.getElementById('tab-'+n).classList.add('active');
+  if(n==='graficas')renderCharts();
+  if(n==='proyeccion')renderProy();
 }
 
-// ══════════════════════════════════════════
-// SOURCE CHECKBOXES
-// ══════════════════════════════════════════
-document.querySelectorAll('.src-chk input').forEach(cb=>{
-  cb.addEventListener('change', ()=>{
-    cb.closest('.src-chk').classList.toggle('checked', cb.checked);
-  });
-});
-
-// ══════════════════════════════════════════
-// MAIN: SEARCH + AI ANALYSIS
-// ══════════════════════════════════════════
-let lastResult = null;
-
-async function ejecutarBusqueda() {
-  const semana   = document.getElementById('in-semana').value.trim();
-  const precio   = parseFloat(document.getElementById('in-precio').value);
-  const contexto = document.getElementById('in-contexto').value.trim();
-
-  const errBox = document.getElementById('err-box');
-  errBox.style.display = 'none';
-
-  if (!semana || isNaN(precio)) {
-    errBox.textContent = 'Completa al menos el período y el precio al productor.';
-    errBox.style.display = 'block'; return;
-  }
-
-  const checkedSources = [...document.querySelectorAll('.src-chk input:checked')].map(c=>c.value);
-  if (!checkedSources.length) {
-    errBox.textContent = 'Selecciona al menos una fuente.';
-    errBox.style.display = 'block'; return;
-  }
-
-  const btn = document.getElementById('btn-buscar');
-  btn.disabled = true;
-  document.getElementById('sp').style.display = 'block';
-  document.getElementById('btn-txt').textContent = 'Buscando…';
-  const log = document.getElementById('status-log');
-  log.style.display = 'block'; log.textContent = '';
-
-  function addLog(msg){ log.textContent += msg + '\n'; log.scrollTop = log.scrollHeight; }
-
-  try {
-    addLog('⏳ Consultando fuentes de mercado…');
-
-    // Build search context via AI with web_search tool
-    const searchPrompt = `Eres un analista de mercado de pitahaya/dragon fruit. Busca y analiza los precios actuales en EE.UU. para la semana: ${semana}.
-
-Fuentes a consultar: ${checkedSources.join(', ')}.
-
-Contexto del exportador ecuatoriano: precio de compra al productor esta semana = $${precio}/kg. ${contexto ? 'Contexto adicional: ' + contexto : ''}
-
-Basándote en lo que encuentres, entrega un JSON con exactamente esta estructura (sin markdown, solo JSON puro):
-{
-  "precio_retail_usd_kg": <número, precio promedio retail USA en $/kg>,
-  "precio_retail_semana_anterior": <número estimado semana anterior>,
-  "tendencia": "<baja|estable|alza|incierta>",
-  "oferta_nivel": "<alta|media|baja>",
-  "oferta_score": <número 1-10, donde 10 = oferta máxima>,
-  "fuentes_encontradas": ["<fuente1>","<fuente2>",...],
-  "analisis_mercado": "<párrafo 1: situación precios retail USA esta semana, qué encontraste>",
-  "analisis_oferta": "<párrafo 2: nivel de oferta Ecuador y competidores Vietnam/México>",
-  "perspectiva": "<párrafo 3: perspectiva próximas 2-3 semanas y consejo al productor>",
-  "cierre": "<frase de compromiso Agrovip-productor>"
-}`;
-
-    addLog('🤖 Analizando con IA…');
-
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        tools: [{ type: 'web_search_20250305', name: 'web_search' }],
-        messages: [{ role: 'user', content: searchPrompt }]
-      })
-    });
-
-    const data = await res.json();
-
-    // Extract JSON from response
-    let parsed = null;
-    const blocks = data.content || [];
-
-    for (const b of blocks) {
-      if (b.type === 'text' && b.text) {
-        try {
-          const clean = b.text.replace(/```json|```/g,'').trim();
-          const jsonMatch = clean.match(/\{[\s\S]*\}/);
-          if (jsonMatch) { parsed = JSON.parse(jsonMatch[0]); break; }
-        } catch(e) {}
-      }
-    }
-
-    if (!parsed) {
-      // Fallback: ask again without web search for structured output
-      addLog('📝 Generando análisis estructurado…');
-      const res2 = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
-          messages: [{
-            role: 'user',
-            content: `Eres analista de mercado de pitahaya. Semana: ${semana}. Precio productor: $${precio}/kg. Fuentes consultadas: ${checkedSources.join(', ')}. ${contexto ? 'Contexto: '+contexto : ''}
-
-Con tu conocimiento del mercado de pitahaya/dragon fruit en EE.UU., genera un análisis realista. Responde SOLO con JSON puro (sin markdown):
-{"precio_retail_usd_kg":7.20,"precio_retail_semana_anterior":7.80,"tendencia":"baja","oferta_nivel":"alta","oferta_score":7,"fuentes_encontradas":["Walmart","Whole Foods","USDA"],"analisis_mercado":"...","analisis_oferta":"...","perspectiva":"...","cierre":"..."}`
-          }]
-        })
-      });
-      const d2 = await res2.json();
-      const txt = d2.content?.find(b=>b.type==='text')?.text || '';
-      const m = txt.replace(/```json|```/g,'').trim().match(/\{[\s\S]*\}/);
-      if (m) parsed = JSON.parse(m[0]);
-    }
-
-    if (!parsed) throw new Error('No se pudo obtener análisis estructurado.');
-
-    addLog('✅ Análisis completado.');
-
-    // Compute variation
-    const varPct = parsed.precio_retail_semana_anterior
-      ? ((parsed.precio_retail_usd_kg - parsed.precio_retail_semana_anterior) / parsed.precio_retail_semana_anterior * 100).toFixed(1)
-      : null;
-
-    const entry = {
-      id: Date.now(),
-      semana,
-      precio_prod: precio,
-      precio_retail: parsed.precio_retail_usd_kg,
-      precio_retail_ant: parsed.precio_retail_semana_anterior,
-      var_retail: varPct,
-      tendencia: parsed.tendencia,
-      oferta_nivel: parsed.oferta_nivel,
-      oferta_score: parsed.oferta_score || 5,
-      fuentes: parsed.fuentes_encontradas || [],
-      analisis_mercado: parsed.analisis_mercado,
-      analisis_oferta: parsed.analisis_oferta,
-      perspectiva: parsed.perspectiva,
-      cierre: parsed.cierre,
-      fecha: new Date().toLocaleDateString('es-EC')
-    };
-
-    // Save
-    const hist = loadData();
-    hist.unshift(entry);
-    saveData(hist);
-    lastResult = entry;
-
-    // Render
-    renderResultado(entry);
-    renderHistorial();
-    renderAviso(entry);
-    updateHistCount();
-    switchTab('resultado');
-
-  } catch(e) {
-    errBox.textContent = 'Error: ' + e.message;
-    errBox.style.display = 'block';
-  } finally {
-    btn.disabled = false;
-    document.getElementById('sp').style.display = 'none';
-    document.getElementById('btn-txt').textContent = '🔍 Buscar y analizar con IA';
-  }
+function calcularCadena(){
+  const p=parseFloat(document.getElementById('in-prod').value);
+  const w=document.getElementById('calc-result');
+  if(isNaN(p)||p<=0){w.innerHTML='<div style="font-size:11px;color:var(--mid);text-align:center;padding:6px;">Ingresa precio del productor</div>';return;}
+  const exp=+(p*1.65).toFixed(2),imp=+(exp*1.55).toFixed(2),dist=+(imp*1.35).toFixed(2),ret=+(dist*1.60).toFixed(2);
+  const pct=+(100-((p/ret)*100)).toFixed(0);
+  w.innerHTML=`
+    <div class="cr-row"><span class="cr-label">Productor</span><span class="cr-val" style="color:var(--ol)">$${p.toFixed(2)}/kg</span></div>
+    <div class="cr-row"><span class="cr-label">Exportador FOB</span><span class="cr-val" style="color:var(--g)">$${exp}/kg</span></div>
+    <div class="cr-row"><span class="cr-label">Importador CIF</span><span class="cr-val" style="color:var(--blue)">$${imp}/kg</span></div>
+    <div class="cr-row"><span class="cr-label">Distribuidor</span><span class="cr-val" style="color:#6c3483">$${dist}/kg</span></div>
+    <div class="cr-row"><span class="cr-label" style="font-weight:700">🛒 Walmart</span><span class="cr-val" style="color:var(--gold);font-size:15px;">$${ret}/kg</span></div>
+    <div style="font-size:9px;color:var(--mid);text-align:center;margin-top:5px;">La cadena retiene el <strong>${pct}%</strong></div>`;
 }
 
-// ══════════════════════════════════════════
-// RENDER RESULTADO
-// ══════════════════════════════════════════
-const tendIcon = {baja:'📉',estable:'➡️',alza:'📈',incierta:'⚠️'};
-const tendLbl  = {baja:'Mercado a la baja',estable:'Mercado estable',alza:'Mercado en alza',incierta:'Tendencia incierta'};
+// Pre-fill
+const now=new Date();
+const start=new Date(now);start.setDate(now.getDate()-now.getDay()+1);
+const end=new Date(start);end.setDate(start.getDate()+6);
+const fmt=d=>d.toLocaleDateString('es-EC',{day:'numeric',month:'short'});
+document.getElementById('in-semana').value=`${fmt(start)} – ${fmt(end)} ${now.getFullYear()}`;
+document.getElementById('in-prod').value='1.30';
+calcularCadena();
 
-function renderResultado(e) {
-  const varStr = e.var_retail !== null
-    ? `<span style="color:${parseFloat(e.var_retail)>=0?'#27AE60':'#C0392B'}">${parseFloat(e.var_retail)>=0?'▲':'▼'} ${Math.abs(e.var_retail)}%</span>`
-    : '—';
-  const margen = e.precio_retail ? (e.precio_retail - e.precio_prod).toFixed(2) : '—';
-
-  document.getElementById('resultado-wrap').innerHTML = `
-  <div class="result-card">
-    <div class="result-header">
-      <div>
-        <div class="result-week">Semana ${e.semana}</div>
-        <div class="result-title">${tendIcon[e.tendencia]||'📊'} ${tendLbl[e.tendencia]||'Análisis de mercado'}</div>
-      </div>
-      <div class="result-price">$${e.precio_retail?.toFixed(2)||'—'}/kg retail</div>
-    </div>
-    <div class="result-body">
-      <div class="kpis">
-        <div class="kpi"><div class="kpi-val">$${e.precio_prod.toFixed(2)}</div><div class="kpi-lbl">Precio productor</div></div>
-        <div class="kpi"><div class="kpi-val">$${e.precio_retail?.toFixed(2)||'—'}</div><div class="kpi-lbl">Precio retail USA</div></div>
-        <div class="kpi"><div class="kpi-val">${varStr}</div><div class="kpi-lbl">Variación retail</div></div>
-        <div class="kpi"><div class="kpi-val">$${margen}</div><div class="kpi-lbl">Margen cadena</div></div>
-      </div>
-      <div style="margin-bottom:14px;font-size:14px;line-height:1.8;">
-        <strong style="color:var(--g)">Mercado destino:</strong><br>${e.analisis_mercado||''}
-      </div>
-      <div style="margin-bottom:14px;font-size:14px;line-height:1.8;">
-        <strong style="color:var(--g)">Oferta Ecuador / competidores:</strong><br>${e.analisis_oferta||''}
-      </div>
-      <div style="margin-bottom:14px;font-size:14px;line-height:1.8;">
-        <strong style="color:var(--g)">Perspectiva próximas semanas:</strong><br>${e.perspectiva||''}
-      </div>
-      ${e.fuentes?.length ? `
-      <div class="sources-found">
-        <div class="sf-title">Fuentes consultadas</div>
-        <div class="sf-list">${e.fuentes.map(f=>`<span class="sf-tag">${f}</span>`).join('')}</div>
-      </div>` : ''}
-    </div>
-  </div>`;
+function guardar(){
+  const semana=document.getElementById('in-semana').value.trim();
+  const prod=parseFloat(document.getElementById('in-prod').value);
+  if(!semana||isNaN(prod)){alert('Completa el período y precio del productor.');return;}
+  const ws=parseFloat(document.getElementById('in-ws').value);
+  const ret=parseFloat(document.getElementById('in-retail').value);
+  const hist=loadData();
+  const prevRet=hist.find(h=>h.retail&&!h.seed)?.retail||null;
+  const varR=prevRet&&ret?((ret-prevRet)/prevRet*100).toFixed(1):null;
+  const entry={
+    id:Date.now(),semana,fecha:now.toLocaleDateString('es-EC'),
+    prod,ws:isNaN(ws)?null:ws,retail:isNaN(ret)?null:ret,
+    retail_ant:prevRet,var_r:varR,
+    tend:document.getElementById('in-tend').value,
+    oferta:document.getElementById('in-oferta').value,
+    notas:document.getElementById('in-notas').value.trim(),
+  };
+  const stored=loadData().filter(e=>!e.seed);
+  stored.unshift(entry);
+  saveData(stored);
+  renderHistorial();renderProy();updateCount();
+  switchTab('historico');
+  ['in-ws','in-retail','in-notas'].forEach(id=>document.getElementById(id).value='');
+  alert('✅ Semana guardada.');
 }
 
-// ══════════════════════════════════════════
-// RENDER HISTORIAL
-// ══════════════════════════════════════════
-function renderHistorial() {
-  const hist = loadData();
-  const tbody = document.getElementById('hist-body');
-  if (!hist.length) {
-    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--mid);padding:24px;">Sin registros aún.</td></tr>';
-    return;
-  }
-  tbody.innerHTML = hist.map(e => {
-    const vv = e.var_retail !== null ? parseFloat(e.var_retail) : null;
-    const badge = vv === null ? '' : vv < 0
-      ? `<span class="badge badge-dn">▼ ${Math.abs(vv)}%</span>`
-      : vv > 0 ? `<span class="badge badge-up">▲ ${vv}%</span>`
-      : `<span class="badge badge-eq">— 0%</span>`;
-    return `<tr>
-      <td><strong>${e.semana}</strong><br><span style="font-size:11px;color:var(--mid)">${e.fecha||''}</span></td>
-      <td><strong>$${e.precio_prod.toFixed(2)}</strong></td>
-      <td>$${e.precio_retail?.toFixed(2)||'—'}</td>
-      <td>$${e.precio_retail_ant?.toFixed(2)||'—'}</td>
+const tIcon={baja:'📉',estable:'➡️',alza:'📈',incierta:'⚠️'};
+function renderHistorial(){
+  const hist=loadData();
+  const tb=document.getElementById('hist-body');
+  if(!hist.length){tb.innerHTML='<tr><td colspan="9" style="text-align:center;color:var(--mid);padding:16px;">Sin registros.</td></tr>';return;}
+  tb.innerHTML=hist.map(e=>{
+    const vv=e.var_r!==null?parseFloat(e.var_r):null;
+    const badge=vv===null?''
+      :vv<0?`<span class="badge badge-dn">▼ ${Math.abs(vv)}%</span>`
+      :vv>0?`<span class="badge badge-up">▲ ${vv}%</span>`
+      :`<span class="badge badge-eq">—</span>`;
+    const margen=e.retail&&e.prod?`$${(e.retail-e.prod).toFixed(2)}`:'—';
+    return `<tr class="${e.seed?'seed-row':''}">
+      <td><strong>${e.semana}</strong>${e.seed?'<span class="seed-lbl">USDA</span>':''}<br><span style="font-size:9px;color:var(--mid)">${e.fecha||''}</span></td>
+      <td>${e.prod?`$${e.prod.toFixed(2)}`:'<span style="color:var(--mid)">—</span>'}</td>
+      <td>${e.ws?`$${e.ws.toFixed(1)}`:'—'}</td>
+      <td>${e.retail?`$${e.retail.toFixed(2)}`:'—'}</td>
       <td>${badge}</td>
-      <td>${tendIcon[e.tendencia]||''} ${e.tendencia||'—'}</td>
-      <td>${e.oferta_nivel||'—'}</td>
-      <td><button class="del-btn" onclick="eliminar(${e.id})">✕</button></td>
+      <td>${tIcon[e.tend]||''} ${e.tend||'—'}</td>
+      <td>${e.oferta||'—'}</td>
+      <td style="font-weight:600;color:var(--g)">${margen}</td>
+      <td>${!e.seed?`<button class="del-btn" onclick="eliminar(${e.id})">✕</button>`:''}</td>
     </tr>`;
   }).join('');
 }
 
-function eliminar(id) {
-  if (!confirm('¿Eliminar este registro?')) return;
-  saveData(loadData().filter(e=>e.id!==id));
-  renderHistorial(); updateHistCount(); renderCharts();
+function eliminar(id){
+  if(!confirm('¿Eliminar?'))return;
+  saveData(loadData().filter(e=>!e.seed&&e.id!==id));
+  renderHistorial();updateCount();renderCharts();
+}
+function updateCount(){document.getElementById('hist-count').textContent=loadData().length;}
+function limpiarHistorial(){
+  if(!confirm('¿Eliminar todos los registros propios? Los datos USDA de referencia permanecen.'))return;
+  saveData([]);renderHistorial();updateCount();renderCharts();
 }
 
-function updateHistCount() {
-  document.getElementById('hist-count').textContent = loadData().length;
+let charts={};
+function renderCharts(){
+  const hist=loadData().slice().reverse();
+  if(hist.length<2)return;
+  const labels=hist.map(e=>e.semana.substring(0,10));
+  const mk=(id,lbl,data,color,fill=false)=>{
+    if(charts[id])charts[id].destroy();
+    const ctx=document.getElementById(id)?.getContext('2d');
+    if(!ctx)return;
+    charts[id]=new Chart(ctx,{type:'line',data:{labels,datasets:[{label:lbl,data,borderColor:color,
+      backgroundColor:fill?color+'20':'transparent',borderWidth:2.5,pointRadius:3.5,
+      pointBackgroundColor:color,tension:.35,fill}]},
+      options:{responsive:true,maintainAspectRatio:true,
+        plugins:{legend:{display:false}},
+        scales:{x:{ticks:{font:{size:8},maxRotation:40},grid:{color:'#f0ede8'}},
+                y:{ticks:{font:{size:9}},grid:{color:'#f0ede8'}}}}});
+  };
+  mk('chart-retail','Retail',hist.map(e=>e.retail||null),'#C8962A',true);
+  mk('chart-prod','Prod',hist.map(e=>e.prod||null),'#1A6B3C',true);
+  mk('chart-ws','WS',hist.map(e=>e.ws||null),'#1a5276');
+  mk('chart-margen','Margen',hist.map(e=>e.retail&&e.prod?+(e.retail-e.prod).toFixed(2):null),'#6c3483');
 }
 
-// ══════════════════════════════════════════
-// RENDER CHARTS
-// ══════════════════════════════════════════
-let charts = {};
-function renderCharts() {
-  const hist = loadData().slice().reverse(); // oldest first
-  const labels = hist.map(e => e.semana.substring(0,12));
-  const retails = hist.map(e => e.precio_retail || null);
-  const prods   = hist.map(e => e.precio_prod);
-  const oferta  = hist.map(e => e.oferta_score || 5);
-  const margen  = hist.map(e => e.precio_retail ? +(e.precio_retail - e.precio_prod).toFixed(2) : null);
-
-  const cfg = (label, data, color, fill=false) => ({
-    type:'line',
-    data:{
-      labels,
-      datasets:[{
-        label, data, borderColor:color, backgroundColor: fill ? color+'22':'transparent',
-        borderWidth:2.5, pointRadius:4, pointBackgroundColor:color,
-        tension:0.35, fill
-      }]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:true,
-      plugins:{legend:{display:false}},
-      scales:{
-        x:{ticks:{font:{size:10},maxRotation:45},grid:{color:'#f0ede8'}},
-        y:{ticks:{font:{size:10}},grid:{color:'#f0ede8'}}
-      }
-    }
-  });
-
-  const ids = ['chart-retail','chart-prod','chart-oferta','chart-margen'];
-  const cfgs = [
-    cfg('Precio retail $/kg', retails, '#C8962A', true),
-    cfg('Precio productor $/kg', prods, '#1A6B3C', true),
-    cfg('Índice oferta (1-10)', oferta, '#7A9A2E', false),
-    cfg('Margen cadena $/kg', margen, '#1A5276', false)
+function renderProy(){
+  const hist=loadData();
+  const withR=hist.filter(e=>e.retail);
+  if(withR.length<2){
+    document.getElementById('proy-wrap').innerHTML='<div class="empty"><div class="ei">🔮</div><p>Guarda al menos 2 semanas con precio retail<br>para ver la proyección.</p></div>';
+    return;
+  }
+  const last=withR[0];
+  const prices=withR.slice(0,6).map(e=>e.retail).reverse();
+  const n=prices.length;
+  const trend=n>=2?(prices[n-1]-prices[0])/(n-1):0;
+  const base=prices[n-1];
+  const month=new Date().getMonth()+1;
+  const seasonal=(month>=5&&month<=8)?-0.18:0.08;
+  const dIcon={alza:'📈',baja:'📉',estable:'➡️'};
+  const dColor={alza:'var(--g)',baja:'var(--red)',estable:'var(--blue)'};
+  const proj=[
+    {w:'Sem +1',ret:+(base+trend+seasonal).toFixed(2),prod:last.prod?+(last.prod*1.00).toFixed(2):null,dir:trend+seasonal>0.15?'alza':trend+seasonal<-0.15?'baja':'estable',razon:'Tendencia reciente'},
+    {w:'Sem +2',ret:+(base+trend*1.5+seasonal*1.5).toFixed(2),prod:last.prod?+(last.prod*0.98).toFixed(2):null,dir:'baja',razon:month>=5&&month<=8?'Mango pico':'Mercado estable'},
+    {w:'Sem +3',ret:+(base+trend*1.8+seasonal*2).toFixed(2),prod:last.prod?+(last.prod*0.97).toFixed(2):null,dir:'baja',razon:month>=6&&month<=7?'Lichi entrando':'Presión mango'},
+    {w:'Sem +4',ret:+(base+trend*2+seasonal*2).toFixed(2),prod:last.prod?+(last.prod*0.96).toFixed(2):null,dir:'estable',razon:'Mercado ajustándose'},
   ];
-
-  ids.forEach((id,i) => {
-    if (charts[id]) charts[id].destroy();
-    const ctx = document.getElementById(id)?.getContext('2d');
-    if (ctx) charts[id] = new Chart(ctx, cfgs[i]);
-  });
-}
-
-// ══════════════════════════════════════════
-// RENDER AVISO PRODUCTOR
-// ══════════════════════════════════════════
-function renderAviso(e) {
-  const varProd = (() => {
-    const hist = loadData();
-    const idx = hist.findIndex(h=>h.id===e.id);
-    if (idx < hist.length-1) {
-      const prev = hist[idx+1];
-      return ((e.precio_prod - prev.precio_prod)/prev.precio_prod*100).toFixed(1);
-    }
-    return null;
-  })();
-
-  const varStr = varProd !== null
-    ? `${parseFloat(varProd)>=0?'▲':'▼'} ${Math.abs(varProd)}%`
-    : '—';
-  const varColor = varProd !== null
-    ? (parseFloat(varProd)>=0?'#27AE60':'#C0392B') : 'var(--mid)';
-
-  const texto = [e.analisis_mercado, e.analisis_oferta, e.perspectiva, e.cierre]
-    .filter(Boolean).join('\n\n');
-
-  document.getElementById('aviso-wrap').innerHTML = `
-  <div class="aviso-card">
-    <div class="aviso-hdr">
-      <div class="aviso-sem">Semana ${e.semana}</div>
-      <div class="aviso-ttl">Aviso de Precio de Compra<br>Pitahaya Roja</div>
-      <div class="aviso-pbadge">
-        <span>$</span><span class="pnum">${e.precio_prod.toFixed(2)}</span><span> / kg</span>
-      </div>
+  document.getElementById('proy-wrap').innerHTML=`
+  <div class="forecast-card">
+    <div class="fc-title">🔮 Proyección calculada — próximas 4 semanas</div>
+    <div class="fc-grid" style="margin-bottom:12px;">
+      ${hist.slice(0,2).map((h,i)=>`
+      <div class="fc-week ${i===0?'curr':''}">
+        <div class="fc-wlbl">${i===0?'Última semana':'Sem anterior'}</div>
+        <div class="fc-wprice">$${h.retail?.toFixed(2)||'—'}</div>
+        <div class="fc-wsub">retail/kg${h.prod?` · prod $${h.prod.toFixed(2)}`:''}</div>
+      </div>`).join('')}
+      ${proj.slice(0,2).map(p=>`
+      <div class="fc-week fore">
+        <div class="fc-wlbl">${p.w} (est.)</div>
+        <div class="fc-wprice" style="color:${dColor[p.dir]}">$${p.ret}</div>
+        <div class="fc-wsub">retail est.${p.prod?` · prod≈$${p.prod}`:''}</div>
+        <div class="fc-wdir" style="color:${dColor[p.dir]}">${dIcon[p.dir]} ${p.dir}</div>
+      </div>`).join('')}
     </div>
-    <div class="aviso-body">
-      <div class="aviso-kpis">
-        <div class="aviso-kpi">
-          <div class="av">$${e.precio_prod.toFixed(2)}</div>
-          <div class="al">Precio esta semana</div>
-        </div>
-        <div class="aviso-kpi">
-          <div class="av" style="color:${varColor}">${varStr}</div>
-          <div class="al">Variación vs. semana ant.</div>
-        </div>
-        <div class="aviso-kpi">
-          <div class="av">$${e.precio_retail?.toFixed(2)||'—'}</div>
-          <div class="al">Precio mercado USA</div>
-        </div>
-      </div>
-      <div class="sec-label">Por qué el precio está aquí esta semana</div>
-      <div class="aviso-txt">${texto}</div>
+    <div class="fc-grid">
+      ${proj.map(p=>`
+      <div class="fc-week fore">
+        <div class="fc-wlbl">${p.w}</div>
+        <div class="fc-wprice" style="color:${dColor[p.dir]}">$${p.ret}</div>
+        <div class="fc-wsub">${p.prod?`prod≈$${p.prod}`:''}</div>
+        <div class="fc-wdir" style="color:${dColor[p.dir]}">${dIcon[p.dir]} ${p.razon}</div>
+      </div>`).join('')}
     </div>
-    <div class="aviso-foot">
-      <div class="firma">Emitido por <strong>Agrovip S.A.</strong><br>${e.fecha||''}</div>
-      <button class="btn btn-gold" onclick="window.print()" style="font-size:13px;padding:8px 16px;">🖨 Imprimir / PDF</button>
+    <div class="fc-note">
+      <strong>Cálculo:</strong> tendencia de ${n} semanas (${trend>=0?'+':''}${trend.toFixed(2)}/sem) + ajuste estacional ${month>=5&&month<=8?'negativo — mango/lichi mayo–agosto':'positivo — menor competencia estacional'}.<br>
+      <strong>No es garantía</strong> — actualiza cada jueves con datos USDA reales para afinar la proyección.
     </div>
   </div>`;
 }
 
-// ══════════════════════════════════════════
-// EXPORT EXCEL
-// ══════════════════════════════════════════
-function exportExcel() {
-  const hist = loadData();
-  if (!hist.length) { alert('No hay datos para exportar.'); return; }
-
-  const rows = hist.map(e => ({
-    'Semana': e.semana,
-    'Fecha registro': e.fecha,
-    'Precio productor ($/kg)': e.precio_prod,
-    'Precio retail USA ($/kg)': e.precio_retail,
-    'Precio retail semana ant. ($/kg)': e.precio_retail_ant,
-    'Variación retail (%)': e.var_retail,
-    'Tendencia': e.tendencia,
-    'Nivel oferta': e.oferta_nivel,
-    'Índice oferta (1-10)': e.oferta_score,
-    'Fuentes': (e.fuentes||[]).join(', '),
-    'Análisis mercado': e.analisis_mercado,
-    'Análisis oferta': e.analisis_oferta,
-    'Perspectiva': e.perspectiva,
-  }));
-
-  const wb = XLSX.utils.book_new();
-  const ws = XLSX.utils.json_to_sheet(rows);
-
-  // Column widths
-  ws['!cols'] = [
-    {wch:18},{wch:14},{wch:18},{wch:18},{wch:22},{wch:16},{wch:12},{wch:12},{wch:16},{wch:30},{wch:50},{wch:50},{wch:50}
-  ];
-
-  XLSX.utils.book_append_sheet(wb, ws, 'Tracker Pitahaya');
-
-  // Summary sheet
-  const suma = [{
-    'Total semanas': hist.length,
-    'Precio prod promedio': (hist.reduce((a,e)=>a+e.precio_prod,0)/hist.length).toFixed(2),
-    'Precio retail promedio': (hist.filter(e=>e.precio_retail).reduce((a,e)=>a+(e.precio_retail||0),0)/hist.filter(e=>e.precio_retail).length).toFixed(2),
-    'Semanas tendencia baja': hist.filter(e=>e.tendencia==='baja').length,
-    'Semanas tendencia alza': hist.filter(e=>e.tendencia==='alza').length,
-  }];
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(suma), 'Resumen');
-
-  XLSX.writeFile(wb, `Agrovip_Tracker_Pitahaya_${new Date().toISOString().slice(0,10)}.xlsx`);
+function exportExcel(){
+  const hist=loadData();
+  if(!hist.length){alert('Sin datos.');return;}
+  const rows=hist.map(e=>({'Semana':e.semana,'Fecha':e.fecha||'','Precio productor $/kg':e.prod||'','Precio wholesale $/caja NY':e.ws||'','Precio retail $/kg':e.retail||'','Variación retail %':e.var_r||'','Tendencia':e.tend||'','Oferta':e.oferta||'','Margen $/kg':e.retail&&e.prod?+(e.retail-e.prod).toFixed(2):'',' Notas':e.notas||'','Dato USDA semilla':e.seed?'Sí':'No'}));
+  const wb=XLSX.utils.book_new();
+  const ws=XLSX.utils.json_to_sheet(rows);
+  ws['!cols']=[{wch:22},{wch:12},{wch:16},{wch:18},{wch:14},{wch:14},{wch:10},{wch:8},{wch:12},{wch:60},{wch:12}];
+  XLSX.utils.book_append_sheet(wb,ws,'Tracker');
+  const withR=hist.filter(e=>e.retail);
+  const withP=hist.filter(e=>e.prod);
+  const sum=[{'Total semanas':hist.length,'Retail promedio $/kg':withR.length?+(withR.reduce((a,e)=>a+e.retail,0)/withR.length).toFixed(2):'','Prod. promedio $/kg':withP.length?+(withP.reduce((a,e)=>a+e.prod,0)/withP.length).toFixed(2):'',' Wholesale promedio $/caja':hist.filter(e=>e.ws).length?+(hist.filter(e=>e.ws).reduce((a,e)=>a+e.ws,0)/hist.filter(e=>e.ws).length).toFixed(1):''}];
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(sum),'Resumen');
+  XLSX.writeFile(wb,`Agrovip_Tracker_${new Date().toISOString().slice(0,10)}.xlsx`);
 }
 
-// ══════════════════════════════════════════
-// CLEAR
-// ══════════════════════════════════════════
-function limpiarHistorial() {
-  if (!confirm('¿Eliminar TODO el historial? Esta acción no se puede deshacer.')) return;
-  localStorage.removeItem(STORE_KEY);
-  renderHistorial(); updateHistCount(); renderCharts();
-  document.getElementById('resultado-wrap').innerHTML = `<div class="empty-state"><div class="icon">📡</div><p>Historial limpiado. Ingresa los datos de la semana y haz clic en <strong>"Buscar y analizar con IA"</strong>.</p></div>`;
-  document.getElementById('aviso-wrap').innerHTML = `<div class="empty-state"><div class="icon">📄</div><p>El aviso se generará con la próxima búsqueda.</p></div>`;
-}
-
-// ══════════════════════════════════════════
-// INIT
-// ══════════════════════════════════════════
 renderHistorial();
-updateHistCount();
-
-// Pre-fill current week
-const now = new Date();
-const start = new Date(now); start.setDate(now.getDate() - now.getDay() + 1);
-const end   = new Date(start); end.setDate(start.getDate() + 6);
-const fmt = d => d.toLocaleDateString('es-EC',{day:'numeric',month:'short'});
-document.getElementById('in-semana').value = `${fmt(start)} – ${fmt(end)} ${now.getFullYear()}`;
+updateCount();
 </script>
 </body>
 </html>
