@@ -3,136 +3,139 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Inteligencia de Mercado — Pitahaya Ecuatoriana | Agrovip</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<title>Inteligencia de Mercado — Pitahaya | Agrovip S.A.</title>
+<meta name="description" content="Precios actuales de pitahaya en EE.UU., cadena de valor y análisis semanal de mercado.">
+<script src="datos.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root{--g:#1A6B3C;--g2:#0d3d22;--g3:#1e5c38;--ol:#7A9A2E;--gold:#C8962A;--gold2:#e8b040;--cr:#F7F3EC;--ink:#1C1A16;--mid:#5A5750;--brd:#E3DDD3;--bg:#FDFBF7;--red:#b83232;--blue:#1a5276;--purple:#6c3483;}
+:root{--g:#1A6B3C;--g2:#0d3d22;--ol:#7A9A2E;--gold:#C8962A;--gold2:#e8b040;--cr:#F7F3EC;--ink:#1C1A16;--mid:#5A5750;--brd:#E3DDD3;--bg:#FDFBF7;--red:#b83232;--blue:#1a5276;}
 *{box-sizing:border-box;margin:0;padding:0;}html{scroll-behavior:smooth;}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;}
-nav{position:sticky;top:0;z-index:100;background:rgba(13,61,34,0.97);backdrop-filter:blur(12px);border-bottom:2px solid var(--gold);padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;}
+nav{position:sticky;top:0;z-index:100;background:rgba(13,61,34,0.97);backdrop-filter:blur(12px);border-bottom:2px solid var(--gold);padding:0 28px;height:58px;display:flex;align-items:center;justify-content:space-between;}
 .nav-brand{display:flex;align-items:center;gap:10px;}
-.nav-badge{width:34px;height:34px;background:var(--gold);border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:15px;color:#fff;}
-.nav-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:#fff;}
-.nav-links{display:flex;gap:22px;}
-.nav-links a{color:rgba(255,255,255,0.55);text-decoration:none;font-size:12px;text-transform:uppercase;letter-spacing:0.08em;transition:color 0.15s;}
+.nav-badge{width:32px;height:32px;background:var(--gold);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:14px;color:#fff;}
+.nav-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:#fff;}
+.nav-links{display:flex;gap:20px;}
+.nav-links a{color:rgba(255,255,255,.55);text-decoration:none;font-size:11px;text-transform:uppercase;letter-spacing:.07em;transition:color .15s;}
 .nav-links a:hover{color:#fff;}
-@media(max-width:640px){.nav-links{display:none;}}
+.nav-badge-sem{background:var(--gold);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;font-family:'Syne',sans-serif;}
+@media(max-width:600px){.nav-links{display:none;}}
 
-/* HERO */
-.hero{background:linear-gradient(160deg,var(--g2) 0%,var(--g3) 100%);padding:60px 32px 52px;text-align:center;position:relative;overflow:hidden;border-bottom:4px solid var(--gold);}
-.hero-eyebrow{display:inline-block;background:rgba(200,150,42,0.18);border:1px solid var(--gold);color:var(--gold2);font-size:11px;text-transform:uppercase;letter-spacing:0.12em;font-weight:600;border-radius:20px;padding:5px 16px;margin-bottom:18px;}
-.hero h1{font-family:'Syne',sans-serif;font-size:clamp(26px,4.5vw,44px);font-weight:800;color:#fff;line-height:1.15;margin-bottom:12px;max-width:700px;margin-left:auto;margin-right:auto;}
+.hero{background:linear-gradient(160deg,var(--g2) 0%,#1e5c38 100%);padding:52px 28px 48px;text-align:center;border-bottom:4px solid var(--gold);position:relative;overflow:hidden;}
+.hero::after{content:'';position:absolute;bottom:-60px;right:-60px;width:240px;height:240px;border-radius:50%;background:rgba(200,150,42,.07);pointer-events:none;}
+.hero-eyebrow{display:inline-block;background:rgba(200,150,42,.18);border:1px solid var(--gold);color:var(--gold2);font-size:10px;text-transform:uppercase;letter-spacing:.12em;font-weight:600;border-radius:20px;padding:4px 14px;margin-bottom:14px;}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(24px,4vw,40px);font-weight:800;color:#fff;line-height:1.15;margin-bottom:10px;max-width:680px;margin-left:auto;margin-right:auto;}
 .hero h1 em{color:var(--gold2);font-style:normal;}
-.hero-sub{font-size:15px;color:rgba(255,255,255,0.6);max-width:540px;margin:0 auto 24px;line-height:1.7;}
-.hero-date{font-size:11px;color:rgba(255,255,255,0.35);}
+.hero-sub{font-size:14px;color:rgba(255,255,255,.6);max-width:520px;margin:0 auto 20px;line-height:1.7;}
+.hero-updated{font-size:11px;color:rgba(255,255,255,.35);}
 
-/* LAYOUT */
-.section{padding:52px 24px;}
-.section-inner{max-width:1040px;margin:0 auto;}
+/* precio semana badge en hero */
+.hero-price-row{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:18px;flex-wrap:wrap;}
+.hpb{background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:10px 18px;text-align:center;}
+.hpb .hpb-lbl{font-size:10px;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;}
+.hpb .hpb-val{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#fff;line-height:1;}
+.hpb .hpb-sub{font-size:10px;color:rgba(255,255,255,.45);margin-top:2px;}
+.hpb.gold{background:rgba(200,150,42,.25);border-color:rgba(200,150,42,.5);}
+.hpb.gold .hpb-val{color:var(--gold2);}
+
+.section{padding:48px 24px;}
+.section-inner{max-width:1000px;margin:0 auto;}
 .section-alt{background:var(--cr);}
-.sec-label{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--ol);margin-bottom:6px;}
+.sec-label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--ol);margin-bottom:6px;}
 .sec-title{font-family:'Syne',sans-serif;font-size:clamp(18px,2.8vw,26px);font-weight:800;color:var(--ink);margin-bottom:8px;}
-.sec-desc{font-size:14px;color:var(--mid);max-width:620px;margin-bottom:28px;line-height:1.7;}
+.sec-desc{font-size:14px;color:var(--mid);max-width:600px;margin-bottom:24px;line-height:1.7;}
 
-/* ── VARIETY CARDS ── */
-.variety-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
-@media(max-width:760px){.variety-grid{grid-template-columns:1fr 1fr;}}
-@media(max-width:460px){.variety-grid{grid-template-columns:1fr;}}
-.vcard{background:#fff;border-radius:14px;overflow:hidden;border:1px solid var(--brd);box-shadow:0 2px 12px rgba(0,0,0,0.04);transition:transform 0.18s,box-shadow 0.18s;}
-.vcard:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(26,107,60,0.1);}
-.vc-stripe{height:5px;}
-.vc-body{padding:18px 18px 14px;}
-.vc-emoji{font-size:28px;margin-bottom:8px;}
-.vc-variety{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--ink);}
-.vc-origin{font-size:11px;color:var(--mid);margin-top:1px;margin-bottom:12px;}
-.vc-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px;}
-.vc-lbl{font-size:11px;color:var(--mid);}
-.vc-val{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;}
-.vc-source{padding:10px 18px;background:var(--cr);border-top:1px solid var(--brd);}
-.vc-source a{font-size:11px;color:var(--mid);text-decoration:none;}
-.vc-source a:hover{color:var(--g);}
-
-/* USDA TABLE */
-.usda-table-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--brd);margin-bottom:20px;}
-table{width:100%;border-collapse:collapse;font-size:13px;}
-thead{background:var(--g);color:#fff;}
-th{padding:11px 14px;text-align:left;font-family:'Syne',sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:0.08em;font-weight:700;}
-td{padding:10px 14px;border-bottom:1px solid var(--brd);}
-tr:last-child td{border-bottom:none;}
-tr:nth-child(even) td{background:#FAFAF8;}
-.td-price{font-family:'Syne',sans-serif;font-weight:700;color:var(--g);}
-.td-tag{display:inline-block;padding:2px 8px;border-radius:12px;font-size:10px;font-weight:600;}
-
-/* SEASONAL CALENDAR */
-.cal-grid{display:grid;grid-template-columns:180px repeat(12,1fr);gap:3px;font-size:11px;min-width:700px;}
-.cal-head{font-weight:700;text-align:center;padding:6px 2px;color:var(--mid);font-size:10px;text-transform:uppercase;letter-spacing:0.06em;}
-.cal-label{font-weight:600;color:var(--ink);padding:7px 8px;display:flex;align-items:center;gap:6px;background:#fff;border-radius:5px;}
-.cal-cell{border-radius:4px;padding:5px 2px;text-align:center;font-size:9px;font-weight:600;}
-.cal-peak{color:#fff;}
-.cal-low{opacity:0.3;}
-.cal-off{background:#f5f5f5;color:#ccc;}
-.cal-now{outline:2px solid var(--gold);outline-offset:1px;position:relative;}
-.cal-now::after{content:'HOY';position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-size:7px;font-weight:800;color:var(--gold);}
-.legend-row{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;}
-.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--mid);}
-.legend-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0;}
-
-/* IMPACT CARDS */
-.impact-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-@media(max-width:620px){.impact-grid{grid-template-columns:1fr;}}
-.icard{background:#fff;border-radius:12px;border:1px solid var(--brd);padding:20px 20px;}
-.icard-icon{font-size:26px;margin-bottom:8px;}
-.icard-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px;}
-.icard-text{font-size:13px;color:var(--mid);line-height:1.65;}
-.icard-alert{margin-top:10px;padding:8px 12px;border-radius:6px;font-size:12px;font-weight:600;}
-.alert-red{background:#FDECEC;color:var(--red);}
-.alert-green{background:#EAF3EC;color:var(--g);}
-.alert-gold{background:#FEF5E7;color:var(--gold);}
-
-/* CHAIN */
-.chain-wrap{overflow-x:auto;}
-.chain-inner{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;min-width:680px;}
-.cstep{background:#fff;border-radius:11px;overflow:hidden;border:1px solid var(--brd);}
-.cs-hdr{padding:11px 14px 9px;}
-.cs-num{font-size:9px;text-transform:uppercase;letter-spacing:0.1em;opacity:0.75;color:#fff;}
-.cs-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:#fff;margin-top:1px;}
-.cs-bdy{padding:13px 14px;}
+/* ── CADENA DE VALOR ── */
+.cadena-wrap{overflow-x:auto;margin-bottom:20px;}
+.cadena-inner{display:grid;grid-template-columns:repeat(5,1fr);gap:0;min-width:640px;}
+.cstep{border:1px solid var(--brd);border-right:none;position:relative;}
+.cstep:last-child{border-right:1px solid var(--brd);border-radius:0 12px 12px 0;}
+.cstep:first-child{border-radius:12px 0 0 12px;}
+.cs-top{padding:12px 14px 10px;border-bottom:1px solid var(--brd);}
+.cs-num{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:#fff;opacity:.75;}
+.cs-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:#fff;margin-top:2px;}
+.cs-body{padding:12px 14px;background:#fff;}
 .cs-price{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;line-height:1;}
 .cs-range{font-size:11px;color:var(--mid);margin-top:2px;}
 .cs-pill{margin-top:8px;display:inline-block;padding:3px 9px;border-radius:12px;font-size:10px;font-weight:600;}
+.cs-arrow{position:absolute;right:-14px;top:50%;transform:translateY(-50%);z-index:2;background:#fff;border:1px solid var(--brd);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--mid);}
 
-/* LINKS */
-.links-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
-@media(max-width:680px){.links-grid{grid-template-columns:1fr 1fr;}}
-.lcard{background:#fff;border:1px solid var(--brd);border-radius:11px;padding:16px 16px 12px;text-decoration:none;display:flex;flex-direction:column;gap:7px;transition:all 0.18s;}
-.lcard:hover{border-color:var(--ol);transform:translateY(-2px);box-shadow:0 5px 18px rgba(26,107,60,0.09);}
-.lc-icon{font-size:22px;}
-.lc-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--ink);}
-.lc-desc{font-size:12px;color:var(--mid);line-height:1.5;}
-.lc-tag{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--ol);margin-top:auto;}
+/* barra % */
+.pct-bar{margin-top:16px;}
+.pct-track{height:32px;border-radius:7px;overflow:hidden;display:flex;width:100%;}
+.pct-seg{display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;}
+.pct-legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px;}
+.pct-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--mid);}
+.pct-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0;}
 
-/* EXPLAINER */
-.exp-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-@media(max-width:620px){.exp-grid{grid-template-columns:1fr;}}
-.ecard{background:#fff;border-radius:12px;border:1px solid var(--brd);padding:20px;}
-.ecard-icon{font-size:26px;margin-bottom:8px;}
+/* ── PRECIOS POR VARIEDAD ── */
+.var-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+@media(max-width:700px){.var-grid{grid-template-columns:1fr 1fr;}}
+.var-card{background:#fff;border-radius:12px;border:1px solid var(--brd);overflow:hidden;transition:transform .18s,box-shadow .18s;}
+.var-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(26,107,60,.1);}
+.vc-stripe{height:4px;}
+.vc-body{padding:16px 16px 12px;}
+.vc-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+.vc-origin{font-size:11px;color:var(--mid);margin-bottom:10px;}
+.vc-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;}
+.vc-lbl{font-size:11px;color:var(--mid);}
+.vc-val{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;}
+.vc-foot{padding:9px 16px;background:var(--cr);border-top:1px solid var(--brd);}
+.vc-foot a{font-size:11px;color:var(--mid);text-decoration:none;}
+.vc-foot a:hover{color:var(--g);}
+
+/* ── COMPETIDORES TEMPORADA ── */
+.comp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+@media(max-width:660px){.comp-grid{grid-template-columns:1fr 1fr;}}
+.comp-card{background:#fff;border-radius:11px;border:1px solid var(--brd);padding:16px;}
+.comp-icon{font-size:22px;margin-bottom:6px;}
+.comp-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px;}
+.comp-desc{font-size:12px;color:var(--mid);line-height:1.55;}
+.comp-impact{margin-top:8px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;}
+.comp-card.inactive{opacity:.4;}
+
+/* ── HISTORIAL CHART ── */
+.chart-card{background:#fff;border-radius:12px;border:1px solid var(--brd);padding:18px 20px;}
+.chart-card h3{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:14px;}
+.charts-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:640px){.charts-2{grid-template-columns:1fr;}}
+
+/* ── FUENTES ── */
+.fuentes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+@media(max-width:660px){.fuentes-grid{grid-template-columns:1fr 1fr;}}
+.lcard{background:#fff;border:1px solid var(--brd);border-radius:11px;padding:14px 14px 11px;text-decoration:none;display:flex;flex-direction:column;gap:6px;transition:all .18s;}
+.lcard:hover{border-color:var(--ol);transform:translateY(-2px);box-shadow:0 5px 18px rgba(26,107,60,.09);}
+.lc-icon{font-size:20px;}
+.lc-name{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--ink);}
+.lc-desc{font-size:11px;color:var(--mid);line-height:1.5;}
+.lc-tag{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--ol);margin-top:auto;}
+
+/* ── EXPLAINER ── */
+.exp-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:600px){.exp-grid{grid-template-columns:1fr;}}
+.ecard{background:#fff;border-radius:11px;border:1px solid var(--brd);padding:18px;}
+.ecard-icon{font-size:24px;margin-bottom:7px;}
 .ecard-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px;}
 .ecard-text{font-size:13px;color:var(--mid);line-height:1.65;}
 
-/* BAR */
-.mb-track{height:34px;border-radius:7px;overflow:hidden;display:flex;width:100%;margin:10px 0;}
-.mb-seg{display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;}
-.mb-legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px;}
-.mb-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--mid);}
-.mb-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0;}
+/* ── PROYECCION ── */
+.proy-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+@media(max-width:600px){.proy-grid{grid-template-columns:1fr 1fr;}}
+.proy-card{background:#fff;border-radius:10px;border:1px solid var(--brd);padding:14px;}
+.proy-card.hist{border-top:3px solid var(--g);}
+.proy-card.proj{border-top:3px solid var(--gold);background:var(--cr);}
+.proy-lbl{font-size:9px;text-transform:uppercase;letter-spacing:.07em;color:var(--mid);font-weight:600;margin-bottom:5px;}
+.proy-precio{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;line-height:1;}
+.proy-sub{font-size:10px;color:var(--mid);margin-top:3px;}
+.proy-dir{font-size:10px;font-weight:600;margin-top:5px;}
 
-/* DISCLAIMER */
-.disclaimer{background:var(--cr);border:1px solid var(--brd);border-radius:9px;padding:12px 16px;font-size:11px;color:var(--mid);line-height:1.6;margin-top:22px;}
-
-footer{background:var(--g2);padding:30px 24px;text-align:center;border-top:3px solid var(--gold);}
-footer .fb{font-family:'Syne',sans-serif;font-weight:800;font-size:17px;color:#fff;margin-bottom:6px;}
-footer p{font-size:11px;color:rgba(255,255,255,0.38);line-height:1.9;}
+footer{background:var(--g2);padding:28px 24px;text-align:center;border-top:3px solid var(--gold);}
+footer .fb{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;color:#fff;margin-bottom:6px;}
+footer p{font-size:11px;color:rgba(255,255,255,.38);line-height:1.9;}
 footer a{color:var(--gold2);text-decoration:none;}
+
+.disclaimer{background:var(--cr);border:1px solid var(--brd);border-radius:9px;padding:11px 14px;font-size:11px;color:var(--mid);line-height:1.6;margin-top:18px;}
 </style>
 </head>
 <body>
@@ -142,372 +145,98 @@ footer a{color:var(--gold2);text-decoration:none;}
     <div class="nav-badge">A</div>
     <div class="nav-name">Agrovip S.A.</div>
   </div>
-  <div class="nav-links">
-    <a href="#variedades">Variedades</a>
-    <a href="#usda">USDA en vivo</a>
-    <a href="#competencia">Competencia estacional</a>
-    <a href="#cadena">Cadena de valor</a>
-    <a href="#fuentes">Fuentes</a>
+  <div style="display:flex;align-items:center;gap:14px;">
+    <div class="nav-links">
+      <a href="#cadena">Cadena de valor</a>
+      <a href="#precios">Precios</a>
+      <a href="#competencia">Competencia</a>
+      <a href="#fuentes">Fuentes</a>
+    </div>
+    <div class="nav-badge-sem" id="nav-sem">Sem —</div>
   </div>
 </nav>
 
 <!-- HERO -->
 <div class="hero">
-  <div class="hero-eyebrow">Actualizado semanalmente · Mayo 2026</div>
+  <div class="hero-eyebrow" id="hero-eyebrow">Actualizado semanalmente</div>
   <h1>¿Cuánto vale tu pitahaya<br><em>en la percha de EE.UU.?</em></h1>
-  <p class="hero-sub">Precios reales por variedad, mercados terminales USDA, y cómo las frutas tropicales de temporada compiten por el espacio en percha.</p>
-  <div class="hero-date" id="fecha-update">Semana del 19–25 mayo 2026</div>
+  <p class="hero-sub">Precios reales esta semana, cadena de valor del campo al consumidor, y por qué el precio sube y baja.</p>
+
+  <div class="hero-price-row" id="hero-price-row">
+    <!-- se llena con JS -->
+  </div>
+
+  <div class="hero-updated" id="hero-updated">—</div>
 </div>
 
-<!-- ══ VARIEDADES ══ -->
-<div class="section" id="variedades">
+<!-- ══ CADENA DE VALOR ══ -->
+<div class="section" id="cadena">
   <div class="section-inner">
-    <div class="sec-label">Precios por variedad</div>
-    <div class="sec-title">Las tres pitahayas en el mercado americano</div>
-    <p class="sec-desc">No todas las pitahayas valen lo mismo. El precio varía significativamente por variedad, origen y calibre. Estos son los precios actuales en los mercados terminales de EE.UU.</p>
+    <div class="sec-label">Cadena de valor — esta semana</div>
+    <div class="sec-title">Del campo ecuatoriano a la percha americana</div>
+    <p class="sec-desc" id="cadena-desc">Calculado con los datos USDA de esta semana. Cada eslabón asume costos y riesgos reales.</p>
 
-    <div class="variety-grid">
-
-      <div class="vcard">
-        <div class="vc-stripe" style="background:#e05a7a;"></div>
-        <div class="vc-body">
-          <div class="vc-emoji">🔴</div>
-          <div class="vc-variety">Roja piel / Pulpa blanca</div>
-          <div class="vc-origin">Ecuador · Hylocereus undatus · La que exporta Agrovip</div>
-          <div class="vc-row"><span class="vc-lbl">Terminal NY (caja 4.5kg)</span><span class="vc-val" style="color:var(--g)">$36–40</span></div>
-          <div class="vc-row"><span class="vc-lbl">FOB Ecuador</span><span class="vc-val" style="color:var(--blue)">$24–28</span></div>
-          <div class="vc-row"><span class="vc-lbl">Retail Walmart (unidad)</span><span class="vc-val" style="color:var(--gold)">$4.97</span></div>
-          <div class="vc-row"><span class="vc-lbl">Equivalente $/kg retail</span><span class="vc-val" style="color:var(--gold)">~$12</span></div>
-        </div>
-        <div class="vc-source"><a href="https://www.ams.usda.gov/mnreports/nx_fv010.pdf" target="_blank" rel="noopener">USDA NY · 6 mayo 2026 →</a></div>
+    <div class="cadena-wrap">
+      <div class="cadena-inner" id="cadena-steps">
+        <!-- se llena con JS -->
       </div>
-
-      <div class="vcard">
-        <div class="vc-stripe" style="background:#c0392b;"></div>
-        <div class="vc-body">
-          <div class="vc-emoji">🩸</div>
-          <div class="vc-variety">Roja piel / Pulpa roja</div>
-          <div class="vc-origin">Ecuador · Hylocereus costaricensis · Premium</div>
-          <div class="vc-row"><span class="vc-lbl">Terminal NY (caja 20 lb)</span><span class="vc-val" style="color:var(--g)">$44</span></div>
-          <div class="vc-row"><span class="vc-lbl">Equivalente $/kg</span><span class="vc-val" style="color:var(--g)">~$9.7</span></div>
-          <div class="vc-row"><span class="vc-lbl">Vs. pulpa blanca</span><span class="vc-val" style="color:var(--red)">+15–20%</span></div>
-          <div class="vc-row"><span class="vc-lbl">Mercado objetivo</span><span class="vc-val" style="color:var(--mid);font-size:12px;">Asian / Premium</span></div>
-        </div>
-        <div class="vc-source"><a href="https://www.ams.usda.gov/mnreports/nx_fv010.pdf" target="_blank" rel="noopener">USDA NY · 6 mayo 2026 →</a></div>
-      </div>
-
-      <div class="vcard">
-        <div class="vc-stripe" style="background:#e8b040;"></div>
-        <div class="vc-body">
-          <div class="vc-emoji">🟡</div>
-          <div class="vc-variety">Amarilla piel / Pulpa blanca</div>
-          <div class="vc-origin">Ecuador · Hylocereus megalanthus · La más dulce</div>
-          <div class="vc-row"><span class="vc-lbl">Terminal NY (caja 6 lb)</span><span class="vc-val" style="color:var(--g)">$40–42</span></div>
-          <div class="vc-row"><span class="vc-lbl">FOB Ecuador</span><span class="vc-val" style="color:var(--blue)">$26–30</span></div>
-          <div class="vc-row"><span class="vc-lbl">Premium vs. roja/blanca</span><span class="vc-val" style="color:var(--g)">+8–15%</span></div>
-          <div class="vc-row"><span class="vc-lbl">Demanda</span><span class="vc-val" style="color:var(--mid);font-size:12px;">Creciente / nicho</span></div>
-        </div>
-        <div class="vc-source"><a href="https://www.ams.usda.gov/mnreports/nx_fv010.pdf" target="_blank" rel="noopener">USDA NY · 6 mayo 2026 →</a></div>
-      </div>
-
     </div>
 
-    <div class="disclaimer">
-      <strong>Fuentes directas USDA (mayo 2026):</strong> Terminal NY (NX_FV010): Roja/blanca 4.5kg cajas 7–9: $36–40. Roja/roja 20lb: $44. Amarilla/blanca 6lb 7–9: $40–42. Terminal Baltimore (BP_FV010): Roja/roja 10lb $35 | Roja/blanca $35 | Amarilla/blanca $25. Terminal Boston (BH_FV010): Roja/blanca calidad fina 10lb $36. FOB Nacional USDA (FVDFOB): Roja/blanca 4.5kg $24–28 | Amarilla/blanca $26–30.
+    <div class="pct-bar">
+      <div style="font-size:12px;font-weight:500;color:var(--ink);margin-bottom:8px;">¿Quién se lleva qué del precio final al consumidor?</div>
+      <div class="pct-track" id="pct-track"></div>
+      <div class="pct-legend" id="pct-legend"></div>
     </div>
+
+    <div class="disclaimer" id="cadena-disclaimer">—</div>
   </div>
 </div>
 
-<!-- ══ USDA EN VIVO ══ -->
-<div class="section section-alt" id="usda">
+<!-- ══ PRECIOS POR VARIEDAD ══ -->
+<div class="section section-alt" id="precios">
   <div class="section-inner">
-    <div class="sec-label">Mercados terminales USDA — datos en vivo</div>
-    <div class="sec-title">Precios mayoristas por ciudad, calibre y variedad</div>
-    <p class="sec-desc">Los informes USDA son la fuente más confiable del mercado mayorista. Se publican semanalmente y son de acceso libre.</p>
+    <div class="sec-label">Precios por variedad — mercados terminales USDA</div>
+    <div class="sec-title">Las tres pitahayas en el mercado americano</div>
+    <p class="sec-desc">Datos del mercado terminal de Nueva York (NX_FV010) y Los Ángeles (HC_FV056). Actualizados esta semana.</p>
 
-    <div class="usda-table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Mercado terminal</th>
-            <th>Variedad</th>
-            <th>Presentación</th>
-            <th>Calibre</th>
-            <th>Precio</th>
-            <th>Estado</th>
-            <th>Fuente</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>Nueva York</strong></td>
-            <td>Ecuador Roja/Blanca</td>
-            <td>4.5 kg carton</td>
-            <td>7s · 8s · 9s</td>
-            <td class="td-price">$36–40</td>
-            <td><span class="td-tag" style="background:#FEF5E7;color:var(--gold)">Oferta ligera</span></td>
-            <td><a href="https://www.ams.usda.gov/mnreports/nx_fv010.pdf" target="_blank" style="color:var(--g);font-size:11px;">NX_FV010 →</a></td>
-          </tr>
-          <tr>
-            <td><strong>Nueva York</strong></td>
-            <td>Ecuador Roja/Roja</td>
-            <td>20 lb carton</td>
-            <td>large</td>
-            <td class="td-price">$44</td>
-            <td><span class="td-tag" style="background:#FEF5E7;color:var(--gold)">Oferta ligera</span></td>
-            <td><a href="https://www.ams.usda.gov/mnreports/nx_fv010.pdf" target="_blank" style="color:var(--g);font-size:11px;">NX_FV010 →</a></td>
-          </tr>
-          <tr>
-            <td><strong>Nueva York</strong></td>
-            <td>Ecuador Amarilla/Blanca</td>
-            <td>6 lb carton</td>
-            <td>7s · 8s · 9s</td>
-            <td class="td-price">$40–42</td>
-            <td><span class="td-tag" style="background:#FEF5E7;color:var(--gold)">Oferta ligera</span></td>
-            <td><a href="https://www.ams.usda.gov/mnreports/nx_fv010.pdf" target="_blank" style="color:var(--g);font-size:11px;">NX_FV010 →</a></td>
-          </tr>
-          <tr>
-            <td><strong>Baltimore</strong></td>
-            <td>Ecuador Roja/Roja</td>
-            <td>10 lb carton</td>
-            <td>8s</td>
-            <td class="td-price">$35</td>
-            <td><span class="td-tag" style="background:#EAF3EC;color:var(--g)">Mercado estable</span></td>
-            <td><a href="https://www.ams.usda.gov/mnreports/bp_fv010.pdf" target="_blank" style="color:var(--g);font-size:11px;">BP_FV010 →</a></td>
-          </tr>
-          <tr>
-            <td><strong>Baltimore</strong></td>
-            <td>Ecuador Amarilla/Blanca</td>
-            <td>6 lb carton</td>
-            <td>9s</td>
-            <td class="td-price">$25</td>
-            <td><span class="td-tag" style="background:#EAF3EC;color:var(--g)">Mercado estable</span></td>
-            <td><a href="https://www.ams.usda.gov/mnreports/bp_fv010.pdf" target="_blank" style="color:var(--g);font-size:11px;">BP_FV010 →</a></td>
-          </tr>
-          <tr>
-            <td><strong>Boston</strong></td>
-            <td>Ecuador Roja/Blanca calidad fina</td>
-            <td>10 lb carton</td>
-            <td>9s</td>
-            <td class="td-price">$36</td>
-            <td><span class="td-tag" style="background:#EAF3EC;color:var(--g)">Mercado estable</span></td>
-            <td><a href="https://www.ams.usda.gov/mnreports/bh_fv010.pdf" target="_blank" style="color:var(--g);font-size:11px;">BH_FV010 →</a></td>
-          </tr>
-          <tr>
-            <td><strong>FOB Nacional</strong></td>
-            <td>Ecuador Roja/Blanca</td>
-            <td>4.5 kg carton</td>
-            <td>7–10</td>
-            <td class="td-price">$24–28</td>
-            <td><span class="td-tag" style="background:#EBF5FB;color:var(--blue)">Demanda moderada</span></td>
-            <td><a href="https://www.ams.usda.gov/mnreports/fvdfob.pdf" target="_blank" style="color:var(--g);font-size:11px;">FVDFOB →</a></td>
-          </tr>
-          <tr>
-            <td><strong>FOB Nacional</strong></td>
-            <td>Ecuador Amarilla/Blanca</td>
-            <td>4.5 kg carton</td>
-            <td>7–9</td>
-            <td class="td-price">$26–30</td>
-            <td><span class="td-tag" style="background:#EBF5FB;color:var(--blue)">Demanda moderada</span></td>
-            <td><a href="https://www.ams.usda.gov/mnreports/fvdfob.pdf" target="_blank" style="color:var(--g);font-size:11px;">FVDFOB →</a></td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="var-grid" id="var-grid"><!-- JS --></div>
+
+    <div class="disclaimer" style="margin-top:16px;" id="var-disclaimer">—</div>
+  </div>
+</div>
+
+<!-- ══ PROYECCION ══ -->
+<div class="section">
+  <div class="section-inner">
+    <div class="sec-label">Proyección de mercado</div>
+    <div class="sec-title">¿Qué viene las próximas semanas?</div>
+    <p class="sec-desc">Basado en tendencia USDA, estacionalidad y competidores activos.</p>
+
+    <div class="proy-grid" id="proy-grid"><!-- JS --></div>
+
+    <div class="charts-2" style="margin-top:18px;">
+      <div class="chart-card">
+        <h3>📉 Precio productor Ecuador ($/kg)</h3>
+        <div style="position:relative;height:180px;"><canvas id="chart-prod" role="img" aria-label="Historial y proyección precio productor">Historial precio productor.</canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>📦 USDA Los Ángeles vs Nueva York ($/caja)</h3>
+        <div style="position:relative;height:180px;"><canvas id="chart-usda" role="img" aria-label="USDA LA vs NY">USDA LA vs NY.</canvas></div>
+      </div>
     </div>
-    <div class="disclaimer">Datos de los informes USDA AMS Specialty Crops Market News: NX_FV010 (6 mayo 2026), BP_FV010 (1 mayo 2026), BH_FV010 (8 mayo 2026), FVDFOB (15 mayo 2026). Los informes se publican semanalmente. "Oferta ligera" significa menos fruta disponible que lo normal — tiende a sostener precios altos.</div>
   </div>
 </div>
 
 <!-- ══ COMPETENCIA ESTACIONAL ══ -->
-<div class="section" id="competencia">
+<div class="section section-alt" id="competencia">
   <div class="section-inner">
-    <div class="sec-label">Competencia de frutas exóticas</div>
-    <div class="sec-title">¿Qué más compite por el espacio en percha?</div>
-    <p class="sec-desc">Los supermercados tienen espacio limitado para frutas exóticas. Cuando el mango, el lichi o la maracuyá entran en temporada, compiten directamente por ese espacio — y afectan la rotación y el precio de la pitahaya.</p>
+    <div class="sec-label">Competencia estacional esta semana</div>
+    <div class="sec-title">Frutas que compiten por espacio en percha</div>
+    <p class="sec-desc">Los supermercados tienen espacio limitado para frutas exóticas. Cuando estas frutas están en temporada, la pitahaya pierde espacio y precio.</p>
 
-    <!-- SEASONAL CALENDAR -->
-    <div style="overflow-x:auto;margin-bottom:24px;">
-      <div style="min-width:750px;">
-        <div style="display:grid;grid-template-columns:170px repeat(12,1fr);gap:3px;font-size:10px;">
-          <!-- headers -->
-          <div></div>
-          <div style="text-align:center;padding:5px 0;color:var(--mid);font-weight:700;font-size:9px;text-transform:uppercase;">Ene</div>
-          <div style="text-align:center;padding:5px 0;color:var(--mid);font-weight:700;font-size:9px;text-transform:uppercase;">Feb</div>
-          <div style="text-align:center;padding:5px 0;color:var(--mid);font-weight:700;font-size:9px;text-transform:uppercase;">Mar</div>
-          <div style="text-align:center;padding:5px 0;color:var(--mid);font-weight:700;font-size:9px;text-transform:uppercase;">Abr</div>
-          <div style="text-align:center;padding:5px 0;color:var(--gold);font-weight:800;font-size:9px;text-transform:uppercase;">May ◀</div>
-          <div style="text-align:center;padding:5px 0;color:var(--mid);font-weight:700;font-size:9px;text-transform:uppercase;">Jun</div>
-          <div style="text-align:center;padding:5px 0;color:var(--mid);font-weight:700;font-size:9px;text-transform:uppercase;">Jul</div>
-          <div style="text-align:center;padding:5px 0;color:var(--mid);font-weight:700;font-size:9px;text-transform:uppercase;">Ago</div>
-          <div style="text-align:center;padding:5px 0;color:var(--mid);font-weight:700;font-size:9px;text-transform:uppercase;">Sep</div>
-          <div style="text-align:center;padding:5px 0;color:var(--mid);font-weight:700;font-size:9px;text-transform:uppercase;">Oct</div>
-          <div style="text-align:center;padding:5px 0;color:var(--mid);font-weight:700;font-size:9px;text-transform:uppercase;">Nov</div>
-          <div style="text-align:center;padding:5px 0;color:var(--mid);font-weight:700;font-size:9px;text-transform:uppercase;">Dic</div>
+    <div class="comp-grid" id="comp-grid"><!-- JS --></div>
 
-          <!-- Pitahaya roja/blanca Ecuador (nuestra fruta - todo el año) -->
-          <div style="background:#EAF3EC;border-radius:5px;padding:6px 8px;font-weight:600;font-size:11px;color:var(--g);display:flex;align-items:center;gap:5px;">🔴 Pitahaya roja/blanca</div>
-          <div style="background:#7A9A2E;border-radius:3px;padding:5px 2px;text-align:center;font-size:9px;font-weight:700;color:#fff;">★</div>
-          <div style="background:#7A9A2E;border-radius:3px;padding:5px 2px;text-align:center;font-size:9px;font-weight:700;color:#fff;">★</div>
-          <div style="background:#1A6B3C;border-radius:3px;padding:5px 2px;text-align:center;font-size:9px;font-weight:700;color:#fff;">PICO</div>
-          <div style="background:#1A6B3C;border-radius:3px;padding:5px 2px;text-align:center;font-size:9px;font-weight:700;color:#fff;">PICO</div>
-          <div style="background:#1A6B3C;border-radius:3px;padding:5px 2px;text-align:center;font-size:9px;font-weight:700;color:#fff;outline:2px solid var(--gold);outline-offset:1px;">PICO</div>
-          <div style="background:#7A9A2E;border-radius:3px;padding:5px 2px;text-align:center;font-size:9px;font-weight:700;color:#fff;">★</div>
-          <div style="background:#7A9A2E;border-radius:3px;padding:5px 2px;text-align:center;font-size:9px;font-weight:700;color:#fff;">★</div>
-          <div style="background:#7A9A2E;border-radius:3px;padding:5px 2px;text-align:center;font-size:9px;font-weight:700;color:#fff;">★</div>
-          <div style="background:#7A9A2E;border-radius:3px;padding:5px 2px;text-align:center;font-size:9px;font-weight:700;color:#fff;">★</div>
-          <div style="background:#7A9A2E;border-radius:3px;padding:5px 2px;text-align:center;font-size:9px;font-weight:700;color:#fff;">★</div>
-          <div style="background:#7A9A2E;border-radius:3px;padding:5px 2px;text-align:center;font-size:9px;font-weight:700;color:#fff;">★</div>
-          <div style="background:#7A9A2E;border-radius:3px;padding:5px 2px;text-align:center;font-size:9px;font-weight:700;color:#fff;">★</div>
-
-          <!-- Mango México/Guatemala -->
-          <div style="background:#FEF5E7;border-radius:5px;padding:6px 8px;font-weight:600;font-size:11px;color:var(--gold);display:flex;align-items:center;gap:5px;">🥭 Mango México</div>
-          <div style="background:#f5f5f5;border-radius:3px;padding:5px 2px;"></div>
-          <div style="background:#f5f5f5;border-radius:3px;padding:5px 2px;"></div>
-          <div style="background:#e8b040;border-radius:3px;padding:5px 2px;text-align:center;font-size:9px;font-weight:700;color:#fff;">★</div>
-          <div style="background:#e8b040;border-radius:3px;padding:5px 2px;text-align:center;font-size:9px;font-weight:700;color:#fff;">★</div>
-          <div style="background:#C8962A;border-radius:3px;padding:5px 2px;text-align:center;font-size:9px;font-weight:700;color:#fff;outline:2px solid var(--gold);outline-offset:1px;">PICO</div>
-          <div style="background:#C8962A;border-radius:3px;padding:5px 2px;text-align:center;font-size:9px;font-weight:700;color:#fff;">PICO</div>
-          <div style="background:#C8962A;border-radius:3px;padding:5px 2px;text-align:center;font-size:9px;font-weight:700;color:#fff;">PICO</div>
-          <div style="background:#e8b040;border-radius:3px;padding:5px 2px;text-align:center;font-size:9px;font-weight:700;color:#fff;">★</div>
-          <div style="background:#f5f5f5;border-radius:3px;padding:5px 2px;"></div>
-          <div style="background:#f5f5f5;border-radius:3px;padding:5px 2px;"></div>
-          <div style="background:#f5f5f5;border-radius:3px;padding:5px 2px;"></div>
-          <div style="background:#f5f5f5;border-radius:3px;padding:5px 2px;"></div>
-
-          <!-- Lichi -->
-          <div style="background:#fef0f0;border-radius:5px;padding:6px 8px;font-weight:600;font-size:11px;color:var(--red);display:flex;align-items:center;gap:5px;">🍒 Lichi (lychee)</div>
-          <div style="background:#f5f5f5;border-radius:3px;padding:5px 2px;"></div>
-          <div style="background:#f5f5f5;border-radius:3px;padding:5px 2px;"></div>
-          <div style="background:#f5f5f5;border-radius:3px;padding:5px 2px;"></div>
-          <div style="background:#f5f5f5;border-radius:3px;padding:5px 2px;"></div>
-          <div style="background:#f5cecc;border-radius:3px;padding:5px 2px;text-align:center;font-size:9px;font-weight:700;color:var(--red);outline:2px solid var(--gold);outline-offset:1px;">Llega</div>
-          <div style="background:#b83232;border-radius:3px;padding:5px 2px;text-align:center;font-size:9px;font-weight:700;color:#fff;">PICO</div>
-          <div style="background:#b83232;border-radius:3px;padding:5px 2px;text-align:center;font-size:9px;font-weight:700;color:#fff;">PICO</div>
-          <div style="background:#f5f5f5;border-radius:3px;padding:5px 2px;"></div>
-          <div style="background:#f5f5f5;border-radius:3px;padding:5px 2px;"></div>
-          <div style="background:#f5f5f5;border-radius:3px;padding:5px 2px;"></div>
-          <div style="background:#f5f5f5;border-radius:3px;padding:5px 2px;"></div>
-          <div style="background:#f5f5f5;border-radius:3px;padding:5px 2px;"></div>
-
-          <!-- Rambutan -->
-          <div style="background:#f0ebf8;border-radius:5px;padding:6px 8px;font-weight:600;font-size:11px;color:var(--purple);display:flex;align-items:center;gap:5px;">🦔 Rambutan</div>
-          <div style="background:#f5f5f5;border-radius:3px;padding:5px 2px;"></div>
-          <div style="background:#f5f5f5;border-radius:3px;padding:5px 2px;"></div>
-          <div style="background:#f5f5f5;border-radius:3px;padding:5px 2px;"></div>
-          <div style="background:#f5f5f5;border-radius:3px;padding:5px 2px;"></div>
-          <div style="background:#f5f5f5;border-radius:3px;padding:5px 2px;text-align:center;font-size:9px;color:#ccc;outline:2px solid var(--gold);outline-offset:1px;">–</div>
-          <div style="background:#f5f5f5;border-radius:3px;padding:5px 2px;"></div>
-          <div style="background:#f5f5f5;border-radius:3px;padding:5px 2px;"></div>
-          <div style="background:#f5f5f5;border-radius:3px;padding:5px 2px;"></div>
-          <div style="background:#f5f5f5;border-radius:3px;padding:5px 2px;"></div>
-          <div style="background:#6c3483;border-radius:3px;padding:5px 2px;text-align:center;font-size:9px;font-weight:700;color:#fff;">PICO</div>
-          <div style="background:#6c3483;border-radius:3px;padding:5px 2px;text-align:center;font-size:9px;font-weight:700;color:#fff;">PICO</div>
-          <div style="background:#f5f5f5;border-radius:3px;padding:5px 2px;"></div>
-
-          <!-- Maracuyá -->
-          <div style="background:#fffbe6;border-radius:5px;padding:6px 8px;font-weight:600;font-size:11px;color:#8a6d00;display:flex;align-items:center;gap:5px;">💛 Maracuyá</div>
-          <div style="background:#f9e87a;border-radius:3px;padding:5px 2px;text-align:center;font-size:9px;font-weight:700;color:#5a4d00;">★</div>
-          <div style="background:#f9e87a;border-radius:3px;padding:5px 2px;text-align:center;font-size:9px;font-weight:700;color:#5a4d00;">★</div>
-          <div style="background:#f9e87a;border-radius:3px;padding:5px 2px;text-align:center;font-size:9px;font-weight:700;color:#5a4d00;">★</div>
-          <div style="background:#d4a500;border-radius:3px;padding:5px 2px;text-align:center;font-size:9px;font-weight:700;color:#fff;">PICO</div>
-          <div style="background:#d4a500;border-radius:3px;padding:5px 2px;text-align:center;font-size:9px;font-weight:700;color:#fff;outline:2px solid var(--gold);outline-offset:1px;">PICO</div>
-          <div style="background:#f9e87a;border-radius:3px;padding:5px 2px;text-align:center;font-size:9px;font-weight:700;color:#5a4d00;">★</div>
-          <div style="background:#f9e87a;border-radius:3px;padding:5px 2px;text-align:center;font-size:9px;font-weight:700;color:#5a4d00;">★</div>
-          <div style="background:#f9e87a;border-radius:3px;padding:5px 2px;text-align:center;font-size:9px;font-weight:700;color:#5a4d00;">★</div>
-          <div style="background:#f9e87a;border-radius:3px;padding:5px 2px;text-align:center;font-size:9px;font-weight:700;color:#5a4d00;">★</div>
-          <div style="background:#f9e87a;border-radius:3px;padding:5px 2px;text-align:center;font-size:9px;font-weight:700;color:#5a4d00;">★</div>
-          <div style="background:#f9e87a;border-radius:3px;padding:5px 2px;text-align:center;font-size:9px;font-weight:700;color:#5a4d00;">★</div>
-          <div style="background:#f9e87a;border-radius:3px;padding:5px 2px;text-align:center;font-size:9px;font-weight:700;color:#5a4d00;">★</div>
-
-        </div>
-        <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:10px;">
-          <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--mid);"><div style="width:10px;height:10px;background:var(--g);border-radius:2px;"></div>Temporada pico (oferta alta, presión en precio)</div>
-          <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--mid);"><div style="width:10px;height:10px;background:var(--ol);border-radius:2px;"></div>Disponible (oferta normal)</div>
-          <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--mid);"><div style="width:10px;height:10px;background:#f5f5f5;border:1px solid #ddd;border-radius:2px;"></div>Fuera de temporada</div>
-          <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--gold);font-weight:700;"><div style="width:10px;height:10px;background:var(--gold);border-radius:2px;"></div>◀ Estamos aquí (mayo 2026)</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- IMPACT CARDS -->
-    <div class="impact-grid">
-      <div class="icard">
-        <div class="icard-icon">🥭</div>
-        <div class="icard-title">Mango en pico — Ahora mismo</div>
-        <div class="icard-text">Mayo es el inicio del pico de mango en EE.UU. México provee el 85% de las importaciones. Con precios bajos y alta visibilidad promocional, el mango compite directamente por el espacio en la sección de tropicales. Los compradores de supermercado priorizan volumen — y el mango mueve mucho más volumen que la pitahaya.</div>
-        <div class="icard-alert alert-red">⚠ Impacto ALTO en rotación de pitahaya: mayo–agosto</div>
-      </div>
-      <div class="icard">
-        <div class="icard-icon">🍒</div>
-        <div class="icard-title">Lichi entrando en junio</div>
-        <div class="icard-text">El lichi fresco tiene una ventana muy corta (junio–julio) y alta demanda en comunidades asiáticas. Cuando llega, captura toda la atención del canal exótico. Precios del lichi fresco van de $4–8/lb, lo que posiciona la pitahaya como más accesible. Sin embargo, el espacio en refrigeración del supermercado no cambia.</div>
-        <div class="icard-alert alert-gold">⚡ Impacto MEDIO: comprime espacio en jun–jul</div>
-      </div>
-      <div class="icard">
-        <div class="icard-icon">💛</div>
-        <div class="icard-title">Maracuyá — competencia directa todo el año</div>
-        <div class="icard-text">La maracuyá (passion fruit) de Florida y Colombia está disponible casi todo el año. Compite por el mismo cliente premium que la pitahaya. Pero también es complementaria — muchos compradores de maracuyá prueban pitahaya por primera vez. El precio al consumidor ($4–6 cada una) es similar a la pitahaya.</div>
-        <div class="icard-alert alert-green">✓ Impacto BAJO — categorías complementarias</div>
-      </div>
-      <div class="icard">
-        <div class="icard-icon">📦</div>
-        <div class="icard-title">La lógica del comprador de supermercado</div>
-        <div class="icard-text">El gerente de produce tiene máximo 3–4 puestos para frutas exóticas. En mayo–agosto los llena con mango y lichi porque rotan más rápido. La pitahaya compite mejor en octubre–abril, cuando hay menos competencia estacional y el consumidor regresa a exóticos más "conocidos". La calidad constante y el calibre grande son clave para mantener el puesto.</div>
-        <div class="icard-alert alert-gold">⚡ Estrategia: enfocarse en calidad en temporada baja de competencia</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══ CADENA DE VALOR ══ -->
-<div class="section section-alt" id="cadena">
-  <div class="section-inner">
-    <div class="sec-label">Cadena de valor</div>
-    <div class="sec-title">Del campo al consumidor — quién se lleva qué</div>
-    <p class="sec-desc">Cada eslabón asume riesgos y costos reales. Entender la cadena completa explica por qué el precio al productor no puede ser igual al precio retail.</p>
-
-    <div class="chain-wrap">
-      <div class="chain-inner">
-        <div class="cstep">
-          <div class="cs-hdr" style="background:var(--ol);"><div class="cs-num">Eslabón 1</div><div class="cs-name">🌱 Productor</div></div>
-          <div class="cs-bdy"><div class="cs-price" style="color:var(--g)">$1.50–2.00</div><div class="cs-range">por kg, en finca Ecuador</div><div class="cs-pill" style="background:#EAF3EC;color:var(--g);">Punto de origen</div></div>
-        </div>
-        <div class="cstep">
-          <div class="cs-hdr" style="background:var(--g);"><div class="cs-num">Eslabón 2</div><div class="cs-name">📦 Exportador</div></div>
-          <div class="cs-bdy"><div class="cs-price" style="color:var(--g)">$2.50–3.50</div><div class="cs-range">FOB Ecuador · caja $24–28</div><div class="cs-pill" style="background:#FEF5E7;color:var(--gold);">+Empaque+flete+certificaciones</div></div>
-        </div>
-        <div class="cstep">
-          <div class="cs-hdr" style="background:var(--blue);"><div class="cs-num">Eslabón 3</div><div class="cs-name">🚢 Importador USA</div></div>
-          <div class="cs-bdy"><div class="cs-price" style="color:var(--blue)">$4.00–6.50</div><div class="cs-range">por kg · CIF Miami/NY</div><div class="cs-pill" style="background:#EBF5FB;color:var(--blue);">+Aduana+FDA+bodega fría</div></div>
-        </div>
-        <div class="cstep">
-          <div class="cs-hdr" style="background:var(--purple);"><div class="cs-num">Eslabón 4</div><div class="cs-name">🏪 Distribuidor</div></div>
-          <div class="cs-bdy"><div class="cs-price" style="color:var(--purple)">$7.00–9.00</div><div class="cs-range">por kg · terminal mayorista</div><div class="cs-pill" style="background:#f5eef8;color:var(--purple);">Margen ~30–40%</div></div>
-        </div>
-        <div class="cstep" style="border:2px solid var(--gold);">
-          <div class="cs-hdr" style="background:var(--gold);"><div class="cs-num">Eslabón 5</div><div class="cs-name">🛒 Supermercado</div></div>
-          <div class="cs-bdy"><div class="cs-price" style="color:var(--gold)">$12–25</div><div class="cs-range">por kg · precio final</div><div class="cs-pill" style="background:#FEF5E7;color:var(--gold);">Margen supermercado ~60%</div></div>
-        </div>
-      </div>
-    </div>
-
-    <div style="margin-top:20px;">
-      <div style="font-size:13px;font-weight:500;color:var(--ink);margin-bottom:8px;">Distribución del precio final al consumidor (base $12/kg Walmart)</div>
-      <div class="mb-track">
-        <div class="mb-seg" style="flex:14;background:var(--ol);">14%</div>
-        <div class="mb-seg" style="flex:12;background:var(--g);">12%</div>
-        <div class="mb-seg" style="flex:21;background:var(--blue);">21%</div>
-        <div class="mb-seg" style="flex:19;background:var(--purple);">19%</div>
-        <div class="mb-seg" style="flex:34;background:var(--gold);">34%</div>
-      </div>
-      <div class="mb-legend">
-        <div class="mb-item"><div class="mb-dot" style="background:var(--ol)"></div>Productor (~14%)</div>
-        <div class="mb-item"><div class="mb-dot" style="background:var(--g)"></div>Exportador (~12%)</div>
-        <div class="mb-item"><div class="mb-dot" style="background:var(--blue)"></div>Importador (~21%)</div>
-        <div class="mb-item"><div class="mb-dot" style="background:var(--purple)"></div>Distribuidor (~19%)</div>
-        <div class="mb-item"><div class="mb-dot" style="background:var(--gold)"></div>Supermercado (~34%)</div>
-      </div>
-    </div>
+    <div style="margin-top:14px;background:#FDECEC;border-radius:9px;padding:12px 16px;font-size:12px;color:var(--red);line-height:1.6;" id="comp-alert"></div>
   </div>
 </div>
 
@@ -516,76 +245,285 @@ footer a{color:var(--gold2);text-decoration:none;}
   <div class="section-inner">
     <div class="sec-label">Fuentes de datos verificadas</div>
     <div class="sec-title">Consulta los precios tú mismo</div>
-    <p class="sec-desc">Todos los datos de esta página provienen de fuentes públicas y verificables. Puedes consultarlos directamente en cualquier momento.</p>
-    <div class="links-grid">
+    <p class="sec-desc">Todos los datos provienen de fuentes públicas y gratuitas. Puedes verificarlos en cualquier momento.</p>
+
+    <div class="fuentes-grid">
       <a class="lcard" href="https://www.ams.usda.gov/mnreports/nx_fv010.pdf" target="_blank" rel="noopener">
         <div class="lc-icon">🏛</div>
-        <div class="lc-name">USDA Terminal NY (NX_FV010)</div>
-        <div class="lc-desc">Precios mayoristas oficiales del mercado terminal de Nueva York. Pitahaya Ecuador listada por variedad y calibre. Actualización semanal.</div>
-        <div class="lc-tag">USDA oficial · Gratis · Semanal</div>
+        <div class="lc-name">USDA Terminal NY</div>
+        <div class="lc-desc">NX_FV010 — Pitahaya Ecuador 4.5kg por variedad y calibre. Referencia Costa Este.</div>
+        <div class="lc-tag">USDA oficial · Semanal · Gratis</div>
+      </a>
+      <a class="lcard" href="https://www.ams.usda.gov/mnreports/hc_fv056.txt" target="_blank" rel="noopener">
+        <div class="lc-icon">🏛</div>
+        <div class="lc-name">USDA Terminal LA</div>
+        <div class="lc-desc">HC_FV056 — Dragon Fruit Ecuador bote, precio por caja 10lb. Referencia Costa Oeste.</div>
+        <div class="lc-tag">USDA oficial · Semanal · Gratis</div>
       </a>
       <a class="lcard" href="https://www.ams.usda.gov/mnreports/fvdfob.pdf" target="_blank" rel="noopener">
-        <div class="lc-icon">📊</div>
-        <div class="lc-name">USDA FOB Nacional (FVDFOB)</div>
-        <div class="lc-desc">Precios FOB nacionales de todas las variedades de pitahaya Ecuador. Incluye condición del mercado y modo de transporte (barco/aire).</div>
-        <div class="lc-tag">USDA oficial · Gratis · Semanal</div>
-      </a>
-      <a class="lcard" href="https://www.ams.usda.gov/mnreports/bp_fv010.pdf" target="_blank" rel="noopener">
-        <div class="lc-icon">🏛</div>
-        <div class="lc-name">USDA Terminal Baltimore</div>
-        <div class="lc-desc">Precios del mercado terminal de Baltimore para pitahaya Ecuador por variedad (roja/roja, roja/blanca, amarilla/blanca).</div>
-        <div class="lc-tag">USDA oficial · Gratis · Semanal</div>
+        <div class="lc-icon">📦</div>
+        <div class="lc-name">USDA FOB Nacional</div>
+        <div class="lc-desc">FVDFOB — Precio FOB de pitahaya Ecuador en punto de origen USA.</div>
+        <div class="lc-tag">USDA oficial · Semanal · Gratis</div>
       </a>
       <a class="lcard" href="https://www.walmart.com/ip/Fresh-Dragon-Fruit-Each/638705858" target="_blank" rel="noopener">
         <div class="lc-icon">🛒</div>
-        <div class="lc-name">Walmart — Pitahaya fresca</div>
-        <div class="lc-desc">Precio de pitahaya fresca entera en Walmart.com. El retailer de mayor volumen en EE.UU. Precio actual: $4.97/unidad.</div>
+        <div class="lc-name">Walmart — Precio retail</div>
+        <div class="lc-desc">Precio actual pitahaya fresca al consumidor. Referencia precio final de cadena.</div>
         <div class="lc-tag">Retail masivo · Precio en tiempo real</div>
       </a>
       <a class="lcard" href="https://dir.tridge.com/prices/fresh-dragon-fruit/US" target="_blank" rel="noopener">
-        <div class="lc-icon">📈</div>
-        <div class="lc-name">Tridge — Serie histórica wholesale</div>
-        <div class="lc-desc">Precios wholesale históricos desde 2021. Datos de NY, SF, Chicago, Detroit, Baltimore. Tendencias anuales y por variedad.</div>
-        <div class="lc-tag">B2B · Serie histórica · Datos verificados</div>
+        <div class="lc-icon">📊</div>
+        <div class="lc-name">Tridge — Wholesale USA</div>
+        <div class="lc-desc">Serie histórica de precios mayoristas por ciudad desde 2021.</div>
+        <div class="lc-tag">B2B · Serie histórica</div>
       </a>
       <a class="lcard" href="https://www.selinawamucii.com/insights/prices/united-states-of-america/dragon-fruit/" target="_blank" rel="noopener">
         <div class="lc-icon">💹</div>
-        <div class="lc-name">Selinawamucii — Precios diarios</div>
-        <div class="lc-desc">Rango de precio wholesale actualizado diariamente. Incluye precio por libra para facilitar comparación con etiquetas americanas.</div>
+        <div class="lc-name">Selinawamucii</div>
+        <div class="lc-desc">Rango de precio wholesale actualizado diariamente en EE.UU.</div>
         <div class="lc-tag">Datos diarios · Libre acceso</div>
       </a>
     </div>
   </div>
 </div>
 
-<!-- EXPLAINER -->
+<!-- ══ EXPLAINER ══ -->
 <div class="section section-alt">
   <div class="section-inner">
     <div class="sec-label">¿Por qué publicamos esto?</div>
     <div class="sec-title">Transparencia como base del negocio</div>
-    <p class="sec-desc">Agrovip comparte los datos que usa para fijar precios de compra. Un productor informado es un mejor socio.</p>
+    <p class="sec-desc">Agrovip comparte los datos que usa para fijar precios de compra cada semana.</p>
     <div class="exp-grid">
-      <div class="ecard"><div class="ecard-icon">📉</div><div class="ecard-title">Cuando el precio baja</div><div class="ecard-text">No es decisión arbitraria. Los supermercados pagan menos cuando hay sobreoferta o cuando el mango o el lichi compiten por el espacio. Agrovip absorbe parte del golpe antes de trasladarlo al productor, pero el mercado manda.</div></div>
-      <div class="ecard"><div class="ecard-icon">📈</div><div class="ecard-title">Cuando el precio sube</div><div class="ecard-text">Lo mismo al revés: escasez o baja competencia estacional sube el precio en percha, y Agrovip paga más por tu fruta. Nuestro precio siempre refleja la realidad del mercado destino.</div></div>
-      <div class="ecard"><div class="ecard-icon">🔗</div><div class="ecard-title">La cadena es larga y costosa</div><div class="ecard-text">Entre tu finca y Walmart hay 4 eslabones con costos reales: empaque, flete marítimo, aduana FDA, bodega refrigerada a 10°C, distribución. No todo el margen es ganancia.</div></div>
-      <div class="ecard"><div class="ecard-icon">🤝</div><div class="ecard-title">Nuestro compromiso</div><div class="ecard-text">Cada semana publicamos el aviso de precio con datos reales de mercado. Si quieres recibirlo directamente, contacta a tu ejecutivo Agrovip. Decidir con información, no con incertidumbre.</div></div>
+      <div class="ecard"><div class="ecard-icon">📉</div><div class="ecard-title">Cuando el precio baja</div><div class="ecard-text">No es decisión arbitraria. Los supermercados pagan menos cuando hay sobreoferta estacional o cuando mango, berries y lichi compiten por el mismo espacio. Agrovip absorbe parte del golpe antes de trasladarlo al productor.</div></div>
+      <div class="ecard"><div class="ecard-icon">📈</div><div class="ecard-title">Cuando el precio sube</div><div class="ecard-text">Lo mismo al revés: escasez o baja competencia estacional sube el precio en percha, y Agrovip paga más por tu fruta. El precio siempre refleja la realidad del mercado destino.</div></div>
+      <div class="ecard"><div class="ecard-icon">🔗</div><div class="ecard-title">La cadena es larga</div><div class="ecard-text">Entre tu finca y Walmart hay 4 eslabones con costos reales: empaque, flete marítimo $7,840/contenedor, camión Miami→LA, aduana FDA, bodega refrigerada. No todo el margen es ganancia.</div></div>
+      <div class="ecard"><div class="ecard-icon">🤝</div><div class="ecard-title">Nuestro compromiso</div><div class="ecard-text">Cada semana actualizamos esta página con los datos reales del mercado. Si tienes dudas sobre el precio de la semana, escribe a tu ejecutivo Agrovip y te mostramos el USDA de esa semana.</div></div>
     </div>
   </div>
 </div>
 
 <footer>
   <div class="fb">Agrovip S.A.</div>
-  <p>
-    Exportadora ecuatoriana de pitahaya · Transparencia en la cadena de valor<br>
-    Datos actualizados semanalmente · <a href="mailto:info@agrovipsas.com">info@agrovipsas.com</a> · <a href="https://agrovipsas.com">agrovipsas.com</a><br><br>
-    Precios de referencia verificados — USDA AMS Market News, Tridge, Walmart.com (mayo 2026)<br>
-    Los valores exactos varían por temporada, variedad, calibre y región de destino.
-  </p>
+  <p>Exportadora ecuatoriana de pitahaya · Transparencia en la cadena de valor<br>
+  Datos actualizados semanalmente · <a href="mailto:info@agrovipsas.com">info@agrovipsas.com</a> · <a href="https://agrovipsas.com">agrovipsas.com</a><br><br>
+  Precios de referencia — USDA AMS Market News, Walmart.com (actualización semanal)</p>
 </footer>
 
 <script>
-const hoy = new Date();
-document.getElementById('fecha-update').textContent = 'Semana del ' + hoy.toLocaleDateString('es-EC',{day:'numeric',month:'long',year:'numeric'});
+// ══════════ RENDERIZADO DESDE datos.js ══════════
+const D = DATOS;
+const S = D.semana;
+const C = D.config;
+const H = D.historial;
+
+// ── Helpers ──
+const FMAR = C.flete_mar, FCAM = C.flete_cam, MARG = C.margen;
+const KG = S.usda_la / 4.536;   // USDA LA $/kg
+const KGN = KG - FCAM;           // USDA LA neto tras camión
+const FOB_PROD = +(S.precio_productor * 1.65).toFixed(2);
+const CIF_MIA = +(FOB_PROD + FMAR).toFixed(2);
+const CIF_LA  = +(FOB_PROD + FMAR + FCAM).toFixed(2);
+const RETAIL_EST = +(CIF_LA / (1 - 0.55)).toFixed(2);
+const NY_KG = +(S.usda_ny / 4.5).toFixed(2);
+const WALMART_KG = +(S.walmart / 0.40).toFixed(2);
+
+const tIcon = {baja:'📉',estable:'➡️',alza:'📈',incierta:'⚠️'};
+const dColor = {baja:'var(--red)',estable:'var(--blue)',alza:'var(--g)',incierta:'var(--gold)'};
+
+// ── NAV & HERO ──
+document.getElementById('nav-sem').textContent = 'Sem ' + S.numero;
+document.getElementById('hero-eyebrow').textContent = 'Semana ' + S.numero + ' · Actualizado ' + S.actualizado;
+document.getElementById('hero-updated').textContent = 'Próxima actualización: jueves ' + (() => {
+  const d = new Date(); const day = d.getDay();
+  const diff = day <= 4 ? 4 - day : 7 - day + 4;
+  d.setDate(d.getDate() + diff);
+  return d.toLocaleDateString('es-EC', {day:'numeric', month:'long'});
+})();
+
+const varProd = S.precio_productor_ant ? ((S.precio_productor - S.precio_productor_ant) / S.precio_productor_ant * 100).toFixed(1) : null;
+const varColor = varProd ? (parseFloat(varProd) >= 0 ? '#4caf7d' : '#ff6b6b') : '#fff';
+const varStr = varProd ? `${parseFloat(varProd)>=0?'▲':'▼'} ${Math.abs(varProd)}%` : '—';
+
+document.getElementById('hero-price-row').innerHTML = `
+  <div class="hpb gold">
+    <div class="hpb-lbl">Precio productor esta semana</div>
+    <div class="hpb-val">$${S.precio_productor.toFixed(2)}/kg</div>
+    <div class="hpb-sub" style="color:${varColor}">${varStr} vs. semana ant.</div>
+  </div>
+  <div class="hpb">
+    <div class="hpb-lbl">USDA NY · caja 4.5kg</div>
+    <div class="hpb-val">$${S.usda_ny}</div>
+    <div class="hpb-sub">$${NY_KG}/kg equivalente</div>
+  </div>
+  <div class="hpb">
+    <div class="hpb-lbl">USDA LA · caja 10lb</div>
+    <div class="hpb-val">$${S.usda_la}</div>
+    <div class="hpb-sub">$${KG.toFixed(2)}/kg equiv.</div>
+  </div>
+  <div class="hpb">
+    <div class="hpb-lbl">Walmart retail</div>
+    <div class="hpb-val">$${S.walmart}/unid.</div>
+    <div class="hpb-sub">≈$${WALMART_KG.toFixed(1)}/kg</div>
+  </div>`;
+
+// ── CADENA DE VALOR ──
+const cadenaSteps = [
+  { num:'Eslabón 1', name:'🌱 Productor', color:'#7A9A2E', precio:S.precio_productor, range:'en finca Ecuador', pill:'Punto de origen', pillBg:'#EAF3EC', pillC:'#3B6D11' },
+  { num:'Eslabón 2', name:'📦 Exportador', color:'#1A6B3C', precio:FOB_PROD, range:'FOB Guayaquil $/kg', pill:`+empaque +flete`, pillBg:'#FEF5E7', pillC:'#BA7517' },
+  { num:'Eslabón 3', name:'🚢 CIF Miami', color:'#1a5276', precio:CIF_MIA, range:'llegada Miami $/kg', pill:`+$${FMAR}/kg flete mar.`, pillBg:'#EBF5FB', pillC:'#185FA5' },
+  { num:'Eslabón 4', name:'🚛 CIF LA', color:'#6c3483', precio:CIF_LA, range:'llegada LA $/kg', pill:`+$${FCAM}/kg camión`, pillBg:'#f5eef8', pillC:'#6c3483' },
+  { num:'Eslabón 5', name:'🛒 USDA LA', color:'#C8962A', precio:KG.toFixed(2), range:'precio wholesale $/kg', pill:`$${S.usda_la}/caja 10lb`, pillBg:'#FEF5E7', pillC:'#BA7517' },
+];
+
+document.getElementById('cadena-steps').innerHTML = cadenaSteps.map((s,i) => `
+  <div class="cstep" style="background:#fff;">
+    <div class="cs-top" style="background:${s.color};">
+      <div class="cs-num">${s.num}</div>
+      <div class="cs-name">${s.name}</div>
+    </div>
+    <div class="cs-body">
+      <div class="cs-price" style="color:${s.color}">$${typeof s.precio==='number'?s.precio.toFixed(2):s.precio}</div>
+      <div class="cs-range">${s.range}</div>
+      <div class="cs-pill" style="background:${s.pillBg};color:${s.pillC};">${s.pill}</div>
+    </div>
+    ${i<4?'<div class="cs-arrow">→</div>':''}
+  </div>`).join('');
+
+document.getElementById('cadena-desc').textContent = `Esta semana con precio productor $${S.precio_productor.toFixed(2)}/kg, la fruta llega a Los Ángeles a $${CIF_LA}/kg. El USDA LA cotiza $${KG.toFixed(2)}/kg, dejando un margen de $${(KG - CIF_LA / (1-MARG)).toFixed(2)}/kg para Agrovip.`;
+
+// Barra %
+const retailBase = WALMART_KG;
+const pcts = [
+  { lbl:`Productor (${(S.precio_productor/retailBase*100).toFixed(0)}%)`, color:'#7A9A2E', flex: Math.round(S.precio_productor/retailBase*100) },
+  { lbl:`Exportador (${((FOB_PROD-S.precio_productor)/retailBase*100).toFixed(0)}%)`, color:'#1A6B3C', flex: Math.round((FOB_PROD-S.precio_productor)/retailBase*100) },
+  { lbl:`Logística (${((CIF_LA-FOB_PROD)/retailBase*100).toFixed(0)}%)`, color:'#1a5276', flex: Math.round((CIF_LA-FOB_PROD)/retailBase*100) },
+  { lbl:`Dist+Super (${((retailBase-CIF_LA)/retailBase*100).toFixed(0)}%)`, color:'#C8962A', flex: Math.round((retailBase-CIF_LA)/retailBase*100) },
+];
+document.getElementById('pct-track').innerHTML = pcts.map(p=>`<div class="pct-seg" style="flex:${p.flex};background:${p.color};">${p.flex}%</div>`).join('');
+document.getElementById('pct-legend').innerHTML = pcts.map(p=>`<div class="pct-item"><div class="pct-dot" style="background:${p.color}"></div>${p.lbl}</div>`).join('');
+
+document.getElementById('cadena-disclaimer').textContent = `Semana ${S.numero} · Fuentes: USDA HC_FV056 LA ($${S.usda_la}/caja 10lb), USDA NX_FV010 NY ($${S.usda_ny}/caja 4.5kg), Walmart.com ($${S.walmart}/unid). Flete marítimo $${FMAR}/kg, camión $${FCAM}/kg, margen Agrovip ${(MARG*100).toFixed(0)}%.`;
+
+// ── VARIEDADES ──
+document.getElementById('var-grid').innerHTML = `
+  <div class="var-card">
+    <div class="vc-stripe" style="background:#e05a7a;"></div>
+    <div class="vc-body">
+      <div style="font-size:22px;margin-bottom:6px;">🔴</div>
+      <div class="vc-title">Roja piel / Pulpa blanca</div>
+      <div class="vc-origin">Ecuador · H. undatus · La que exporta Agrovip</div>
+      <div class="vc-row"><span class="vc-lbl">USDA NY caja 4.5kg</span><span class="vc-val" style="color:var(--g)">$${S.usda_ny}</span></div>
+      <div class="vc-row"><span class="vc-lbl">USDA LA caja 10lb</span><span class="vc-val" style="color:var(--red)">$${S.usda_la}</span></div>
+      <div class="vc-row"><span class="vc-lbl">Walmart retail</span><span class="vc-val" style="color:var(--gold)">$${S.walmart}/unid.</span></div>
+      <div class="vc-row"><span class="vc-lbl">Equivalente $/kg retail</span><span class="vc-val" style="color:var(--gold)">~$${WALMART_KG.toFixed(1)}</span></div>
+    </div>
+    <div class="vc-foot"><a href="https://www.ams.usda.gov/mnreports/nx_fv010.pdf" target="_blank">USDA NX_FV010 semana ${S.numero} →</a></div>
+  </div>
+  <div class="var-card">
+    <div class="vc-stripe" style="background:#c0392b;"></div>
+    <div class="vc-body">
+      <div style="font-size:22px;margin-bottom:6px;">🩸</div>
+      <div class="vc-title">Roja piel / Pulpa roja</div>
+      <div class="vc-origin">Ecuador · H. costaricensis · Premium</div>
+      <div class="vc-row"><span class="vc-lbl">USDA NY 20lb carton</span><span class="vc-val" style="color:var(--g)">$44</span></div>
+      <div class="vc-row"><span class="vc-lbl">Premium vs. blanca</span><span class="vc-val" style="color:var(--g)">+15–20%</span></div>
+      <div class="vc-row"><span class="vc-lbl">Mercado</span><span class="vc-val" style="color:var(--mid);font-size:11px;">Asian / Premium</span></div>
+    </div>
+    <div class="vc-foot"><a href="https://www.ams.usda.gov/mnreports/nx_fv010.pdf" target="_blank">USDA NX_FV010 →</a></div>
+  </div>
+  <div class="var-card">
+    <div class="vc-stripe" style="background:#e8b040;"></div>
+    <div class="vc-body">
+      <div style="font-size:22px;margin-bottom:6px;">🟡</div>
+      <div class="vc-title">Amarilla piel / Pulpa blanca</div>
+      <div class="vc-origin">Ecuador · H. megalanthus · La más dulce</div>
+      <div class="vc-row"><span class="vc-lbl">USDA NY 6lb carton</span><span class="vc-val" style="color:var(--g)">$40–42</span></div>
+      <div class="vc-row"><span class="vc-lbl">Premium vs. roja/blanca</span><span class="vc-val" style="color:var(--g)">+8–15%</span></div>
+      <div class="vc-row"><span class="vc-lbl">Demanda</span><span class="vc-val" style="color:var(--mid);font-size:11px;">Creciente / nicho</span></div>
+    </div>
+    <div class="vc-foot"><a href="https://www.ams.usda.gov/mnreports/nx_fv010.pdf" target="_blank">USDA NX_FV010 →</a></div>
+  </div>`;
+
+document.getElementById('var-disclaimer').textContent = `Datos USDA semana ${S.numero} (${S.periodo}). NY referencia Costa Este; LA referencia Veritas y Mexotics.`;
+
+// ── COMPETIDORES ──
+const COMPS = {
+  mango:       { icon:'🥭', name:'Mango México',       desc:'Pico mayo–agosto. Rota 5–8x más rápido que pitahaya. Los supermercados le dan espacio prioritario en la sección tropical.', impact:'Impacto ALTO', col:'#A32D2D' },
+  fresas:      { icon:'🍓', name:'Fresas California',   desc:'Abril–junio: hasta 10 millones de canastas diarias. Precio bajo, altísima rotación, ocupa espacio premium en sección berries.', impact:'Impacto ALTO', col:'#D4537E' },
+  blueberries: { icon:'🫐', name:'Blueberries',         desc:'Junio–julio: Carolina del Norte, New Jersey, Michigan y Oregon cosechan simultáneamente, comprimiendo precios en todo el corredor Oeste.', impact:'Impacto MEDIO–ALTO', col:'#3B6D11' },
+  cerezas:     { icon:'🍒', name:'Cerezas California',  desc:'2026: cosecha rebotó a 8–8.5M cajas, 7–10 días antes de lo normal. Llenan los espacios premium de produce en junio.', impact:'Impacto ALTO', col:'#A32D2D' },
+  lichi:       { icon:'🍒', name:'Lichi (Lychee)',      desc:'Entra a finales de mayo/junio. Alta demanda en comunidades asiáticas de LA — exactamente el mercado de Veritas y Mexotics.', impact:'Impacto ALTO en LA', col:'#BA7517' },
+  uvas:        { icon:'🍇', name:'Uvas California',     desc:'Temporada 2026 adelantada. Los retailers preparan espacio y promociones, presionando espacio para exóticos.', impact:'Impacto MEDIO', col:'#6c3483' },
+};
+
+const activeComps = Object.keys(COMPS).filter(k => S[k]);
+const inactiveComps = Object.keys(COMPS).filter(k => !S[k]);
+
+document.getElementById('comp-grid').innerHTML = [...activeComps, ...inactiveComps].map(k => {
+  const c = COMPS[k]; const active = S[k];
+  return `<div class="comp-card ${active?'':'inactive'}">
+    <div class="comp-icon">${c.icon}</div>
+    <div class="comp-name">${c.name} ${active?'<span style="background:#FDECEC;color:var(--red);font-size:9px;padding:1px 6px;border-radius:10px;font-weight:700;">ACTIVO</span>':''}</div>
+    <div class="comp-desc">${c.desc}</div>
+    <div class="comp-impact" style="color:${active?c.col:'var(--mid)'}">${active?c.impact:'Sin temporada esta semana'}</div>
+  </div>`;
+}).join('');
+
+document.getElementById('comp-alert').textContent = activeComps.length >= 3
+  ? `Esta semana hay ${activeComps.length} frutas de temporada activas simultáneamente (${activeComps.map(k=>COMPS[k].icon).join(' ')}). La pitahaya compite por el último espacio disponible en percha. Esto explica directamente la presión sobre el precio de compra al productor.`
+  : `Esta semana hay ${activeComps.length} competidores activos. Menor presión estacional — mejor posición para sostener el precio.`;
+
+// ── PROYECCIÓN ──
+const histForProy = H.slice(0,2);
+const projItems = [
+  ...histForProy.map((h,i) => ({ sem:h.sem, per:h.periodo.split(' ')[0]+' '+h.periodo.split(' ')[1], prod:h.prod, la:h.la, dir:h.tend, isHist:true, isCurr:i===0 })),
+  ...S.proyeccion.map(p => ({ sem:p.sem, per:p.periodo, prod:p.prod, la:p.usda_la, dir:p.dir, razon:p.razon, isHist:false }))
+];
+
+document.getElementById('proy-grid').innerHTML = projItems.map(p => `
+  <div class="proy-card ${p.isHist?(p.isCurr?'hist':''):'proj'}">
+    <div class="proy-lbl">Sem ${p.sem} ${p.isHist?(p.isCurr?'(esta semana)':'(anterior)'):'(proyectado)'}</div>
+    <div class="proy-precio" style="color:${p.prod>=1.5?'var(--g)':p.prod>=1?'var(--gold)':'var(--red)'}">$${p.prod.toFixed(2)}</div>
+    <div class="proy-sub">/kg productor</div>
+    <div class="proy-sub">USDA LA: $${p.la}</div>
+    ${!p.isHist?`<div class="proy-dir" style="color:${dColor[p.dir]}">${tIcon[p.dir]} ${p.razon}</div>`:''}
+  </div>`).join('');
+
+// ── CHARTS ──
+const allHist = H.slice().reverse();
+const labels = allHist.map(h => 'Sem ' + h.sem);
+const projLabels = [...labels, ...S.proyeccion.map(p => 'Sem ' + p.sem)];
+
+new Chart(document.getElementById('chart-prod'), {
+  type:'line',
+  data:{
+    labels: projLabels,
+    datasets:[
+      { label:'Histórico', data:[...allHist.map(h=>h.prod), null, null],
+        borderColor:'#1A6B3C', backgroundColor:'#1A6B3C18', borderWidth:2.5,
+        pointRadius:5, pointBackgroundColor:'#1A6B3C', tension:.35, fill:true },
+      { label:'Proyección', data:[...allHist.map(()=>null), allHist[allHist.length-1]?.prod||null, ...S.proyeccion.map(p=>p.prod)],
+        borderColor:'#C8962A', backgroundColor:'transparent', borderWidth:2,
+        borderDash:[5,4], pointRadius:4, pointBackgroundColor:'#C8962A', tension:.35 }
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+    scales:{x:{ticks:{font:{size:9}},grid:{display:false}},y:{ticks:{font:{size:10},callback:v=>'$'+v.toFixed(2)},grid:{color:'rgba(128,128,128,0.07)'},min:0}}}
+});
+
+new Chart(document.getElementById('chart-usda'), {
+  type:'line',
+  data:{
+    labels,
+    datasets:[
+      { label:'USDA NY $/caja', data:allHist.map(h=>h.ny), borderColor:'#185FA5', backgroundColor:'transparent', borderWidth:2.5, pointRadius:4, pointBackgroundColor:'#185FA5', tension:.35 },
+      { label:'USDA LA $/caja', data:allHist.map(h=>h.la), borderColor:'#BA7517', backgroundColor:'transparent', borderWidth:2, borderDash:[4,3], pointRadius:4, pointBackgroundColor:'#BA7517', tension:.35 }
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+    scales:{x:{ticks:{font:{size:9}},grid:{display:false}},y:{ticks:{font:{size:10},callback:v=>'$'+v},grid:{color:'rgba(128,128,128,0.07)'}}}}
+});
 </script>
 </body>
 </html>
