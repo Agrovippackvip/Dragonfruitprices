@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aviso de Precio Semanal — Agrovip S.A.</title>
+<script src="datos.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--g:#1A6B3C;--g2:#0d3d22;--ol:#7A9A2E;--gold:#C8962A;--cr:#F7F3EC;--ink:#1C1A16;--mid:#5A5750;--brd:#E3DDD3;--bg:#FDFBF7;--red:#b83232;--blue:#1a5276;--purple:#6c3483;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);}
+.topbar{background:var(--g2);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;border-bottom:3px solid var(--gold);}
+.brand{display:flex;align-items:center;gap:10px;}
+.brand-badge{width:36px;height:36px;background:var(--gold);border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:16px;color:#fff;}
+.brand-name{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:#fff;}
+.brand-sub{font-size:11px;color:rgba(255,255,255,.5);margin-top:1px;}
+.topbar-btns{display:flex;gap:8px;flex-wrap:wrap;}
+.btn{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;border-radius:6px;padding:8px 13px;cursor:pointer;border:none;display:flex;align-items:center;gap:5px;transition:all .15s;}
+.btn-gold{background:var(--gold);color:#fff;}.btn-gold:hover{opacity:.88;}
+.btn-outline{background:transparent;border:1.5px solid rgba(255,255,255,.3);color:#fff;}.btn-outline:hover{background:rgba(255,255,255,.08);}
+.btn-sm{padding:6px 11px;font-size:11px;}
+.layout{display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 68px);}
+@media(max-width:820px){.layout{grid-template-columns:1fr;}}
+.panel-left{background:var(--cr);border-right:1px solid var(--brd);padding:18px 16px;display:flex;flex-direction:column;gap:11px;overflow-y:auto;}
+.panel-title{font-family:'Syne',sans-serif;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--g);border-bottom:2px solid var(--ol);padding-bottom:7px;}
+.field{display:flex;flex-direction:column;gap:3px;}
+.field label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--mid);font-weight:600;}
+.field input,.field select{background:#fff;border:1.5px solid var(--brd);border-radius:6px;padding:8px 10px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--ink);outline:none;transition:border-color .15s;}
+.field input:focus{border-color:var(--g);}
+.comp-checks{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:2px;}
+.cc-item{display:flex;align-items:center;gap:6px;font-size:11px;background:#fff;border:1.5px solid var(--brd);border-radius:5px;padding:6px 8px;cursor:pointer;transition:all .15s;}
+.cc-item:hover{border-color:var(--g);}
+.cc-item input{accent-color:var(--g);width:13px;height:13px;flex-shrink:0;}
+.cc-item.checked{border-color:var(--g);background:#EAF3EC;}
+.btn-guardar{background:var(--g);color:#fff;border:none;border-radius:7px;padding:12px;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;width:100%;transition:background .15s;}
+.btn-guardar:hover{background:var(--g2);}
+
+/* CALCULADORA CON SEMÁFORO */
+.calc-box{border-radius:8px;padding:11px 12px;transition:all .3s;}
+.calc-box.ok{background:#fff;border:1.5px solid var(--g);}
+.calc-box.warn{background:#FFFBF0;border:1.5px solid var(--gold);}
+.calc-box.danger{background:#FFF0F0;border:2px solid var(--red);animation:pulse .8s infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(184,50,50,.4);}50%{box-shadow:0 0 0 6px rgba(184,50,50,0);}}
+.calc-title{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px;}
+.calc-semaforo{display:flex;align-items:center;gap:8px;margin-bottom:8px;padding:7px 10px;border-radius:6px;font-size:12px;font-weight:600;}
+.cr-row{display:flex;justify-content:space-between;align-items:center;padding:3px 0;border-bottom:1px dashed var(--brd);}
+.cr-row:last-child{border:none;padding-top:4px;}
+.cr-lbl{font-size:11px;color:var(--mid);}
+.cr-val{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;}
+.ruta-mini{background:var(--cr);border-radius:5px;padding:6px 8px;margin-top:4px;}
+.rm-title{font-size:9px;text-transform:uppercase;letter-spacing:.07em;color:var(--mid);font-weight:600;margin-bottom:4px;}
+.rm-row{display:flex;justify-content:space-between;align-items:center;font-size:11px;padding:2px 0;}
+.rm-label{color:var(--mid);}
+.rm-val{font-family:'Syne',sans-serif;font-weight:700;font-size:11px;}
+
+/* ALERTA CRÍTICA MODAL */
+.alerta-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;align-items:center;justify-content:center;}
+.alerta-overlay.show{display:flex;}
+.alerta-box{background:#fff;border-radius:14px;padding:28px 32px;max-width:480px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.3);border-top:5px solid var(--red);}
+.alerta-icon{font-size:40px;text-align:center;margin-bottom:12px;}
+.alerta-titulo{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--red);text-align:center;margin-bottom:8px;}
+.alerta-monto{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:var(--red);text-align:center;margin:12px 0;}
+.alerta-detalle{font-size:13px;color:var(--mid);line-height:1.7;margin-bottom:16px;}
+.alerta-detalle strong{color:var(--ink);}
+.alerta-rutas{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
+.alerta-ruta{background:var(--cr);border-radius:8px;padding:10px 12px;text-align:center;}
+.alerta-ruta .ar-name{font-size:11px;color:var(--mid);margin-bottom:3px;}
+.alerta-ruta .ar-val{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;}
+.alerta-ruta .ar-loss{font-size:11px;font-weight:600;margin-top:2px;}
+.btn-cerrar{background:var(--red);color:#fff;border:none;border-radius:7px;padding:11px 24px;font-size:13px;font-weight:700;cursor:pointer;width:100%;font-family:'DM Sans',sans-serif;}
+.btn-cerrar:hover{opacity:.88;}
+.btn-revisar{background:var(--cr);color:var(--ink);border:1.5px solid var(--brd);border-radius:7px;padding:11px 24px;font-size:13px;font-weight:600;cursor:pointer;width:100%;font-family:'DM Sans',sans-serif;margin-top:6px;}
+
+.fuentes-rapidas{background:#fff;border:1px solid var(--brd);border-radius:7px;padding:9px 10px;}
+.fuentes-rapidas .ft{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--mid);margin-bottom:6px;}
+.fuentes-rapidas a{font-size:10px;color:var(--blue);padding:4px 6px;background:var(--cr);border-radius:4px;text-decoration:none;display:block;margin-bottom:4px;}
+.fuentes-rapidas a:hover{background:var(--g);color:#fff;}
+.panel-right{padding:20px 24px;display:flex;flex-direction:column;gap:14px;overflow-y:auto;}
+.tabs{display:flex;gap:2px;border-bottom:2px solid var(--brd);flex-wrap:wrap;}
+.tab{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;padding:8px 14px;cursor:pointer;color:var(--mid);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s;}
+.tab.active{color:var(--g);border-bottom-color:var(--g);}
+.tab-content{display:none;}
+.tab-content.active{display:block;animation:fi .2s ease;}
+@keyframes fi{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+.aviso-wrap{background:#fff;border-radius:12px;border:1px solid var(--brd);overflow:hidden;box-shadow:0 2px 16px rgba(26,107,60,.07);}
+.av-hdr{background:var(--g);padding:20px 24px;}
+.av-sem{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.6);margin-bottom:3px;}
+.av-ttl{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:#fff;margin-bottom:10px;line-height:1.2;}
+.av-badge{display:inline-flex;align-items:baseline;gap:3px;background:var(--gold);border-radius:6px;padding:6px 14px;}
+.av-badge span{color:#fff;}
+.av-badge .pnum{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;}
+.av-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:16px 24px 0;}
+.kpi{background:var(--cr);border-radius:7px;padding:10px 12px;border-left:3px solid var(--ol);}
+.kpi .kv{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--g);line-height:1;}
+.kpi .kl{font-size:10px;color:var(--mid);margin-top:3px;}
+.av-body{padding:16px 24px 20px;}
+.sec-lbl{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--g);font-weight:700;border-bottom:2px solid var(--ol);display:inline-block;padding-bottom:3px;margin-bottom:10px;margin-top:16px;}
+.av-texto{font-size:13px;line-height:1.85;color:var(--ink);}
+.av-texto p{margin-bottom:10px;}
+.av-texto strong{color:var(--g);}
+.cadena-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:4px;}
+.cs{background:var(--cr);border-radius:6px;padding:8px 6px;text-align:center;}
+.cs .cv{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;line-height:1;}
+.cs .cl{font-size:9px;color:var(--mid);margin-top:2px;}
+.cs .ct{font-size:8px;margin-top:3px;font-weight:600;}
+.percha-bar{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0;}
+.percha-activo{display:flex;align-items:center;gap:5px;border-radius:7px;padding:6px 10px;font-size:11px;font-weight:600;background:#FDECEC;color:var(--red);}
+.percha-pitahaya{display:flex;align-items:center;gap:5px;border-radius:7px;padding:6px 10px;font-size:11px;font-weight:600;background:#EAF3EC;color:var(--g);border:1.5px solid var(--ol);}
+.comp-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:4px;}
+.comp-card{background:var(--cr);border-radius:7px;padding:10px 11px;border-left:3px solid var(--brd);}
+.comp-card .cn{font-size:11px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+.comp-card .cd{font-size:10px;color:var(--mid);line-height:1.5;}
+.comp-card .ci{font-size:9px;font-weight:700;margin-top:4px;text-transform:uppercase;}
+.hist-mini{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:4px;}
+.hm{background:var(--cr);border-radius:5px;padding:7px 6px;text-align:center;}
+.hm-s{font-size:8px;color:var(--mid);margin-bottom:2px;}
+.hm-p{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;}
+.hm-r{font-size:9px;color:var(--mid);}
+.rutas-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;}
+.ruta-card{background:var(--cr);border-radius:7px;padding:9px 10px;}
+.ruta-card .rn{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--ink);}
+.ruta-card .rc{font-size:10px;color:var(--mid);margin-bottom:5px;}
+.ruta-card .rp{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;}
+.ruta-card .rr{font-size:9px;color:var(--mid);margin-top:2px;}
+.fuentes-aviso{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;}
+.fa-card{background:var(--cr);border-radius:7px;padding:9px 10px;text-decoration:none;display:block;border:1px solid var(--brd);transition:border-color .15s;}
+.fa-card:hover{border-color:var(--g);}
+.fa-card .fn{font-size:11px;font-weight:700;color:var(--ink);margin-bottom:2px;}
+.fa-card .fd{font-size:10px;color:var(--mid);line-height:1.4;}
+.fa-card .fl{font-size:10px;color:var(--blue);margin-top:4px;}
+.av-foot{background:var(--cr);border-top:1px solid var(--brd);padding:12px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+.firma{font-size:11px;color:var(--mid);}
+.table-wrap{overflow-x:auto;border-radius:9px;border:1px solid var(--brd);}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+thead{background:var(--g);color:#fff;}
+th{padding:9px 11px;text-align:left;font-family:'Syne',sans-serif;font-size:9px;text-transform:uppercase;letter-spacing:.06em;font-weight:700;}
+td{padding:8px 11px;border-bottom:1px solid var(--brd);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:nth-child(even) td{background:#FAFAF8;}
+.badge-dn{background:#FDECEC;color:var(--red);border-radius:11px;padding:2px 7px;font-size:10px;font-weight:600;display:inline-block;}
+.badge-up{background:#EAF3EC;color:var(--g);border-radius:11px;padding:2px 7px;font-size:10px;font-weight:600;display:inline-block;}
+.seed-row td{background:#EAF3EC!important;}
+.seed-lbl{font-size:8px;background:var(--ol);color:#fff;padding:1px 5px;border-radius:8px;margin-left:4px;}
+.del-btn{background:none;border:none;color:#ccc;cursor:pointer;font-size:12px;}
+.del-btn:hover{color:var(--red);}
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.chart-card{background:#fff;border-radius:9px;border:1px solid var(--brd);padding:14px 16px;}
+.chart-card h3{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--ink);margin-bottom:10px;}
+.empty{text-align:center;padding:40px 20px;color:var(--mid);border:2px dashed var(--brd);border-radius:9px;}
+.empty .ei{font-size:32px;margin-bottom:8px;}
+.empty p{font-size:12px;line-height:1.6;}
+@media print{
+  .topbar,.panel-left,.tabs,.no-print,.alerta-overlay{display:none!important;}
+  .layout{display:block;}
+  .panel-right{padding:0;}
+  #tab-aviso{display:block!important;}
+  .av-foot .btn{display:none;}
+  body{background:#fff;}
+  .aviso-wrap{box-shadow:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- ALERTA CRÍTICA MODAL -->
+<div class="alerta-overlay no-print" id="alerta-overlay">
+  <div class="alerta-box">
+    <div class="alerta-icon">🚨</div>
+    <div class="alerta-titulo">ALERTA — RIESGO DE PÉRDIDA SEVERA</div>
+    <div class="alerta-monto" id="alerta-monto">—</div>
+    <div class="alerta-detalle" id="alerta-detalle">—</div>
+    <div class="alerta-rutas" id="alerta-rutas"></div>
+    <button class="btn-cerrar" onclick="cerrarAlerta()">Entendido — revisar precio</button>
+    <button class="btn-revisar" onclick="cerrarAlerta()">Continuar de todas formas</button>
+  </div>
+</div>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="brand-badge">A</div>
+    <div>
+      <div class="brand-name">Aviso de Precio Semanal</div>
+      <div class="brand-sub">Agrovip S.A. · Actualizar cada jueves</div>
+    </div>
+  </div>
+  <div class="topbar-btns">
+    <button class="btn btn-outline no-print" onclick="exportExcel()">📊 Excel</button>
+    <button class="btn btn-gold no-print" onclick="window.print()">⬇ Descargar PDF</button>
+  </div>
+</div>
+
+<div class="layout">
+<div class="panel-left">
+  <div class="panel-title">Ingresar datos de la semana</div>
+  <div class="field">
+    <label>Semana N°</label>
+    <input id="in-sem" type="number" placeholder="22" min="1" max="53">
+  </div>
+  <div class="field">
+    <label>Período</label>
+    <input id="in-periodo" type="text" placeholder="22–28 Mayo 2026">
+  </div>
+  <div class="field">
+    <label>Precio productor ($/kg)</label>
+    <input id="in-prod" type="number" step="0.01" placeholder="0.95" oninput="calcularCadena()">
+  </div>
+  <div class="field">
+    <label>USDA NY — caja 4.5kg ($) <a href="https://www.ams.usda.gov/mnreports/nx_fv010.pdf" target="_blank" style="color:var(--blue);font-size:9px;margin-left:4px;">ver →</a></label>
+    <input id="in-ny" type="number" step="0.5" placeholder="36.00" oninput="calcularCadena()">
+  </div>
+  <div class="field">
+    <label>USDA LA — caja 10lb ($) <a href="https://www.ams.usda.gov/mnreports/hc_fv056.txt" target="_blank" style="color:var(--blue);font-size:9px;margin-left:4px;">ver →</a></label>
+    <input id="in-la" type="number" step="0.5" placeholder="17.50" oninput="calcularCadena()">
+  </div>
+  <div class="field">
+    <label>Tendencia</label>
+    <select id="in-tend">
+      <option value="baja">📉 Baja — sobreoferta</option>
+      <option value="estable" selected>➡️ Estable</option>
+      <option value="alza">📈 Alza — escasez</option>
+      <option value="incierta">⚠️ Incierta</option>
+    </select>
+  </div>
+  <div class="field">
+    <label>Oferta Ecuador</label>
+    <select id="in-oferta">
+      <option value="alta">Alta — temporada pico</option>
+      <option value="media" selected>Media — normal</option>
+      <option value="baja">Baja — fuera de temporada</option>
+    </select>
+  </div>
+  <div class="field">
+    <label>Competidores activos en percha</label>
+    <div class="comp-checks" id="comp-checks">
+      <label class="cc-item checked"><input type="checkbox" value="mango" checked>🥭 Mango</label>
+      <label class="cc-item checked"><input type="checkbox" value="fresas" checked>🍓 Fresas</label>
+      <label class="cc-item checked"><input type="checkbox" value="blueberries" checked>🫐 Blueberries</label>
+      <label class="cc-item checked"><input type="checkbox" value="cerezas" checked>🍒 Cerezas</label>
+      <label class="cc-item checked"><input type="checkbox" value="lichi" checked>🍒 Lichi</label>
+      <label class="cc-item"><input type="checkbox" value="uvas">🍇 Uvas</label>
+    </div>
+  </div>
+  <button class="btn-guardar" onclick="guardar()">💾 Guardar y generar aviso</button>
+  <div class="calc-box ok" id="calc-box">
+    <div class="calc-title" id="calc-title" style="color:var(--g)">🧮 Cadena de valor</div>
+    <div id="calc-semaforo"></div>
+    <div id="calc-result"><div style="font-size:11px;color:var(--mid);text-align:center;padding:4px;">Ingresa precio del productor y USDA LA</div></div>
+    <div id="ruta-mini"></div>
+  </div>
+  <div class="fuentes-rapidas">
+    <div class="ft">🔗 USDA — consultar cada jueves</div>
+    <a href="https://www.ams.usda.gov/mnreports/nx_fv010.pdf" target="_blank">🏛 NY · NX_FV010 (caja 4.5kg Ecuador)</a>
+    <a href="https://www.ams.usda.gov/mnreports/hc_fv056.txt" target="_blank">🏛 LA · HC_FV056 (caja 10lb Ecuador bote)</a>
+    <a href="https://www.ams.usda.gov/mnreports/fvdfob.pdf" target="_blank">📦 FOB · FVDFOB (Ecuador 4.5kg)</a>
+    <a href="https://www.walmart.com/ip/Fresh-Dragon-Fruit-Each/638705858" target="_blank">🛒 Walmart (precio retail unitario)</a>
+  </div>
+</div>
+
+<div class="panel-right">
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('aviso')">Aviso productor</div>
+    <div class="tab" onclick="switchTab('historico')">Histórico (<span id="hist-count">0</span>)</div>
+    <div class="tab" onclick="switchTab('graficas')">Gráficas</div>
+  </div>
+  <div class="tab-content active" id="tab-aviso">
+    <div id="aviso-render">
+      <div class="empty"><div class="ei">📋</div><p>Completa los campos del panel izquierdo<br>y haz clic en <strong>"Guardar y generar aviso"</strong>.</p></div>
+    </div>
+  </div>
+  <div class="tab-content" id="tab-historico">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;">
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;">Registro histórico</div>
+      <button class="btn btn-sm no-print" style="background:transparent;border:1.5px solid var(--brd);color:var(--mid);" onclick="limpiar()">🗑 Limpiar propios</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Sem</th><th>Período</th><th>$/kg prod.</th><th>USDA NY</th><th>USDA LA</th><th>Var.</th><th>Tendencia</th><th>Competidores</th><th></th></tr></thead>
+        <tbody id="hist-body"></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="tab-content" id="tab-graficas">
+    <div class="charts-grid">
+      <div class="chart-card"><h3>📉 Precio productor ($/kg)</h3><div style="position:relative;height:160px;"><canvas id="c-prod"></canvas></div></div>
+      <div class="chart-card"><h3>📦 USDA NY vs LA ($/caja)</h3><div style="position:relative;height:160px;"><canvas id="c-usda"></canvas></div></div>
+      <div class="chart-card"><h3>💰 Margen disponible $/kg</h3><div style="position:relative;height:160px;"><canvas id="c-marg"></canvas></div></div>
+      <div class="chart-card"><h3>🏷 Pérdida/ganancia por contenedor</h3><div style="position:relative;height:160px;"><canvas id="c-ret"></canvas></div></div>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+const FMAR=1.74, FCAM=0.50, MARG=0.14, KG_CONT=17280;
+const UMBRAL_CRITICO=5000; // pérdida > $5,000/contenedor = alerta crítica
+const KEY='agrovip_v8';
+
+// Rutas — nombres para productores (sin nombres de clientes)
+const RUTAS=[
+  {id:'este',  label:'Costa Este',      ciudad:'Miami, FL',       usda_ref:'ny', pkg:4.5,  truck:0.00, dias:10},
+  {id:'oeste', label:'Costa Oeste — LA',ciudad:'Los Ángeles, CA', usda_ref:'la', pkg:4.536,truck:0.50, dias:15},
+  {id:'sf',    label:'Costa Oeste — SF',ciudad:'San Francisco, CA',usda_ref:'la',pkg:4.536,truck:0.65, dias:17},
+];
+
+// Semillas desde datos.js (se actualiza cada jueves sin tocar este archivo)
+const SEEDS = (typeof DATOS !== 'undefined' && DATOS.historial)
+  ? DATOS.historial.map((h,i) => ({
+      id:'s'+i, sem:h.sem, periodo:h.periodo,
+      prod:h.prod, ny:h.ny, la:h.la,
+      tend:h.tend, oferta:h.oferta||'media',
+      comps:h.comps||[], seed:true
+    }))
+  : [
+      {id:'s1',sem:20,periodo:'5–11 May 2026', prod:2.80,ny:45.0,la:19.0,tend:'alza',oferta:'baja', comps:['mango'],seed:true},
+      {id:'s2',sem:21,periodo:'12–18 May 2026',prod:2.30,ny:38.0,la:17.5,tend:'baja',oferta:'media',comps:['mango','fresas'],seed:true},
+      {id:'s3',sem:22,periodo:'22–28 May 2026',prod:0.95,ny:36.0,la:17.5,tend:'baja',oferta:'alta', comps:['mango','fresas','blueberries','cerezas','lichi'],seed:true},
+    ];
+
+const COMP_DB={
+  mango:      {icon:'🥭',name:'Mango México',     impacto:'ALTO',   col:'#A32D2D',titulo:'Mango México en pico de temporada',detalle:'Mayo–agosto es la temporada pico de mango de México. Los supermercados asignan 2–3 espacios prioritarios en la sección tropical porque rota 5–8x más rápido que la pitahaya. Con mayor volumen disponible a precios bajos, los gerentes de produce reducen pedidos de pitahaya o negocian precios más bajos.'},
+  fresas:     {icon:'🍓',name:'Fresas California',impacto:'ALTO',   col:'#D4537E',titulo:'Fresas California en temporada pico',detalle:'Abril–junio California despacha hasta 10 millones de canastas diarias. Precio bajo y altísima rotación. Ocupa el espacio premium de berries frescos y reduce la demanda de frutas exóticas como la pitahaya.'},
+  blueberries:{icon:'🫐',name:'Blueberries',       impacto:'MEDIO–ALTO',col:'#3B6D11',titulo:'Blueberries — cosecha múltiple simultánea',detalle:'En junio–julio entran simultáneamente Carolina del Norte, New Jersey, Michigan y Oregon. Los retailers llenan la sección de berries en oferta, desplazando espacio de frutas exóticas.'},
+  cerezas:    {icon:'🍒',name:'Cerezas California',impacto:'ALTO',   col:'#A32D2D',titulo:'Cerezas California — cosecha récord 2026',detalle:'Cosecha 2026: 8–8.5 millones de cajas, 7–10 días antes de lo normal. Impulse fruit — los retailers les dan espacio prominente y promociones agresivas, reduciendo visibilidad de pitahaya.'},
+  lichi:      {icon:'🍒',name:'Lichi (Lychee)',   impacto:'ALTO en LA',col:'#BA7517',titulo:'Lichi entrando en Los Ángeles',detalle:'Entra a finales de mayo–junio desde Florida y Taiwán. Altísima demanda en comunidades asiáticas de LA — exactamente el mercado de Costa Oeste. El distribuidor tiene ahora dos exóticos premium compitiendo por el mismo espacio.'},
+  uvas:       {icon:'🍇',name:'Uvas California',  impacto:'MEDIO',  col:'#6c3483',titulo:'Uvas de mesa — temporada adelantada 2026',detalle:'Temporada adelantada en 2026. Los retailers preparan espacio y promociones para absorber el volumen, reduciendo el espacio para frutas exóticas.'},
+};
+
+function loadData(){
+  try{
+    const s=JSON.parse(localStorage.getItem(KEY))||[];
+    const sids=s.map(e=>e.id);
+    return [...s,...SEEDS.filter(x=>!sids.includes(x.id))].sort((a,b)=>(b.sem||0)-(a.sem||0));
+  }catch{return[...SEEDS];}
+}
+function saveData(arr){localStorage.setItem(KEY,JSON.stringify(arr.filter(e=>!e.seed)));}
+
+function switchTab(n){
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',['aviso','historico','graficas'][i]===n));
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  document.getElementById('tab-'+n).classList.add('active');
+  if(n==='graficas')renderCharts();
+  if(n==='historico')renderHistorial();
+}
+document.querySelectorAll('.cc-item input').forEach(cb=>{
+  cb.addEventListener('change',()=>cb.closest('.cc-item').classList.toggle('checked',cb.checked));
+});
+
+// ── CALCULADORA CON SEMÁFORO ──
+function calcularCadena(){
+  const p=parseFloat(document.getElementById('in-prod').value);
+  const ny=parseFloat(document.getElementById('in-ny').value)||null;
+  const la=parseFloat(document.getElementById('in-la').value)||null;
+  const box=document.getElementById('calc-box');
+  const title=document.getElementById('calc-title');
+  const sem=document.getElementById('calc-semaforo');
+  const res=document.getElementById('calc-result');
+  const mini=document.getElementById('ruta-mini');
+
+  if(isNaN(p)||p<=0){
+    box.className='calc-box ok';
+    title.style.color='var(--g)';
+    title.textContent='🧮 Cadena de valor';
+    sem.innerHTML='';
+    res.innerHTML='<div style="font-size:11px;color:var(--mid);text-align:center;padding:4px;">Ingresa precio del productor y USDA LA</div>';
+    mini.innerHTML='';
+    return;
+  }
+
+  const fob=+(p*1.65).toFixed(2);
+  const cifMia=+(fob+FMAR).toFixed(2);
+  const cifLA=+(fob+FMAR+FCAM).toFixed(2);
+  const cifSF=+(fob+FMAR+0.65).toFixed(2);
+
+  // Calcular margen y pérdida por ruta
+  const nyKg=ny?+(ny/4.5).toFixed(2):null;
+  const laKg=la?+(la/4.536).toFixed(2):null;
+  const sfKg=la?+(la/4.536-0.15).toFixed(2):null; // SF ~$0.15 menos que LA
+
+  const margenEste=nyKg?+(nyKg-cifMia).toFixed(2):null;
+  const margenLA=laKg?+(laKg-cifLA).toFixed(2):null;
+  const margenSF=sfKg?+(sfKg-cifSF).toFixed(2):null;
+
+  const pctEste=nyKg&&margenEste?+((margenEste/nyKg)*100).toFixed(1):null;
+  const pctLA=laKg&&margenLA?+((margenLA/laKg)*100).toFixed(1):null;
+
+  // Pérdida por contenedor
+  const lossLA=margenLA?+(margenLA*KG_CONT).toFixed(0):null;
+  const lossSF=margenSF?+(margenSF*KG_CONT).toFixed(0):null;
+
+  // Semáforo general (peor caso)
+  const minPct=Math.min(...[pctEste,pctLA].filter(x=>x!==null));
+  const minLoss=Math.min(...[lossLA,lossSF].filter(x=>x!==null));
+
+  let estado='ok', emoji='🟢', msg='', msgColor='var(--g)';
+  if(minPct<0||minLoss<-UMBRAL_CRITICO){
+    estado='danger'; emoji='🔴'; msg=`PÉRDIDA SEVERA — ${minPct<0?'margen negativo':'pérdida >$'+Math.abs(minLoss).toLocaleString()+'/cont'}`; msgColor='var(--red)';
+  } else if(minPct<5){
+    estado='danger'; emoji='🔴'; msg=`RIESGO ALTO — margen ${minPct}% (mín. requerido 14%)`; msgColor='var(--red)';
+  } else if(minPct<MARG*100){
+    estado='warn'; emoji='🟡'; msg=`MARGEN AJUSTADO — ${minPct}% (objetivo 14%)`; msgColor='var(--gold)';
+  } else {
+    msg=`PRECIO VIABLE — margen ${minPct}%`; msgColor='var(--g)';
+  }
+
+  box.className='calc-box '+estado;
+  title.textContent='🧮 Cadena de valor';
+  title.style.color=msgColor;
+
+  sem.innerHTML=`<div class="calc-semaforo" style="background:${estado==='ok'?'#EAF3EC':estado==='warn'?'#FFF8E7':'#FDECEC'};color:${msgColor};">${emoji} ${msg}</div>`;
+
+  res.innerHTML=`
+    <div class="cr-row"><span class="cr-lbl">Productor</span><span class="cr-val" style="color:var(--ol)">$${p.toFixed(2)}/kg</span></div>
+    <div class="cr-row"><span class="cr-lbl">FOB Guayaquil</span><span class="cr-val" style="color:var(--g)">$${fob}/kg</span></div>
+    <div class="cr-row"><span class="cr-lbl">CIF Miami</span><span class="cr-val" style="color:var(--blue)">$${cifMia}/kg</span></div>
+    <div class="cr-row"><span class="cr-lbl">CIF LA</span><span class="cr-val" style="color:var(--purple)">$${cifLA}/kg</span></div>
+    ${laKg?`<div class="cr-row"><span class="cr-lbl">USDA LA</span><span class="cr-val" style="color:var(--gold)">$${laKg}/kg</span></div>`:''}
+    ${margenLA!==null?`<div class="cr-row"><span class="cr-lbl" style="font-weight:600">Margen LA</span><span class="cr-val" style="color:${margenLA>=0?'var(--g)':'var(--red)'};font-size:13px;">$${margenLA}/kg (${pctLA}%)</span></div>`:''}
+    ${margenEste!==null?`<div class="cr-row"><span class="cr-lbl" style="font-weight:600">Margen Miami</span><span class="cr-val" style="color:${margenEste>=0?'var(--g)':'var(--red)'};font-size:13px;">$${margenEste}/kg (${pctEste}%)</span></div>`:''}`;
+
+  // Mini rutas
+  if(lossLA!==null||lossSF!==null){
+    const rowLA=lossLA!==null?`<div class="rm-row"><span class="rm-label">Costa Oeste LA</span><span class="rm-val" style="color:${lossLA>=0?'var(--g)':'var(--red)'}">${lossLA>=0?'+$'+lossLA.toLocaleString():'-$'+Math.abs(lossLA).toLocaleString()}/cont</span></div>`:'';
+    const rowSF=lossSF!==null?`<div class="rm-row"><span class="rm-label">Costa Oeste SF</span><span class="rm-val" style="color:${lossSF>=0?'var(--g)':'var(--red)'}">${lossSF>=0?'+$'+lossSF.toLocaleString():'-$'+Math.abs(lossSF).toLocaleString()}/cont</span></div>`:'';
+    const rowE=margenEste!==null?`<div class="rm-row"><span class="rm-label">Costa Este Miami</span><span class="rm-val" style="color:${margenEste>=0?'var(--g)':'var(--red)'}">${margenEste>=0?'+$'+(margenEste*KG_CONT).toFixed(0).toLocaleString():'-$'+Math.abs(margenEste*KG_CONT).toFixed(0)}/cont</span></div>`:'';
+    mini.innerHTML=`<div class="ruta-mini"><div class="rm-title">Resultado por contenedor (17,280 kg)</div>${rowE}${rowLA}${rowSF}</div>`;
+  } else {
+    mini.innerHTML='';
+  }
+
+  // Disparar alerta crítica si pérdida severa
+  const worstLoss=Math.min(lossLA||0,lossSF||0,(margenEste||0)*KG_CONT);
+  if(worstLoss<-UMBRAL_CRITICO){
+    setTimeout(()=>mostrarAlerta(p,ny,la,margenEste,margenLA,margenSF,lossLA,lossSF),500);
+  }
+}
+
+let alertaMostrada=false;
+function mostrarAlerta(p,ny,la,mE,mLA,mSF,lLA,lSF){
+  if(alertaMostrada)return;
+  alertaMostrada=true;
+  const nyKg=ny?+(ny/4.5).toFixed(2):null;
+  const laKg=la?+(la/4.536).toFixed(2):null;
+  const worstLoss=Math.min(lLA||0,lSF||0,(mE||0)*KG_CONT);
+  document.getElementById('alerta-monto').textContent='-$'+Math.abs(worstLoss).toLocaleString()+' por contenedor';
+  document.getElementById('alerta-detalle').innerHTML=`Con un precio de compra de <strong>$${p.toFixed(2)}/kg</strong> y los precios actuales del mercado, <strong>cada contenedor que envíes genera una pérdida</strong>. El flete marítimo ($${FMAR}/kg) más el camión a LA ($${FCAM}/kg) más el margen mínimo operativo dejan sin espacio para pagar $${p.toFixed(2)}/kg al productor.<br><br>El precio máximo viable esta semana es <strong>$${laKg?Math.max(0,+(laKg-FMAR-FCAM-0.20).toFixed(2)):' — (ingresa USDA LA)'}</strong>/kg.`;
+  document.getElementById('alerta-rutas').innerHTML=`
+    <div class="alerta-ruta"><div class="ar-name">Costa Este (Miami)</div><div class="ar-val" style="color:${mE>=0?'var(--g)':'var(--red)'}">$${nyKg||'—'}/kg USDA</div><div class="ar-loss" style="color:${mE>=0?'var(--g)':'var(--red)'}">${mE!==null?(mE>=0?'Ganancia $'+(mE*KG_CONT).toLocaleString():'Pérdida -$'+Math.abs(mE*KG_CONT).toLocaleString()):'-'}/cont</div></div>
+    <div class="alerta-ruta"><div class="ar-name">Costa Oeste (LA)</div><div class="ar-val" style="color:${mLA>=0?'var(--g)':'var(--red)'}">$${laKg||'—'}/kg USDA</div><div class="ar-loss" style="color:${mLA>=0?'var(--g)':'var(--red)'}">${lLA!==null?(lLA>=0?'Ganancia $'+lLA.toLocaleString():'Pérdida -$'+Math.abs(lLA).toLocaleString()):'-'}/cont</div></div>`;
+  document.getElementById('alerta-overlay').classList.add('show');
+}
+function cerrarAlerta(){
+  document.getElementById('alerta-overlay').classList.remove('show');
+  alertaMostrada=false;
+}
+
+const now=new Date();
+const wStart=new Date(now);wStart.setDate(now.getDate()-now.getDay()+1);
+const wEnd=new Date(wStart);wEnd.setDate(wStart.getDate()+6);
+const fmt=d=>d.toLocaleDateString('es-EC',{day:'numeric',month:'short'});
+// Pre-llenar desde datos.js si está disponible
+const wn=Math.ceil((((now-new Date(now.getFullYear(),0,1))/86400000)+new Date(now.getFullYear(),0,1).getDay()+1)/7);
+if(typeof DATOS !== 'undefined' && DATOS.semana) {
+  document.getElementById('in-sem').value    = DATOS.semana.numero;
+  document.getElementById('in-periodo').value= DATOS.semana.periodo;
+  document.getElementById('in-prod').value   = DATOS.semana.precio_productor;
+  document.getElementById('in-ny').value     = DATOS.semana.usda_ny;
+  document.getElementById('in-la').value     = DATOS.semana.usda_la;
+  document.getElementById('in-tend').value   = DATOS.semana.tendencia;
+  document.getElementById('in-oferta').value = DATOS.semana.oferta_ecuador;
+  // Marcar competidores
+  document.querySelectorAll('.cc-item input').forEach(cb => {
+    const activo = DATOS.semana[cb.value] === true;
+    cb.checked = activo;
+    cb.closest('.cc-item').classList.toggle('checked', activo);
+  });
+} else {
+  document.getElementById('in-periodo').value=`${fmt(wStart)} – ${fmt(wEnd)} ${now.getFullYear()}`;
+  document.getElementById('in-sem').value=wn;
+}
+
+function guardar(){
+  const sem=parseInt(document.getElementById('in-sem').value);
+  const periodo=document.getElementById('in-periodo').value.trim();
+  const prod=parseFloat(document.getElementById('in-prod').value);
+  if(!periodo||isNaN(prod)){alert('Completa al menos el período y el precio del productor.');return;}
+  const ny=parseFloat(document.getElementById('in-ny').value)||null;
+  const la=parseFloat(document.getElementById('in-la').value)||null;
+  const comps=[...document.querySelectorAll('.cc-item input:checked')].map(c=>c.value);
+  const entry={id:Date.now(),sem,periodo,prod,ny,la,
+    tend:document.getElementById('in-tend').value,
+    oferta:document.getElementById('in-oferta').value,
+    comps,fecha:now.toLocaleDateString('es-EC')};
+  const stored=loadData().filter(e=>!e.seed);
+  stored.unshift(entry);
+  saveData(stored);
+  renderAviso(entry);
+  renderHistorial();
+  updateCount();
+  switchTab('aviso');
+  alert('✅ Semana guardada.');
+}
+
+const tIcon={baja:'📉',estable:'➡️',alza:'📈',incierta:'⚠️'};
+
+function renderAviso(e){
+  if(!e){const h=loadData();if(!h.length)return;e=h[0];}
+  const hist=loadData().slice(0,5);
+  const prev=loadData().filter(x=>x.id!==e.id&&x.prod!=null);
+  const varProd=prev.length?((e.prod-prev[0].prod)/prev[0].prod*100).toFixed(1):null;
+  const vc=varProd!==null?(parseFloat(varProd)>=0?'var(--g)':'var(--red)'):'var(--mid)';
+  const vs=varProd!==null?`${parseFloat(varProd)>=0?'▲':'▼'} ${Math.abs(varProd)}%`:'Primera semana';
+  const fob=+(e.prod*1.65).toFixed(2);
+  const cifMia=+(fob+FMAR).toFixed(2);
+  const cifLA=+(fob+FMAR+FCAM).toFixed(2);
+  const laKg=e.la?+(e.la/4.536).toFixed(2):null;
+  const nyKg=e.ny?+(e.ny/4.5).toFixed(2):null;
+  const margenLA=laKg?+(laKg-cifLA).toFixed(2):null;
+  const margenPct=laKg&&margenLA?+((margenLA/laKg)*100).toFixed(1):null;
+  const activeComps=(e.comps||[]).filter(c=>COMP_DB[c]);
+  const numActive=activeComps.length;
+  const tendTxt={baja:'a la baja',estable:'estable',alza:'al alza',incierta:'incierta'};
+  const ofertaTxt={alta:'alta — temporada pico en Ecuador',media:'normal',baja:'baja — fuera de temporada'};
+
+  const p1=`Esta semana el precio de compra de pitahaya en Agrovip es <strong>$${e.prod.toFixed(2)} por kg</strong>${varProd?` — una variación de <strong>${vs}</strong> respecto a la semana anterior`:''}.  La tendencia del mercado mayorista en EE.UU. es <strong>${tendTxt[e.tend]||e.tend}</strong>, con oferta de Ecuador <strong>${ofertaTxt[e.oferta]||e.oferta}</strong>.`;
+  const p2=`La <strong>Costa Oeste (Los Ángeles)</strong> es el destino principal esta semana. El USDA en Los Ángeles cotiza la pitahaya Ecuador bote${e.la?` a <strong>$${e.la} por caja de 10 lb ($${laKg}/kg)</strong>`:''} — significativamente menos que los <strong>$${e.ny||'36–40'} por caja de 4.5kg en la Costa Este ($${nyKg||'8–9'}/kg)</strong>. En la Costa Oeste la pitahaya compite también con fruta que llega desde la Costa Este vía camión (2 días), presionando estructuralmente los precios hacia abajo.`;
+  const p3=numActive>0?`<strong>El factor determinante esta semana</strong> son los competidores en percha. Hay <strong>${numActive} frutas de temporada activas simultáneamente</strong> (${activeComps.map(c=>COMP_DB[c].name).join(', ')}) compitiendo por el espacio de la sección de produce. Un supermercado tiene entre 8 y 12 puestos para frutas exóticas. Cuando mango, fresas, cerezas, blueberries y lichi ocupan esos espacios, la pitahaya queda en el último lugar disponible.`:'Esta semana hay menos competencia estacional, lo que da mejor posición a la pitahaya en la sección de produce.';
+  const p4=margenLA!==null?`Desde el punto de vista de la cadena: tu fruta sale de Ecuador a <strong>$${fob}/kg FOB</strong>, llega a la Costa Este a <strong>$${cifMia}/kg</strong>, y llega a la Costa Oeste a <strong>$${cifLA}/kg</strong> incluyendo flete en camión. Con el USDA Costa Oeste en <strong>$${laKg}/kg</strong>, el margen disponible es <strong>$${margenLA}/kg (${margenPct}%)</strong>.`:'La cadena muestra que después del flete marítimo y el camión a la Costa Oeste, el margen es muy ajustado.';
+
+  const compsHTML=activeComps.map(c=>{const ci=COMP_DB[c];return`<div class="comp-card" style="border-left-color:${ci.col}"><div class="cn">${ci.icon} ${ci.titulo}</div><div class="cd">${ci.detalle}</div><div class="ci" style="color:${ci.col}">Impacto: ${ci.impacto}</div></div>`;}).join('');
+  const perchaHTML=activeComps.map(c=>`<div class="percha-activo">${COMP_DB[c].icon} ${COMP_DB[c].name}</div>`).join('')+`<div class="percha-pitahaya">🐉 Pitahaya — ${numActive>=4?'último espacio disponible':numActive>=2?'espacio reducido':'espacio normal'}</div>`;
+  const cadenaHTML=`
+    <div class="cs"><div class="cv" style="color:var(--ol)">$${e.prod.toFixed(2)}</div><div class="cl">Productor</div><div class="ct" style="color:var(--ol)">Finca Ecuador</div></div>
+    <div class="cs"><div class="cv" style="color:var(--g)">$${fob}</div><div class="cl">FOB</div><div class="ct">Guayaquil</div></div>
+    <div class="cs"><div class="cv" style="color:var(--blue)">$${cifMia}</div><div class="cl">Costa Este</div><div class="ct">(Miami)</div></div>
+    <div class="cs"><div class="cv" style="color:var(--purple)">$${cifLA}</div><div class="cl">Costa Oeste</div><div class="ct">(Los Ángeles)</div></div>
+    <div class="cs" style="border:1.5px solid ${margenLA!==null&&margenLA>0?'var(--gold)':'var(--red)'}">
+      <div class="cv" style="color:${margenLA!==null&&margenLA>0?'var(--gold)':'var(--red)'}">$${laKg||'—'}</div>
+      <div class="cl">USDA</div>
+      <div class="ct" style="color:${margenLA!==null&&margenLA>0?'var(--g)':'var(--red)'}">${margenLA!==null?'Margen $'+margenLA:'sin USDA LA'}</div>
+    </div>`;
+  const histHTML=hist.map(h=>{const col=h.prod>=2?'var(--g)':h.prod>=1.5?'#BA7517':h.prod>=1?'var(--gold)':'var(--red)';return`<div class="hm"><div class="hm-s">Sem ${h.sem||'—'}</div><div class="hm-p" style="color:${col}">$${h.prod?.toFixed(2)||'—'}</div><div class="hm-r">${h.ny?'NY $'+h.ny:''}</div></div>`;}).join('');
+  const difKg=nyKg&&laKg?+(nyKg-laKg).toFixed(2):null;
+  const rutasHTML=`
+    <div class="ruta-card"><div class="rn">Costa Este</div><div class="rc">📍 Miami, FL · 10–12 días</div><div class="rp" style="color:var(--g)">$${nyKg||'—'}/kg</div><div class="rr">Referencia USDA NY</div></div>
+    <div class="ruta-card" style="border-left:2px solid var(--red);"><div class="rn">Costa Oeste — LA</div><div class="rc">📍 Los Ángeles, CA · 15 días</div><div class="rp" style="color:var(--red)">$${laKg||'—'}/kg</div><div class="rr">USDA LA${difKg?` — $${difKg}/kg menos que Costa Este`:''}</div></div>
+    <div class="ruta-card" style="border-left:2px solid var(--purple);"><div class="rn">Costa Oeste — SF</div><div class="rc">📍 San Francisco, CA · 17 días</div><div class="rp" style="color:var(--purple)">$${laKg?+(laKg-0.15).toFixed(2):'—'}/kg</div><div class="rr">Ref. USDA LA ajustado</div></div>`;
+
+  document.getElementById('aviso-render').innerHTML=`
+  <div class="aviso-wrap">
+    <div class="av-hdr">
+      <div class="av-sem">Agrovip S.A. · Semana ${e.sem||'—'} · ${e.periodo}</div>
+      <div class="av-ttl">Aviso de precio de compra — Pitahaya Roja Ecuador</div>
+      <div class="av-badge"><span>$</span><span class="pnum">${e.prod.toFixed(2)}</span><span> / kg</span></div>
+    </div>
+    <div class="av-kpis">
+      <div class="kpi"><div class="kv">$${e.prod.toFixed(2)}</div><div class="kl">Precio esta semana</div></div>
+      <div class="kpi"><div class="kv" style="color:${vc}">${vs}</div><div class="kl">Vs. semana anterior</div></div>
+      <div class="kpi"><div class="kv">${{baja:'📉 Baja',estable:'➡️ Estable',alza:'📈 Alza',incierta:'⚠️ Incierta'}[e.tend]||e.tend}</div><div class="kl">Tendencia mercado</div></div>
+    </div>
+    <div class="av-body">
+      <div class="sec-lbl">Por qué el precio está aquí esta semana</div>
+      <div class="av-texto"><p>${p1}</p><p>${p2}</p><p>${p3}</p><p>${p4}</p></div>
+      ${numActive>0?`<div class="sec-lbl">Lo que ocupa la percha de exóticos esta semana</div>
+      <div style="background:var(--cr);border-radius:8px;padding:11px 13px;">
+        <div style="font-size:11px;color:var(--mid);margin-bottom:7px;">Espacio disponible en sección tropical del supermercado (8–12 puestos):</div>
+        <div class="percha-bar">${perchaHTML}</div>
+        <div style="font-size:10px;color:var(--red);margin-top:6px;font-weight:500;">Con ${numActive} competidores activos, la pitahaya compite por el último espacio. El gerente de produce prioriza las frutas que más rotan.</div>
+      </div>`:''}
+      ${compsHTML?`<div class="sec-lbl">Detalle de cada competidor — fuentes verificables</div><div class="comp-grid">${compsHTML}</div>`:''}
+      <div class="sec-lbl">La cadena de valor esta semana — $/kg</div>
+      <div class="cadena-strip">${cadenaHTML}</div>
+      <div style="font-size:10px;color:var(--mid);margin-top:5px;">Flete marítimo: $${FMAR}/kg · Camión Costa Este→Oeste: $${FCAM}/kg · Margen objetivo Agrovip: ${(MARG*100).toFixed(0)}%</div>
+      <div class="sec-lbl">Precio de referencia por destino</div>
+      <div class="rutas-grid">${rutasHTML}</div>
+      ${difKg?`<div style="font-size:10px;color:var(--mid);margin-top:6px;background:#FDECEC;border-radius:6px;padding:7px 10px;"><strong>Diferencia estructural:</strong> La Costa Oeste (Los Ángeles) paga $${difKg}/kg menos que la Costa Este (Miami) por la misma fruta. Esto es permanente y se debe a la competencia de fruta que llega vía camión desde Miami.</div>`:''}
+      <div class="sec-lbl">Historial — precio y USDA NY últimas semanas</div>
+      <div class="hist-mini">${histHTML}</div>
+      <div class="sec-lbl">Verifica estos datos tú mismo — fuentes públicas gratuitas</div>
+      <div class="fuentes-aviso">
+        <a class="fa-card" href="https://www.ams.usda.gov/mnreports/hc_fv056.txt" target="_blank"><div class="fn">USDA Los Ángeles</div><div class="fd">HC_FV056 — busca "DRAGON FRUIT" → Ecuador boat. Precio semanal caja 10lb.</div><div class="fl">ams.usda.gov →</div></a>
+        <a class="fa-card" href="https://www.ams.usda.gov/mnreports/nx_fv010.pdf" target="_blank"><div class="fn">USDA Nueva York</div><div class="fd">NX_FV010 — Dragon Fruit Ecuador 4.5kg por calibre. Referencia Costa Este.</div><div class="fl">ams.usda.gov →</div></a>
+        <a class="fa-card" href="https://www.walmart.com/ip/Fresh-Dragon-Fruit-Each/638705858" target="_blank"><div class="fn">Walmart retail</div><div class="fd">Precio actual al consumidor final. Último eslabón de la cadena.</div><div class="fl">walmart.com →</div></a>
+      </div>
+      <div style="margin-top:14px;background:var(--cr);border-radius:8px;padding:11px 13px;font-size:12px;color:var(--mid);line-height:1.7;">
+        Para verificar los precios: busca el reporte <strong>HC_FV056</strong> (Costa Oeste) y <strong>NX_FV010</strong> (Costa Este) en ams.usda.gov — públicos y gratuitos, publicados cada semana.<br><br>
+        <strong style="color:var(--ink)">Agrovip actualiza este aviso cada semana</strong> con datos reales del mercado.
+      </div>
+    </div>
+    <div class="av-foot">
+      <div class="firma">Emitido por <strong>Agrovip S.A.</strong> · ${e.fecha||now.toLocaleDateString('es-EC')}</div>
+      <button class="btn btn-gold btn-sm no-print" onclick="window.print()">⬇ Descargar PDF</button>
+    </div>
+  </div>`;
+}
+
+function renderHistorial(){
+  const hist=loadData();
+  const tb=document.getElementById('hist-body');
+  if(!hist.length){tb.innerHTML='<tr><td colspan="9" style="text-align:center;color:var(--mid);padding:16px;">Sin registros.</td></tr>';return;}
+  tb.innerHTML=hist.map((e,i)=>{
+    const nxt=hist.find((_,j)=>j>i&&_.prod!=null);
+    const vv=nxt?((e.prod-nxt.prod)/nxt.prod*100).toFixed(1):null;
+    const badge=vv===null?''
+      :parseFloat(vv)<0?`<span class="badge-dn">▼${Math.abs(vv)}%</span>`
+      :parseFloat(vv)>0?`<span class="badge-up">▲${vv}%</span>`:'';
+    return`<tr class="${e.seed?'seed-row':''}">
+      <td><strong>${e.sem||'—'}</strong>${e.seed?'<span class="seed-lbl">ref.</span>':''}</td>
+      <td style="font-size:11px;">${e.periodo||'—'}</td>
+      <td><strong>$${e.prod?.toFixed(2)||'—'}</strong></td>
+      <td>${e.ny?'$'+e.ny:'—'}</td>
+      <td>${e.la?'$'+e.la:'—'}</td>
+      <td>${badge}</td>
+      <td>${tIcon[e.tend]||''} ${e.tend||'—'}</td>
+      <td style="font-size:10px;">${(e.comps||[]).map(c=>({mango:'🥭',fresas:'🍓',blueberries:'🫐',cerezas:'🍒',lichi:'🍒',uvas:'🍇'}[c]||c)).join(' ')}</td>
+      <td>${!e.seed?`<button class="del-btn" onclick="eliminar(${e.id})">✕</button>`:''}</td>
+    </tr>`;
+  }).join('');
+}
+function eliminar(id){if(!confirm('¿Eliminar?'))return;saveData(loadData().filter(e=>!e.seed&&e.id!==id));renderHistorial();updateCount();renderCharts();}
+function limpiar(){if(!confirm('¿Eliminar registros propios? Los datos de referencia permanecen.'))return;saveData([]);renderHistorial();updateCount();renderCharts();}
+function updateCount(){document.getElementById('hist-count').textContent=loadData().length;}
+
+let charts={};
+function renderCharts(){
+  const hist=loadData().slice().reverse();
+  if(hist.length<2)return;
+  const labels=hist.map(e=>'Sem '+(e.sem||''));
+  const ds=(data,color,fill=false,dash=[],lbl='')=>({label:lbl,data,borderColor:color,backgroundColor:fill?color+'20':'transparent',borderWidth:2.5,pointRadius:4,pointBackgroundColor:color,tension:.35,fill,borderDash:dash});
+  const mk=(id,datasets)=>{
+    if(charts[id])charts[id].destroy();
+    const ctx=document.getElementById(id)?.getContext('2d');
+    if(!ctx)return;
+    charts[id]=new Chart(ctx,{type:'line',data:{labels,datasets},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:datasets.length>1,labels:{font:{size:10}}}},
+        scales:{x:{ticks:{font:{size:9}},grid:{display:false}},y:{ticks:{font:{size:10},callback:v=>'$'+v.toFixed(2)},grid:{color:'rgba(128,128,128,0.07)'}}}}});
+  };
+  mk('c-prod',[ds(hist.map(e=>e.prod||null),'#1A6B3C',true)]);
+  mk('c-usda',[ds(hist.map(e=>e.ny||null),'#185FA5',false,[],'NY'),ds(hist.map(e=>e.la||null),'#BA7517',false,[4,3],'LA')]);
+  mk('c-marg',[ds(hist.map(e=>e.la&&e.prod?+(e.la/4.536-e.prod*1.65-FMAR-FCAM).toFixed(2):null),'#6c3483',false,[],'Margen LA')]);
+  mk('c-ret',[ds(hist.map(e=>e.la&&e.prod?+((e.la/4.536-e.prod*1.65-FMAR-FCAM)*KG_CONT).toFixed(0):null),'#C8962A',true,[],'P&L /cont')]);
+}
+
+function exportExcel(){
+  const hist=loadData();
+  if(!hist.length){alert('Sin datos.');return;}
+  const rows=hist.map(e=>({'Sem':e.sem||'','Período':e.periodo||'','Fecha':e.fecha||'','Precio prod $/kg':e.prod||'','USDA NY $/caja':e.ny||'','USDA LA $/caja':e.la||'','Tendencia':e.tend||'','Oferta':e.oferta||'','Competidores':(e.comps||[]).join(', '),'Ref. USDA':e.seed?'Sí':'No'}));
+  const wb=XLSX.utils.book_new();
+  const ws=XLSX.utils.json_to_sheet(rows);
+  ws['!cols']=[{wch:6},{wch:20},{wch:12},{wch:14},{wch:12},{wch:12},{wch:10},{wch:8},{wch:35},{wch:8}];
+  XLSX.utils.book_append_sheet(wb,ws,'Precios');
+  XLSX.writeFile(wb,`Agrovip_Sem${wn}_${now.getFullYear()}.xlsx`);
+}
+
+renderHistorial();
+updateCount();
+calcularCadena();
+const last=loadData()[0];
+if(last)renderAviso(last);
+</script>
+</body>
+</html>
