@@ -136,6 +136,55 @@ footer p{font-size:11px;color:rgba(255,255,255,.38);line-height:1.9;}
 footer a{color:var(--gold2);text-decoration:none;}
 
 .disclaimer{background:var(--cr);border:1px solid var(--brd);border-radius:9px;padding:11px 14px;font-size:11px;color:var(--mid);line-height:1.6;margin-top:18px;}
+
+/* ── RETAIL CHAINS ── */
+.retail-section{margin-top:24px;}
+.retail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+@media(max-width:700px){.retail-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:440px){.retail-grid{grid-template-columns:1fr;}}
+.rc-card{background:#fff;border-radius:11px;border:1px solid var(--brd);overflow:hidden;transition:transform .18s,box-shadow .18s;}
+.rc-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(26,107,60,.09);}
+.rc-top{padding:11px 14px 8px;border-bottom:1px solid var(--brd);display:flex;align-items:center;gap:8px;}
+.rc-icon{font-size:18px;}
+.rc-name{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--ink);}
+.rc-seg{font-size:10px;color:var(--mid);margin-top:1px;}
+.rc-body{padding:11px 14px;}
+.rc-price{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--g);line-height:1;}
+.rc-unit{font-size:11px;color:var(--mid);margin-top:2px;}
+.rc-kg{font-size:12px;font-weight:600;color:var(--ink);margin-top:4px;}
+.rc-oferta{display:inline-block;margin-top:6px;background:#FDECEC;color:var(--red);border-radius:12px;padding:2px 9px;font-size:10px;font-weight:600;}
+.rc-link{display:block;padding:8px 14px;background:var(--cr);border-top:1px solid var(--brd);font-size:10px;color:var(--mid);text-decoration:none;transition:background .15s,color .15s;}
+.rc-link:hover{background:var(--g);color:#fff;}
+.retail-range{background:#fff;border-radius:10px;border:1px solid var(--brd);padding:14px 18px;margin-top:14px;}
+.rr-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--ink);margin-bottom:10px;}
+.rr-bar-wrap{margin-bottom:6px;}
+.rr-bar-label{display:flex;justify-content:space-between;font-size:10px;color:var(--mid);margin-bottom:3px;}
+.rr-bar-track{height:10px;background:var(--cr);border-radius:5px;overflow:hidden;position:relative;}
+.rr-bar-fill{height:100%;border-radius:5px;position:absolute;left:0;}
+.rr-note{font-size:10px;color:var(--mid);margin-top:8px;line-height:1.5;}
+
+/* ── RETAIL CHAINS ── */
+.retail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px;}
+@media(max-width:700px){.retail-grid{grid-template-columns:1fr 1fr;}}
+.rc-card{background:#fff;border-radius:11px;border:1px solid var(--brd);overflow:hidden;transition:transform .15s,box-shadow .15s;}
+.rc-card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(26,107,60,.09);}
+.rc-top{padding:10px 13px 8px;border-bottom:1px solid var(--brd);display:flex;align-items:center;gap:7px;}
+.rc-icon{font-size:17px;}
+.rc-name{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--ink);}
+.rc-seg{font-size:10px;color:var(--mid);}
+.rc-body{padding:10px 13px;}
+.rc-price{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--g);line-height:1;}
+.rc-unit{font-size:10px;color:var(--mid);margin-top:2px;}
+.rc-kg{font-size:11px;font-weight:600;color:var(--ink);margin-top:3px;}
+.rc-oferta{display:inline-block;margin-top:5px;background:#EAF3EC;color:var(--g);border-radius:12px;padding:2px 8px;font-size:10px;font-weight:600;}
+.rc-link{display:block;padding:7px 13px;background:var(--cr);border-top:1px solid var(--brd);font-size:10px;color:var(--mid);text-decoration:none;transition:all .15s;}
+.rc-link:hover{background:var(--g);color:#fff;}
+.retail-range{background:#fff;border-radius:10px;border:1px solid var(--brd);padding:14px 16px;margin-top:12px;}
+.rr-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--ink);margin-bottom:10px;}
+.rr-row{margin-bottom:8px;}
+.rr-lbl{display:flex;justify-content:space-between;font-size:10px;color:var(--mid);margin-bottom:3px;}
+.rr-track{height:8px;background:var(--cr);border-radius:4px;overflow:hidden;}
+.rr-fill{height:100%;border-radius:4px;}
 </style>
 </head>
 <body>
@@ -149,7 +198,7 @@ footer a{color:var(--gold2);text-decoration:none;}
     <div class="nav-links">
       <a href="#cadena">Cadena de valor</a>
       <a href="#precios">Precios</a>
-      <a href="#competencia">Competencia</a>
+      <a href="#retail-cadenas">Cadenas retail</a><a href="#competencia">Competencia</a>
       <a href="#fuentes">Fuentes</a>
     </div>
     <div class="nav-badge-sem" id="nav-sem">Sem —</div>
@@ -224,6 +273,18 @@ footer a{color:var(--gold2);text-decoration:none;}
         <div style="position:relative;height:180px;"><canvas id="chart-usda" role="img" aria-label="USDA LA vs NY">USDA LA vs NY.</canvas></div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- ══ PRECIOS POR CADENA ══ -->
+<div class="section" id="retail-cadenas">
+  <div class="section-inner">
+    <div class="sec-label">Precios por cadena retail — semana actual</div>
+    <div class="sec-title">¿Cuánto paga el consumidor según dónde compra?</div>
+    <p class="sec-desc">La diferencia entre cadenas puede ser hasta 40%. Esto afecta la demanda y rotación de pitahaya directamente.</p>
+    <div class="retail-grid" id="retail-grid"></div>
+    <div class="retail-range" id="retail-range"></div>
+    <div class="disclaimer" style="margin-top:14px;" id="retail-disclaimer"></div>
   </div>
 </div>
 
@@ -447,6 +508,64 @@ document.getElementById('var-grid').innerHTML = `
 
 document.getElementById('var-disclaimer').textContent = `Datos USDA semana ${S.numero} (${S.periodo}). NY referencia Costa Este; LA referencia Veritas y Mexotics.`;
 
+
+// ── RETAIL CHAINS ──
+if(S.retail){
+  const R = S.retail;
+  const chains = [
+    { key:'walmart',        icon:'🛒', name:'Walmart',        seg:'Masivo · Costa Este y Oeste' },
+    { key:'publix',         icon:'🏪', name:'Publix',         seg:'Sur/Florida · Costa Este' },
+    { key:'sprouts',        icon:'🌿', name:'Sprouts',        seg:'Natural · Costa Oeste' },
+    { key:'whole_foods',    icon:'🌱', name:'Whole Foods',    seg:'Premium · Ambas costas' },
+    { key:'whole_foods_lb', icon:'🌱', name:'Whole Foods (kg)',seg:'Premium orgánico por peso' },
+    { key:'kroger',         icon:'🛒', name:'Kroger',         seg:'Masivo · Costa Este' },
+  ];
+  const kgProd = S.precio_productor;
+
+  document.getElementById('retail-grid').innerHTML = chains
+    .filter(c => R[c.key])
+    .map(c => {
+      const d = R[c.key];
+      const precio = d.precio_unidad || null;
+      const kg = d.kg_equiv;
+      const ratio = kg ? ((kgProd / kg)*100).toFixed(0) : null;
+      return `<div class="rc-card">
+        <div class="rc-top">
+          <div class="rc-icon">${c.icon}</div>
+          <div><div class="rc-name">${c.name}</div><div class="rc-seg">${c.seg}</div></div>
+        </div>
+        <div class="rc-body">
+          ${precio ? `<div class="rc-price">$${precio.toFixed(2)}</div><div class="rc-unit">por unidad (~400g)</div>` : ''}
+          ${d.precio_lb ? `<div class="rc-price">$${d.precio_lb}/lb</div><div class="rc-unit">precio por libra</div>` : ''}
+          <div class="rc-kg">≈ <strong>$${kg.toFixed(1)}/kg</strong> equivalente</div>
+          ${ratio ? `<div class="rc-unit" style="margin-top:3px;">Productor = ${ratio}% del precio final</div>` : ''}
+          ${d.oferta ? `<div class="rc-oferta">🏷 En oferta: $${d.oferta.toFixed(2)} (−${d.oferta_pct}%)</div>` : ''}
+        </div>
+        <a class="rc-link" href="${d.url}" target="_blank" rel="noopener">Ver precio actual →</a>
+      </div>`;
+    }).join('');
+
+  // Range bar
+  const kgValues = chains.filter(c=>R[c.key]).map(c=>({name:c.name,kg:R[c.key].kg_equiv})).sort((a,b)=>a.kg-b.kg);
+  const minKg = kgValues[0].kg, maxKg = kgValues[kgValues.length-1].kg;
+  const colors = ['#1A6B3C','#7A9A2E','#C8962A','#1a5276','#6c3483','#b83232'];
+  document.getElementById('retail-range').innerHTML = `
+    <div class="rr-title">Rango de precio retail — $${minKg.toFixed(1)}/kg (mín.) a $${maxKg.toFixed(1)}/kg (máx.)</div>
+    ${kgValues.map((v,i) => `
+    <div class="rr-row">
+      <div class="rr-lbl"><span>${v.name}</span><span style="font-weight:600;color:${colors[i%colors.length]}">$${v.kg.toFixed(1)}/kg</span></div>
+      <div class="rr-track"><div class="rr-fill" style="width:${((v.kg-minKg)/(maxKg-minKg)*80+20).toFixed(0)}%;background:${colors[i%colors.length]};"></div></div>
+    </div>`).join('')}
+    <div style="font-size:11px;color:var(--mid);margin-top:8px;line-height:1.6;">
+      <strong>Diferencia entre cadenas:</strong> $${(maxKg-minKg).toFixed(1)}/kg (${(((maxKg-minKg)/minKg)*100).toFixed(0)}%). 
+      El productor recibe $${kgProd.toFixed(2)}/kg — equivale al ${((kgProd/((minKg+maxKg)/2))*100).toFixed(0)}% del precio promedio retail.
+    </div>`;
+
+  document.getElementById('retail-disclaimer').textContent =
+    `Precios verificados semana ${S.numero} (${S.periodo}). Fuentes: Walmart.com, Publix.com, Sprouts.com, WholeFoodsMarket.com, Kroger.com e Instacart. Los precios pueden variar por región, membresía y promociones semanales.`;
+}
+
+// ── Add nav link ──
 // ── COMPETIDORES ──
 const COMPS = {
   mango:       { icon:'🥭', name:'Mango México',       desc:'Pico mayo–agosto. Rota 5–8x más rápido que pitahaya. Los supermercados le dan espacio prioritario en la sección tropical.', impact:'Impacto ALTO', col:'#A32D2D' },
