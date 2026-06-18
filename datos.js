@@ -20,6 +20,9 @@ const DATOS = {
     precio_productor:     0.95,   // $/kg pagado al productor
     precio_productor_ant: 2.30,   // $/kg semana anterior
 
+    // --- PRECIO WALMART (campo directo para cálculos) ---
+    walmart: 4.97,   // $/unidad ~400g en Walmart.com
+
     // --- USDA (consultar cada jueves) ---
     usda_ny:   36.00,   // NX_FV010 → caja 4.5kg Ecuador roja/blanca NY
     usda_la:   17.50,   // HC_FV056 → caja 10lb Ecuador bote LA
