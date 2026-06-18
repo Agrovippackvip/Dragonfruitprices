@@ -12,13 +12,13 @@ const DATOS = {
   // │  EDITAR ESTO CADA JUEVES                                │
   // └─────────────────────────────────────────────────────────┘
   semana: {
-    numero:      22,
-    periodo:     "22–28 Mayo 2026",
-    actualizado: "22 May 2026",
+    numero:      26,
+    periodo:     "18–25 Junio 2026",
+    actualizado: "18 Junio 2026",
 
     // --- PRECIOS AL PRODUCTOR ---
-    precio_productor:     0.95,   // $/kg pagado al productor
-    precio_productor_ant: 2.30,   // $/kg semana anterior
+    precio_productor:     0.30,   // $/kg pagado al productor
+    precio_productor_ant: 0.30,   // $/kg semana anterior
 
     // --- PRECIO WALMART (campo directo para cálculos) ---
     walmart: 4.97,   // $/unidad ~400g en Walmart.com
