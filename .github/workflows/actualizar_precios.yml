@@ -1,1 +1,49 @@
+name: Actualizar precios USDA — Agrovip
 
+on:
+  schedule:
+    # Cada jueves a las 10:00 AM hora Ecuador (UTC-5 = 15:00 UTC)
+    - cron: '0 15 * * 4'
+  workflow_dispatch:
+    # También permite ejecutar manualmente desde GitHub
+    inputs:
+      precio_productor:
+        description: 'Precio pagado al productor esta semana ($/kg)'
+        required: true
+        default: '0.95'
+      semana_numero:
+        description: 'Número de semana'
+        required: false
+
+jobs:
+  actualizar:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependencias
+        run: pip install requests
+
+      - name: Ejecutar script de actualización
+        env:
+          USDA_API_KEY: ${{ secrets.USDA_API_KEY }}
+          PRECIO_PRODUCTOR: ${{ github.event.inputs.precio_productor || '0.00' }}
+          SEMANA_NUMERO: ${{ github.event.inputs.semana_numero || '' }}
+        run: python scripts/actualizar_precios.py
+
+      - name: Commit y push datos.js actualizado
+        run: |
+          git config --global user.name "Agrovip Bot"
+          git config --global user.email "bot@agrovipsas.com"
+          git add datos.js
+          git diff --staged --quiet || git commit -m "⚡ Precios USDA actualizados automáticamente - $(date '+%d %b %Y')"
+          git push
