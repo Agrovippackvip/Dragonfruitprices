@@ -1,19 +1,19 @@
 // ═══════════════════════════════════════════════════════════════
 //  AGROVIP S.A. — DATOS DE MERCADO
 //  Actualizado automáticamente cada jueves por GitHub Actions
-//  Última actualización: 19 Jun 2026
+//  Última actualización: 25 Jun 2026
 //  ⚠ No editar manualmente — se sobreescribe cada jueves
 // ═══════════════════════════════════════════════════════════════
 
 const DATOS = {
 
   semana: {
-    numero:      25,
-    periodo:     "15–21 Jun 2026",
-    actualizado: "19 Jun 2026",
+    numero:      26,
+    periodo:     "22–28 Jun 2026",
+    actualizado: "25 Jun 2026",
 
-    precio_productor:     0.95,
-    precio_productor_ant: 0.3,
+    precio_productor:     0.0,
+    precio_productor_ant: 0.95,
 
     walmart: 4.97,
 
@@ -70,13 +70,13 @@ const DATOS = {
     nota: "Esta semana hay 5 competidores activos en percha: Mango México, Fresas California, Blueberries, Cerezas California, Lichi. La pitahaya compite por espacio limitado en la sección de produce de los supermercados.",
 
     proyeccion: [
-      { sem: 26, periodo: "Sem 26", prod: 0.78, usda_la: 16.0, dir: "baja", razon: "Presión estacional continúa." },
-      { sem: 27, periodo: "Sem 27", prod: 0.72, usda_la: 15.55, dir: "baja", razon: "Presión estacional continúa." }
+      { sem: 27, periodo: "Sem 27", prod: 0.78, usda_la: 16.0, dir: "alza", razon: "Menor competencia estacional." },
+      { sem: 28, periodo: "Sem 28", prod: 0.72, usda_la: 15.55, dir: "baja", razon: "Presión estacional continúa." }
     ]
   },
 
   historial: [
-    { sem:25, periodo:"15–21 Jun 2026", prod:0.95, ny:36.0, la:17.5, tend:"incierta", comps:["mango", "fresas", "blueberries", "cerezas", "lichi"], retail_avg:13.1 }
+    { sem:26, periodo:"22–28 Jun 2026", prod:0.0, ny:36.0, la:17.5, tend:"incierta", comps:["mango", "fresas", "blueberries", "cerezas", "lichi"], retail_avg:13.1 }
   ],
 
   config: {
