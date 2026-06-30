@@ -285,6 +285,24 @@ footer a{color:var(--gold2);text-decoration:none;}
     <div class="retail-grid" id="retail-grid"></div>
     <div class="retail-range" id="retail-range"></div>
     <div class="disclaimer" style="margin-top:14px;" id="retail-disclaimer"></div>
+
+    <!-- COMPARATIVO 4 SEMANAS -->
+    <div style="margin-top:28px;">
+      <div class="sec-label">Comparativo últimas 4 semanas</div>
+      <div class="sec-title">¿Cómo se ha movido el precio?</div>
+      <p class="sec-desc">Evolución semanal del precio en cada cadena retail y en los mercados terminales USDA. Verás siempre la misma tendencia: cuando baja el USDA, baja el precio que se puede pagar al productor.</p>
+      <div class="charts-2">
+        <div class="chart-card">
+          <h3>🛒 Precio retail por cadena ($/kg)</h3>
+          <div style="position:relative;height:200px;"><canvas id="chart-retail-4w" role="img" aria-label="Comparativo retail 4 semanas">Comparativo de precios retail por cadena en las últimas 4 semanas.</canvas></div>
+        </div>
+        <div class="chart-card">
+          <h3>🏛 USDA terminales — NY vs LA ($/caja)</h3>
+          <div style="position:relative;height:200px;"><canvas id="chart-usda-4w" role="img" aria-label="Comparativo USDA 4 semanas">Comparativo de precios USDA NY y LA en las últimas 4 semanas.</canvas></div>
+        </div>
+      </div>
+      <div class="disclaimer" style="margin-top:14px;" id="comparativo-disclaimer"></div>
+    </div>
   </div>
 </div>
 
@@ -565,7 +583,80 @@ if(S.retail){
     `Precios verificados semana ${S.numero} (${S.periodo}). Fuentes: Walmart.com, Publix.com, Sprouts.com, WholeFoodsMarket.com, Kroger.com e Instacart. Los precios pueden variar por región, membresía y promociones semanales.`;
 }
 
-// ── Add nav link ──
+// ── COMPARATIVO 4 SEMANAS ──
+(function renderComparativo4Sem() {
+  const hist4 = H.slice(0, 4).slice().reverse(); // oldest first, max 4 weeks
+  if (hist4.length < 2) return;
+
+  const labels = hist4.map(h => 'Sem ' + h.sem);
+
+  // Retail por cadena
+  const chains = [
+    { key: 'walmart',     name: 'Walmart',      color: '#185FA5' },
+    { key: 'publix',      name: 'Publix',       color: '#A32D2D' },
+    { key: 'sprouts',     name: 'Sprouts',      color: '#3B6D11' },
+    { key: 'whole_foods', name: 'Whole Foods',  color: '#6c3483' },
+  ];
+
+  const retailDatasets = chains.map(c => ({
+    label: c.name,
+    data: hist4.map(h => h.retail ? h.retail[c.key] : null),
+    borderColor: c.color,
+    backgroundColor: 'transparent',
+    borderWidth: 2,
+    pointRadius: 4,
+    pointBackgroundColor: c.color,
+    tension: 0.3,
+  }));
+
+  new Chart(document.getElementById('chart-retail-4w'), {
+    type: 'line',
+    data: { labels, datasets: retailDatasets },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true, position: 'bottom', labels: { font: { size: 10 }, boxWidth: 10, padding: 10 } }
+      },
+      scales: {
+        x: { ticks: { font: { size: 10 } }, grid: { display: false } },
+        y: { ticks: { font: { size: 10 }, callback: v => '$' + v.toFixed(1) }, grid: { color: 'rgba(128,128,128,0.07)' } }
+      }
+    }
+  });
+
+  // USDA NY vs LA
+  new Chart(document.getElementById('chart-usda-4w'), {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        { label: 'USDA NY', data: hist4.map(h => h.ny), borderColor: '#185FA5', backgroundColor: '#185FA518', borderWidth: 2.5, pointRadius: 5, pointBackgroundColor: '#185FA5', tension: 0.3, fill: true },
+        { label: 'USDA LA', data: hist4.map(h => h.la), borderColor: '#BA7517', backgroundColor: 'transparent', borderWidth: 2, borderDash: [5, 4], pointRadius: 5, pointBackgroundColor: '#BA7517', tension: 0.3 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: true, position: 'bottom', labels: { font: { size: 10 }, boxWidth: 10, padding: 10 } } },
+      scales: {
+        x: { ticks: { font: { size: 10 } }, grid: { display: false } },
+        y: { ticks: { font: { size: 10 }, callback: v => '$' + v }, grid: { color: 'rgba(128,128,128,0.07)' } }
+      }
+    }
+  });
+
+  // Disclaimer con variación
+  const firstNY = hist4[0].ny, lastNY = hist4[hist4.length - 1].ny;
+  const varNY = firstNY ? (((lastNY - firstNY) / firstNY) * 100).toFixed(1) : null;
+  const firstWM = hist4[0].retail ? hist4[0].retail.walmart : null;
+  const lastWM = hist4[hist4.length - 1].retail ? hist4[hist4.length - 1].retail.walmart : null;
+  const varWM = (firstWM && lastWM) ? (((lastWM - firstWM) / firstWM) * 100).toFixed(1) : null;
+
+  document.getElementById('comparativo-disclaimer').textContent =
+    `En ${hist4.length} semanas, el USDA NY pasó de $${firstNY} a $${lastNY} por caja (${varNY >= 0 ? '+' : ''}${varNY}%).` +
+    (varWM !== null ? ` El precio retail Walmart se movió ${varWM >= 0 ? '+' : ''}${varWM}% en el mismo período.` : '') +
+    ` Datos: USDA AMS Market News + precios públicos de cada cadena.`;
+})();
+
 // ── COMPETIDORES ──
 const COMPS = {
   mango:       { icon:'🥭', name:'Mango México',       desc:'Pico mayo–agosto. Rota 5–8x más rápido que pitahaya. Los supermercados le dan espacio prioritario en la sección tropical.', impact:'Impacto ALTO', col:'#A32D2D' },
