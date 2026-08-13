@@ -1,16 +1,16 @@
 // ═══════════════════════════════════════════════════════════════
 //  AGROVIP S.A. — DATOS DE MERCADO
 //  Actualizado automáticamente cada jueves por GitHub Actions
-//  Última actualización: 30 Jul 2026
+//  Última actualización: 13 Ago 2026
 //  ⚠ No editar manualmente — se sobreescribe cada jueves
 // ═══════════════════════════════════════════════════════════════
 
 const DATOS = {
 
   semana: {
-    numero:      31,
-    periodo:     "27–2 Ago 2026",
-    actualizado: "30 Jul 2026",
+    numero:      33,
+    periodo:     "10–16 Ago 2026",
+    actualizado: "13 Ago 2026",
 
     precio_productor:     0.0,
     precio_productor_ant: 0.0,
@@ -64,19 +64,19 @@ const DATOS = {
     fresas: false,
     blueberries: true,
     cerezas: false,
-    lichi: true,
+    lichi: false,
     uvas: true,
 
-    nota: "Esta semana hay 4 competidores activos en percha: Mango México, Blueberries, Lichi, Uvas California. La pitahaya compite por espacio limitado en la sección de produce de los supermercados.",
+    nota: "Esta semana hay 3 competidores activos en percha: Mango México, Blueberries, Uvas California. La pitahaya compite por espacio limitado en la sección de produce de los supermercados.",
 
     proyeccion: [
-      { sem: 32, periodo: "Sem 32", prod: 0.85, usda_la: 16.5, dir: "alza", razon: "Menor competencia estacional." },
-      { sem: 33, periodo: "Sem 33", prod: 0.81, usda_la: 16.2, dir: "baja", razon: "Presión estacional continúa." }
+      { sem: 34, periodo: "Sem 34", prod: 0.91, usda_la: 17.0, dir: "alza", razon: "Menor competencia estacional." },
+      { sem: 35, periodo: "Sem 35", prod: 0.89, usda_la: 16.85, dir: "baja", razon: "Presión estacional continúa." }
     ]
   },
 
   historial: [
-    { sem:31, periodo:"27–2 Ago 2026", prod:0.0, ny:36.0, la:17.5, tend:"incierta", comps:["mango", "blueberries", "lichi", "uvas"], retail_avg:13.1 }
+    { sem:33, periodo:"10–16 Ago 2026", prod:0.0, ny:36.0, la:17.5, tend:"incierta", comps:["mango", "blueberries", "uvas"], retail_avg:13.1 }
   ],
 
   config: {
