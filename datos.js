@@ -1,16 +1,16 @@
 // ═══════════════════════════════════════════════════════════════
 //  AGROVIP S.A. — DATOS DE MERCADO
 //  Actualizado automáticamente cada jueves por GitHub Actions
-//  Última actualización: 13 Ago 2026
+//  Última actualización: 20 Ago 2026
 //  ⚠ No editar manualmente — se sobreescribe cada jueves
 // ═══════════════════════════════════════════════════════════════
 
 const DATOS = {
 
   semana: {
-    numero:      33,
-    periodo:     "10–16 Ago 2026",
-    actualizado: "13 Ago 2026",
+    numero:      34,
+    periodo:     "17–23 Ago 2026",
+    actualizado: "20 Ago 2026",
 
     precio_productor:     0.0,
     precio_productor_ant: 0.0,
@@ -70,13 +70,13 @@ const DATOS = {
     nota: "Esta semana hay 3 competidores activos en percha: Mango México, Blueberries, Uvas California. La pitahaya compite por espacio limitado en la sección de produce de los supermercados.",
 
     proyeccion: [
-      { sem: 34, periodo: "Sem 34", prod: 0.91, usda_la: 17.0, dir: "alza", razon: "Menor competencia estacional." },
-      { sem: 35, periodo: "Sem 35", prod: 0.89, usda_la: 16.85, dir: "baja", razon: "Presión estacional continúa." }
+      { sem: 35, periodo: "Sem 35", prod: 0.91, usda_la: 17.0, dir: "alza", razon: "Menor competencia estacional." },
+      { sem: 36, periodo: "Sem 36", prod: 0.89, usda_la: 16.85, dir: "baja", razon: "Presión estacional continúa." }
     ]
   },
 
   historial: [
-    { sem:33, periodo:"10–16 Ago 2026", prod:0.0, ny:36.0, la:17.5, tend:"incierta", comps:["mango", "blueberries", "uvas"], retail_avg:13.1 }
+    { sem:34, periodo:"17–23 Ago 2026", prod:0.0, ny:36.0, la:17.5, tend:"incierta", comps:["mango", "blueberries", "uvas"], retail_avg:13.1 }
   ],
 
   config: {
