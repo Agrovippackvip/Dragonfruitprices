@@ -1,16 +1,16 @@
 // ═══════════════════════════════════════════════════════════════
 //  AGROVIP S.A. — DATOS DE MERCADO
 //  Actualizado automáticamente cada jueves por GitHub Actions
-//  Última actualización: 28 Ago 2026
+//  Última actualización: 3 Sep 2026
 //  ⚠ No editar manualmente — se sobreescribe cada jueves
 // ═══════════════════════════════════════════════════════════════
 
 const DATOS = {
 
   semana: {
-    numero:      35,
-    periodo:     "24–30 Ago 2026",
-    actualizado: "28 Ago 2026",
+    numero:      36,
+    periodo:     "31–6 Sep 2026",
+    actualizado: "3 Sep 2026",
 
     precio_productor:     0.0,
     precio_productor_ant: 0.0,
@@ -58,25 +58,25 @@ const DATOS = {
 },
 
     tendencia:      "incierta",
-    oferta_ecuador: "baja",
+    oferta_ecuador: "alta",
 
-    mango: true,
+    mango: false,
     fresas: false,
-    blueberries: true,
+    blueberries: false,
     cerezas: false,
     lichi: false,
     uvas: true,
 
-    nota: "Esta semana hay 3 competidores activos en percha: Mango México, Blueberries, Uvas California. La pitahaya compite por espacio limitado en la sección de produce de los supermercados.",
+    nota: "Esta semana hay 1 competidores activos en percha: Uvas California. La pitahaya compite por espacio limitado en la sección de produce de los supermercados.",
 
     proyeccion: [
-      { sem: 36, periodo: "Sem 36", prod: 0.91, usda_la: 17.0, dir: "alza", razon: "Menor competencia estacional." },
-      { sem: 37, periodo: "Sem 37", prod: 0.89, usda_la: 16.85, dir: "baja", razon: "Presión estacional continúa." }
+      { sem: 37, periodo: "Sem 37", prod: 1.01, usda_la: 17.7, dir: "alza", razon: "Menor competencia estacional." },
+      { sem: 38, periodo: "Sem 38", prod: 1.02, usda_la: 17.76, dir: "alza", razon: "Menor competencia estacional." }
     ]
   },
 
   historial: [
-    { sem:35, periodo:"24–30 Ago 2026", prod:0.0, ny:36.0, la:17.5, tend:"incierta", comps:["mango", "blueberries", "uvas"], retail_avg:13.1 }
+    { sem:36, periodo:"31–6 Sep 2026", prod:0.0, ny:36.0, la:17.5, tend:"incierta", comps:["uvas"], retail_avg:13.1 }
   ],
 
   config: {
