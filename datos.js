@@ -1,16 +1,16 @@
 // ═══════════════════════════════════════════════════════════════
 //  AGROVIP S.A. — DATOS DE MERCADO
 //  Actualizado automáticamente cada jueves por GitHub Actions
-//  Última actualización: 10 Sep 2026
+//  Última actualización: 17 Sep 2026
 //  ⚠ No editar manualmente — se sobreescribe cada jueves
 // ═══════════════════════════════════════════════════════════════
 
 const DATOS = {
 
   semana: {
-    numero:      37,
-    periodo:     "7–13 Sep 2026",
-    actualizado: "10 Sep 2026",
+    numero:      38,
+    periodo:     "14–20 Sep 2026",
+    actualizado: "17 Sep 2026",
 
     precio_productor:     0.0,
     precio_productor_ant: 0.0,
@@ -70,13 +70,13 @@ const DATOS = {
     nota: "Esta semana hay 1 competidores activos en percha: Uvas California. La pitahaya compite por espacio limitado en la sección de produce de los supermercados.",
 
     proyeccion: [
-      { sem: 38, periodo: "Sem 38", prod: 1.01, usda_la: 17.7, dir: "alza", razon: "Menor competencia estacional." },
-      { sem: 39, periodo: "Sem 39", prod: 1.02, usda_la: 17.76, dir: "alza", razon: "Menor competencia estacional." }
+      { sem: 39, periodo: "Sem 39", prod: 1.01, usda_la: 17.7, dir: "alza", razon: "Menor competencia estacional." },
+      { sem: 40, periodo: "Sem 40", prod: 1.02, usda_la: 17.76, dir: "alza", razon: "Menor competencia estacional." }
     ]
   },
 
   historial: [
-    { sem:37, periodo:"7–13 Sep 2026", prod:0.0, ny:36.0, la:17.5, tend:"incierta", comps:["uvas"], retail_avg:13.1 }
+    { sem:38, periodo:"14–20 Sep 2026", prod:0.0, ny:36.0, la:17.5, tend:"incierta", comps:["uvas"], retail_avg:13.1 }
   ],
 
   config: {
