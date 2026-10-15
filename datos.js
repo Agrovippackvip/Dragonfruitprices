@@ -1,16 +1,16 @@
 // ═══════════════════════════════════════════════════════════════
 //  AGROVIP S.A. — DATOS DE MERCADO
 //  Actualizado automáticamente cada jueves por GitHub Actions
-//  Última actualización: 8 Oct 2026
+//  Última actualización: 15 Oct 2026
 //  ⚠ No editar manualmente — se sobreescribe cada jueves
 // ═══════════════════════════════════════════════════════════════
 
 const DATOS = {
 
   semana: {
-    numero:      41,
-    periodo:     "5–11 Oct 2026",
-    actualizado: "8 Oct 2026",
+    numero:      42,
+    periodo:     "12–18 Oct 2026",
+    actualizado: "15 Oct 2026",
 
     precio_productor:     0.0,
     precio_productor_ant: 0.0,
@@ -70,13 +70,13 @@ const DATOS = {
     nota: "Menor competencia estacional esta semana. Mejor posición para pitahaya en percha.",
 
     proyeccion: [
-      { sem: 42, periodo: "Sem 42", prod: 1.05, usda_la: 18.0, dir: "alza", razon: "Menor competencia estacional." },
-      { sem: 43, periodo: "Sem 43", prod: 1.07, usda_la: 18.15, dir: "alza", razon: "Menor competencia estacional." }
+      { sem: 43, periodo: "Sem 43", prod: 1.05, usda_la: 18.0, dir: "alza", razon: "Menor competencia estacional." },
+      { sem: 44, periodo: "Sem 44", prod: 1.07, usda_la: 18.15, dir: "alza", razon: "Menor competencia estacional." }
     ]
   },
 
   historial: [
-    { sem:41, periodo:"5–11 Oct 2026", prod:0.0, ny:36.0, la:17.5, tend:"incierta", comps:[], retail_avg:13.1 }
+    { sem:42, periodo:"12–18 Oct 2026", prod:0.0, ny:36.0, la:17.5, tend:"incierta", comps:[], retail_avg:13.1 }
   ],
 
   config: {
